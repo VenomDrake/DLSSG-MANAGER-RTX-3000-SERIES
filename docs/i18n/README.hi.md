@@ -28,7 +28,7 @@
 
 ## डाउनलोड और उपयोग
 
-[v0.3.0 सार्वजनिक पूर्वावलोकन](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/tag/v0.3.0) प्राप्त करें: [पोर्टेबल ZIP](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.3.0/DLSSGModManager-Portable-win-x64.zip) · [Windows इंस्टॉलर](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.3.0/DLSSGModManager-Setup.msi)। बाद के संस्करणों के लिए [सभी रिलीज़](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases) देखें।
+[v0.3.1 सार्वजनिक पूर्वावलोकन](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/tag/v0.3.1) प्राप्त करें: [पोर्टेबल ZIP](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.3.1/DLSSGModManager-Portable-win-x64.zip) · [Windows इंस्टॉलर](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.3.1/DLSSGModManager-Setup.msi)। बाद के संस्करणों के लिए [सभी रिलीज़](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases) देखें।
 
 पोर्टेबल पैकेज से `DLSSGModManager.exe` चलाएँ या केवल वर्तमान उपयोगकर्ता के लिए इंस्टॉल होने वाला `DLSSGModManager-Setup.msi` चलाएँ। प्रकाशित बाइनरी चलाने के लिए अलग से .NET, Python या CUDA Toolkit इंस्टॉल करने की आवश्यकता नहीं है।
 
@@ -115,7 +115,7 @@ dotnet run --project src/DlssgManager.Desktop -- --read-only --game 'D:\Games\Ex
 
 ## अपना फ़ोर्क प्रकाशित करें
 
-एक सार्वजनिक GitHub रिपॉज़िटरी बनाएँ और इस स्रोत ट्री को पुश करें। शामिल Windows वर्कफ़्लो पुल रिक्वेस्ट और मुख्य ब्रांच पर पुश के लिए बिल्ड तथा परीक्षण करता है। `v0.3.0` जैसा टैग उसी रिपॉज़िटरी के Actions टोकन से बाइनरी को GitHub रिलीज़ के रूप में भी प्रकाशित करता है। स्रोत में कोई टोकन संग्रहीत नहीं होता और अंतिम उपयोगकर्ताओं को टोकन नहीं देना पड़ता।
+एक सार्वजनिक GitHub रिपॉज़िटरी बनाएँ और इस स्रोत ट्री को पुश करें। शामिल Windows वर्कफ़्लो पुल रिक्वेस्ट और मुख्य ब्रांच पर पुश के लिए बिल्ड तथा परीक्षण करता है। `v0.3.1` जैसा टैग उसी रिपॉज़िटरी के Actions टोकन से बाइनरी को GitHub रिलीज़ के रूप में भी प्रकाशित करता है। स्रोत में कोई टोकन संग्रहीत नहीं होता और अंतिम उपयोगकर्ताओं को टोकन नहीं देना पड़ता।
 
 [CONTRIBUTING.md](../../CONTRIBUTING.md), [SECURITY.md](../../SECURITY.md) और [THIRD_PARTY_NOTICES.md](../../THIRD_PARTY_NOTICES.md) देखें। यह स्वतंत्र मैनेजर MIT लाइसेंस के अंतर्गत है; मूल परियोजना की मॉड सामग्री पर उसकी अपनी शर्तें लागू होती हैं।
 

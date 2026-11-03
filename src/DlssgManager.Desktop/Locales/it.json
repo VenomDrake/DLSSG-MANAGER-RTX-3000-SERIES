@@ -117,7 +117,7 @@
   "close_busy": "È in corso un’operazione. Annullala e attendi la pulizia prima di chiudere.",
   "step_detect": "Rilevamento",
   "demo": "Anteprima / sola lettura",
-  "software_version": "Versione gestore 0.3.0",
+  "software_version": "Versione gestore 0.3.1",
   "launch_note": "Attiva DLSS Frame Generation nel menu grafico del gioco. Il gestore leggerà il log mentre questa finestra è aperta.",
   "no_steam_games": "Nessun gioco Steam installato trovato. Puoi comunque scegliere una cartella manualmente.",
   "manual_install": "Rilevata un’installazione manuale verificata",

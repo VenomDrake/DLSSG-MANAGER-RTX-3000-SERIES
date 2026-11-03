@@ -117,7 +117,7 @@
   "close_busy": "An operation is running. Cancel it and wait for cleanup before closing.",
   "step_detect": "Detecting",
   "demo": "Preview / read-only",
-  "software_version": "Manager version 0.3.0",
+  "software_version": "Manager version 0.3.1",
   "launch_note": "Use the game's graphics menu to enable DLSS Frame Generation. The manager will read the log while this window is open.",
   "no_steam_games": "No installed Steam games found. You can still choose a folder manually.",
   "manual_install": "Verified manual installation detected",

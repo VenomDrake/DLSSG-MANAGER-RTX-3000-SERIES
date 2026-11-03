@@ -117,7 +117,7 @@
   "close_busy": "Une opération est en cours. Annulez-la puis attendez la fin du nettoyage avant de fermer.",
   "step_detect": "Détection",
   "demo": "Aperçu / lecture seule",
-  "software_version": "Version du gestionnaire 0.3.0",
+  "software_version": "Version du gestionnaire 0.3.1",
   "launch_note": "Activez DLSS Frame Generation dans le menu graphique du jeu. Le gestionnaire lira le journal tant que cette fenêtre est ouverte.",
   "no_steam_games": "Aucun jeu Steam installé trouvé. Vous pouvez toujours choisir un dossier manuellement.",
   "manual_install": "Installation manuelle vérifiée détectée",

@@ -1,5 +1,6 @@
 using System.IO;
 using System.Windows;
+using System.Windows.Media;
 
 namespace DlssgManager.Desktop;
 
@@ -25,6 +26,7 @@ public partial class MainWindow
             : _scan is null ? "ui_next_select" : PrechecksBlocked() ? "ui_next_blocked"
             : IsGameCurrent() ? "up_to_date" : "ui_next_ready";
         NextActionText.Text = Localization.Get(nextKey);
+        NextActionText.Foreground = (Brush)FindResource(nextKey == "up_to_date" ? "Accent" : "Muted");
         InstallButton.ToolTip = _readOnly ? Localization.Get("ui_preview_description") : NextActionText.Text;
         LaunchButton.ToolTip = _readOnly ? Localization.Get("ui_preview_description") : Localization.Get("launch_note");
     }
