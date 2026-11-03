@@ -28,7 +28,7 @@ A Windows desktop companion for [DLSSG for SM86](https://github.com/sdli1995/dls
 
 ## Download and use
 
-Get the [v0.2.1 public preview](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/tag/v0.2.1): [portable ZIP](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.2.1/DLSSGModManager-Portable-win-x64.zip) · [Windows installer](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.2.1/DLSSGModManager-Setup.msi). Browse [all releases](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases) for later versions.
+Get the [v0.2.2 public preview](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/tag/v0.2.2): [portable ZIP](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.2.2/DLSSGModManager-Portable-win-x64.zip) · [Windows installer](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.2.2/DLSSGModManager-Setup.msi). Browse [all releases](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases) for later versions.
 
 Use `DLSSGModManager.exe` from the portable package, or run the per-user `DLSSGModManager-Setup.msi`. No separate .NET, Python or CUDA Toolkit installation is needed for the published binaries.
 
@@ -52,6 +52,8 @@ The manager quietly checks its own GitHub releases in the background. A small no
 Choose **Update and restart** when convenient, after the current operation finishes. The manager automatically selects the portable ZIP or MSI for the current installation, downloads it, verifies its SHA-256 against the official GitHub release asset digest, closes, installs the update and reopens. Games, settings and backups are preserved. Future updates do not require visiting GitHub or replacing files manually.
 
 **Moving from 0.1.0 to 0.2.0 requires one manual update**, because 0.1.0 does not contain the updater. Close 0.1.0, then run the new MSI or extract the complete new portable package into your portable application folder, using the same package type as before. Starting with 0.2.0, subsequent manager updates can be installed in the app.
+
+**One-time fix for MSI installations of 0.2.0/0.2.1:** their in-app MSI updater may fail with Windows Installer error **1639** or show its help window. Close the manager, download and run the **0.2.2 MSI once** from the release linked above, keeping the same installation folder. Installing the 0.2.1 MSI does not fix this defect. After 0.2.2 is installed, future in-app updates use the corrected updater. Portable installations are not affected by this MSI issue.
 
 Manager updates and mod updates are separate. Updating the manager does not install a new mod in any game; the reviewed upstream installation recipe remains **0.4.1**.
 
@@ -107,6 +109,6 @@ dotnet run --project src/DlssgManager.Desktop -- --read-only --game 'D:\Games\Ex
 
 ## Publish your fork
 
-Create a public GitHub repository and push this source tree. The included Windows workflow builds and tests pull requests and main-branch pushes. A tag such as `v0.2.1` also publishes the binaries as a GitHub release using that repository's Actions token. No token is stored in source or required by end users.
+Create a public GitHub repository and push this source tree. The included Windows workflow builds and tests pull requests and main-branch pushes. A tag such as `v0.2.2` also publishes the binaries as a GitHub release using that repository's Actions token. No token is stored in source or required by end users.
 
 See [CONTRIBUTING.md](CONTRIBUTING.md), [SECURITY.md](SECURITY.md), and [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md). This independent manager is MIT-licensed; upstream mod material has its own terms.

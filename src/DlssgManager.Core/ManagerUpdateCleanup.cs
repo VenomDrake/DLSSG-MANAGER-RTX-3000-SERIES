@@ -96,7 +96,7 @@ internal static class ManagerUpdateCleanup
                 }
                 else if (parts.Length == 1)
                 {
-                    if (parts[0] is not ("update-plan.json" or "update-result.json" or ActivityFileName
+                    if (parts[0] is not ("update-plan.json" or "update-result.json" or "manager-install.log" or ActivityFileName
                         or ManagerUpdateService.PortableAssetName or ManagerUpdateService.InstallerAssetName)) return false;
                 }
                 else if (parts.Length != 2 || parts[0] == "worker" && parts[1] != ManagerUpdateService.ExeName

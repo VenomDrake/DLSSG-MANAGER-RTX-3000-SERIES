@@ -32,4 +32,7 @@ public sealed record ManagerUpdatePlan
     public IReadOnlyList<string> LaunchArguments { get; init; } = [];
 }
 public sealed record ManagerUpdateResult(bool Success, bool RebootRequired, string Code, string Detail,
-    string FromVersion, string ToVersion);
+    string FromVersion, string ToVersion)
+{
+    [JsonIgnore] public bool Relaunched { get; init; }
+}

@@ -32,7 +32,7 @@ public static class ManagerUpdateWorker
             var result = new ManagerUpdateResult(true, reboot, "manager_update_completed", "", plan.FromVersion, plan.ToVersion);
             await WriteResultAsync(plan, result).ConfigureAwait(false);
             Relaunch(plan);
-            return result;
+            return result with { Relaunched = true };
         }
         catch (Exception error) when (error is IOException or InvalidDataException or UnauthorizedAccessException or InvalidOperationException or ArgumentException
             or JsonException or System.ComponentModel.Win32Exception or OperationCanceledException)
@@ -41,7 +41,11 @@ public static class ManagerUpdateWorker
             if (plan is not null)
             {
                 try { await WriteResultAsync(plan, result).ConfigureAwait(false); } catch (Exception writing) when (writing is IOException or UnauthorizedAccessException) { }
-                try { if (File.Exists(plan.TargetExePath)) Relaunch(plan); } catch (Exception launching) when (launching is System.ComponentModel.Win32Exception or InvalidOperationException or IOException) { }
+                try
+                {
+                    if (File.Exists(plan.TargetExePath)) { Relaunch(plan); result = result with { Relaunched = true }; }
+                }
+                catch (Exception launching) when (launching is System.ComponentModel.Win32Exception or InvalidOperationException or IOException) { }
             }
             return result;
         }
@@ -268,15 +272,17 @@ public static class ManagerUpdateWorker
     {
         var installer = Path.Combine(plan.CandidateDirectory, ManagerUpdateService.InstallerAssetName);
         ManagerUpdateMsi.Validate(installer, plan.ToVersion);
-        using var process = new Process { StartInfo = new ProcessStartInfo(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.System), "msiexec.exe"))
-        { UseShellExecute = false, CreateNoWindow = true } };
-        foreach (var arg in new[] { "/i", installer, "/passive", "/norestart", "APPFOLDER=" + Path.GetDirectoryName(plan.TargetExePath) }) process.StartInfo.ArgumentList.Add(arg);
+        token.ThrowIfCancellationRequested();
+        using var process = new Process { StartInfo = CreateInstallerStartInfo(plan) };
         if (!process.Start()) throw new InvalidOperationException("Windows Installer could not be started.");
         // Once Windows Installer starts it owns its transaction. Cancellation must not terminate it.
         await process.WaitForExitAsync(CancellationToken.None).ConfigureAwait(false);
-        if (process.ExitCode is not (0 or 3010)) throw new IOException("Windows Installer did not complete the manager update (" + process.ExitCode + ").");
+        if (process.ExitCode is not (0 or 3010)) throw new IOException("Windows Installer did not complete the manager update (" + process.ExitCode
+            + "). Log: " + Path.Combine(plan.OperationDirectory, ManagerUpdateInstallerCommand.LogFileName));
         return process.ExitCode == 3010;
     }
+
+    internal static ProcessStartInfo CreateInstallerStartInfo(ManagerUpdatePlan plan) => ManagerUpdateInstallerCommand.CreateStartInfo(plan);
 
     private static async Task WriteResultAsync(ManagerUpdatePlan plan, ManagerUpdateResult result)
     {

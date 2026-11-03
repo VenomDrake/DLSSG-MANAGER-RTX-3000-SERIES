@@ -28,7 +28,7 @@ Una aplicación de escritorio para Windows que complementa [DLSSG for SM86](http
 
 ## Descarga y uso
 
-Descarga la [versión preliminar pública v0.2.1](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/tag/v0.2.1): [ZIP portátil](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.2.1/DLSSGModManager-Portable-win-x64.zip) · [instalador de Windows](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.2.1/DLSSGModManager-Setup.msi). Consulta [todas las versiones](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases) para encontrar versiones posteriores.
+Descarga la [versión preliminar pública v0.2.2](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/tag/v0.2.2): [ZIP portátil](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.2.2/DLSSGModManager-Portable-win-x64.zip) · [instalador de Windows](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.2.2/DLSSGModManager-Setup.msi). Consulta [todas las versiones](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases) para encontrar versiones posteriores.
 
 Utiliza `DLSSGModManager.exe` del paquete portátil o ejecuta `DLSSGModManager-Setup.msi`, que instala el programa para el usuario actual. Los binarios publicados no requieren instalar por separado .NET, Python ni CUDA Toolkit.
 
@@ -52,6 +52,8 @@ El gestor comprueba silenciosamente sus propias versiones de GitHub en segundo p
 Elige **Actualizar y reiniciar** cuando te convenga, tras finalizar la operación actual. El gestor selecciona automáticamente el ZIP portable o el MSI adecuado para la instalación actual, lo descarga, verifica su SHA-256 con el resumen del archivo de la versión oficial de GitHub, se cierra, instala la actualización y vuelve a abrirse. Se conservan los juegos, los ajustes y las copias de seguridad. Las próximas actualizaciones no requieren visitar GitHub ni sustituir archivos manualmente.
 
 **El paso de 0.1.0 a 0.2.0 requiere una única actualización manual**, porque 0.1.0 no incluye el actualizador. Cierra 0.1.0 y ejecuta el nuevo MSI o extrae el nuevo paquete portable completo en la carpeta de tu aplicación portable, usando el mismo tipo de paquete que antes. A partir de 0.2.0, las siguientes actualizaciones del gestor se pueden instalar desde la aplicación.
+
+**Corrección única para las instalaciones MSI 0.2.0/0.2.1:** su actualización MSI desde la aplicación puede fallar con el error **1639** de Windows Installer o mostrar su ventana de ayuda. Cierra el gestor, descarga y ejecuta **una vez el MSI 0.2.2** de la versión indicada arriba y conserva la misma carpeta de instalación. Instalar el MSI 0.2.1 no corrige este fallo. Tras instalar 0.2.2, las siguientes actualizaciones desde la aplicación utilizan el actualizador corregido. Las instalaciones portátiles no se ven afectadas por este problema de MSI.
 
 Las actualizaciones del gestor y del mod son independientes. Actualizar el gestor no instala un mod nuevo en ningún juego; el procedimiento de instalación revisado del proyecto original sigue siendo el de **0.4.1**.
 
@@ -107,6 +109,6 @@ dotnet run --project src/DlssgManager.Desktop -- --read-only --game 'D:\Games\Ex
 
 ## Publicar tu fork
 
-Crea un repositorio público de GitHub y sube este árbol de código fuente. El flujo de trabajo de Windows incluido compila y prueba las pull requests y los envíos a la rama principal. Una etiqueta como `v0.2.1` también publica los binarios como una versión de GitHub mediante el token de Actions del repositorio. No se guarda ningún token en el código fuente ni se exige a los usuarios finales.
+Crea un repositorio público de GitHub y sube este árbol de código fuente. El flujo de trabajo de Windows incluido compila y prueba las pull requests y los envíos a la rama principal. Una etiqueta como `v0.2.2` también publica los binarios como una versión de GitHub mediante el token de Actions del repositorio. No se guarda ningún token en el código fuente ni se exige a los usuarios finales.
 
 Consulta [CONTRIBUTING.md](../../CONTRIBUTING.md), [SECURITY.md](../../SECURITY.md) y [THIRD_PARTY_NOTICES.md](../../THIRD_PARTY_NOTICES.md). Este gestor independiente tiene licencia MIT; el material del mod original mantiene sus propias condiciones.

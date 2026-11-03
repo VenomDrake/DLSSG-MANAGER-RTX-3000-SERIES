@@ -185,6 +185,48 @@ await Test("MSI pending-reboot status accepts only expected old or new versions"
     var fakeMsi = fixture.Path("fake.msi"); await File.WriteAllTextAsync(fakeMsi, "not an installer");
     ThrowsSync<InvalidDataException>(() => ManagerUpdateMsi.Validate(fakeMsi, "0.3.0"));
 });
+await Test("MSI command quotes property values separately and keeps Unicode/spaced paths out of a shell", async () =>
+{
+    using var temp = new Temp();
+    var data = temp.Path("Update cache Ω 数据 & 100%");
+    var operation = System.IO.Path.Combine(data, "manager-updates", "update-" + Guid.NewGuid().ToString("N"));
+    var candidate = System.IO.Path.Combine(operation, "candidate"); Directory.CreateDirectory(candidate);
+    var targetDirectory = temp.Path("Manager folder Ω & (spaces)"); Directory.CreateDirectory(targetDirectory);
+    var target = System.IO.Path.Combine(targetDirectory, ManagerUpdateService.ExeName); File.Copy(Fixture("Old.exe"), target);
+    var installer = System.IO.Path.Combine(candidate, ManagerUpdateService.InstallerAssetName); await File.WriteAllTextAsync(installer, "inert fixture, never executed");
+    var plan = new ManagerUpdatePlan
+    {
+        Mode = ManagerUpdateMode.Installed, DataDirectory = data + System.IO.Path.DirectorySeparatorChar,
+        OperationDirectory = operation + System.IO.Path.DirectorySeparatorChar, CandidateDirectory = candidate + System.IO.Path.DirectorySeparatorChar,
+        TargetExePath = System.IO.Path.Combine(targetDirectory + System.IO.Path.DirectorySeparatorChar, ManagerUpdateService.ExeName)
+    };
+    var start = ManagerUpdateWorker.CreateInstallerStartInfo(plan);
+    var log = System.IO.Path.Combine(operation, ManagerUpdateInstallerCommand.LogFileName);
+    Assert(!start.UseShellExecute && start.CreateNoWindow && start.ArgumentList.Count == 0, "MSI command went through a shell or ArgumentList quoting.");
+    Assert(start.FileName == System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.System), "msiexec.exe"), "Unexpected installer executable.");
+    Assert(start.Arguments.StartsWith("/i \"" + installer + "\" /passive /norestart ", StringComparison.Ordinal), "MSI path was not quoted as its own argument.");
+    Assert(start.Arguments.Contains(" APPFOLDER=\"" + targetDirectory + "\" ", StringComparison.Ordinal)
+        && !start.Arguments.Contains("\"APPFOLDER=", StringComparison.Ordinal), "The property name was quoted instead of only its normalized value.");
+    Assert(start.Arguments.EndsWith("/L*v \"" + log + "\"", StringComparison.Ordinal), "Verbose log path was not quoted inside the operation directory.");
+    Assert(start.WorkingDirectory == operation && !File.Exists(log), "Building the command should not run MSI or create its log.");
+    ThrowsSync<InvalidDataException>(() => ManagerUpdateWorker.CreateInstallerStartInfo(plan with { Mode = ManagerUpdateMode.Portable }));
+    foreach (var invalid in new[] { candidate + "\" /quiet", candidate + "\n", "relative\\candidate" })
+        ThrowsSync<InvalidDataException>(() => ManagerUpdateWorker.CreateInstallerStartInfo(plan with { CandidateDirectory = invalid }));
+    ThrowsSync<InvalidDataException>(() => ManagerUpdateWorker.CreateInstallerStartInfo(plan with { OperationDirectory = temp.Path("outside") }));
+    await File.WriteAllTextAsync(log, "preserve earlier diagnostics");
+    ThrowsSync<IOException>(() => ManagerUpdateWorker.CreateInstallerStartInfo(plan));
+    Assert(await File.ReadAllTextAsync(log) == "preserve earlier diagnostics", "Existing installer diagnostics were overwritten.");
+});
+await Test("recovery launch outcome is returned to the helper but never persisted or trusted from JSON", () =>
+{
+    var result = new ManagerUpdateResult(false, false, "manager_update_failed", "fixture", "0.2.0", "0.3.0") { Relaunched = true };
+    var raw = JsonSerializer.Serialize(result, ManagerUpdateService.Json);
+    Assert(!raw.Contains("Relaunched", StringComparison.Ordinal), "Runtime launch outcome leaked into persisted results.");
+    Assert(JsonSerializer.Deserialize<ManagerUpdateResult>(raw, ManagerUpdateService.Json)?.Relaunched == false, "Reading a result incorrectly claimed a live recovery process.");
+    var forged = raw[..^1] + ",\"Relaunched\":true}";
+    Assert(JsonSerializer.Deserialize<ManagerUpdateResult>(forged, ManagerUpdateService.Json)?.Relaunched == false, "JSON forged a successful recovery launch.");
+    return Task.CompletedTask;
+});
 await Test("results can only be read from the manager update cache", async () =>
 {
     using var fixture = await UpdateFixture.Create();
@@ -200,7 +242,7 @@ await Test("worker rejects an invalid plan without executing or relaunching any 
 {
     using var fixture = await UpdateFixture.Create();
     var result = await ManagerUpdateWorker.RunAsync(fixture.Plan.PlanPath, new string('0', 64));
-    Assert(!result.Success && result.Code == "manager_update_failed", "Invalid worker plan did not fail safely.");
+    Assert(!result.Success && !result.Relaunched && result.Code == "manager_update_failed", "Invalid worker plan did not fail safely.");
     Assert(ManagerUpdateService.ReadManagerVersion(fixture.Plan.TargetExePath) == new Version(0, 2, 0), "Rejected plan mutated target.");
     Assert(!File.Exists(fixture.Plan.ResultPath), "Untrusted plan was used to write a result.");
 });
@@ -215,6 +257,7 @@ await Test("cache pruning retains newest, failed, incomplete, future, active and
         Directory.CreateDirectory(directory);
         Directory.CreateDirectory(System.IO.Path.Combine(directory, "candidate"));
         await File.WriteAllTextAsync(System.IO.Path.Combine(directory, "candidate", "LICENSE"), "fixture");
+        await File.WriteAllTextAsync(System.IO.Path.Combine(directory, ManagerUpdateInstallerCommand.LogFileName), "inert MSI diagnostic fixture");
         var resultPath = System.IO.Path.Combine(directory, "update-result.json");
         var result = new ManagerUpdateResult(success, false, success ? "manager_update_completed" : "manager_update_failed", "", "0.2.0", version);
         await File.WriteAllBytesAsync(resultPath, JsonSerializer.SerializeToUtf8Bytes(result));

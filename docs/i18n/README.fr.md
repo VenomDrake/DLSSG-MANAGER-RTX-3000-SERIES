@@ -28,7 +28,7 @@ Une application de bureau Windows qui accompagne [DLSSG for SM86](https://github
 
 ## Téléchargement et utilisation
 
-Téléchargez la [préversion publique v0.2.1](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/tag/v0.2.1) : [ZIP portable](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.2.1/DLSSGModManager-Portable-win-x64.zip) · [programme d'installation Windows](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.2.1/DLSSGModManager-Setup.msi). Consultez [toutes les versions](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases) pour les versions suivantes.
+Téléchargez la [préversion publique v0.2.2](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/tag/v0.2.2) : [ZIP portable](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.2.2/DLSSGModManager-Portable-win-x64.zip) · [programme d'installation Windows](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.2.2/DLSSGModManager-Setup.msi). Consultez [toutes les versions](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases) pour les versions suivantes.
 
 Utilisez `DLSSGModManager.exe` depuis le paquet portable ou exécutez `DLSSGModManager-Setup.msi`, qui installe l'application pour l'utilisateur actuel. Les binaires publiés ne nécessitent pas d'installation séparée de .NET, Python ou CUDA Toolkit.
 
@@ -52,6 +52,8 @@ Le gestionnaire vérifie discrètement ses propres versions GitHub en arrière-p
 Choisissez **Mettre à jour et redémarrer** au moment qui vous convient, après la fin de l’opération en cours. Le gestionnaire sélectionne automatiquement le ZIP portable ou le MSI adapté à l’installation actuelle, le télécharge, vérifie son SHA-256 avec l’empreinte du fichier de la version officielle GitHub, se ferme, installe la mise à jour et se rouvre. Vos jeux, réglages et sauvegardes sont conservés. Les prochaines mises à jour ne nécessitent ni de visiter GitHub ni de remplacer des fichiers manuellement.
 
 **Le passage de 0.1.0 à 0.2.0 nécessite une seule mise à jour manuelle**, car 0.1.0 ne contient pas le système de mise à jour. Fermez 0.1.0, puis lancez le nouveau MSI ou extrayez le nouveau paquet portable complet dans le dossier de votre application portable, avec le même type de paquet qu’auparavant. À partir de 0.2.0, les mises à jour suivantes du gestionnaire peuvent être installées dans l’application.
+
+**Correction ponctuelle pour les installations MSI 0.2.0/0.2.1 :** leur mise à jour MSI depuis l’application peut échouer avec l’erreur Windows Installer **1639** ou afficher sa fenêtre d’aide. Fermez le gestionnaire, puis téléchargez et exécutez **une fois le MSI 0.2.2** depuis la version indiquée ci-dessus, en conservant le même dossier d’installation. Installer le MSI 0.2.1 ne corrige pas ce défaut. Une fois 0.2.2 installé, les prochaines mises à jour depuis l’application utilisent le programme de mise à jour corrigé. Les installations portables ne sont pas touchées par ce problème MSI.
 
 Les mises à jour du gestionnaire et du mod sont distinctes. Mettre à jour le gestionnaire n’installe aucun nouveau mod dans les jeux ; la procédure d’installation vérifiée du projet d’origine reste celle de **0.4.1**.
 
@@ -107,6 +109,6 @@ dotnet run --project src/DlssgManager.Desktop -- --read-only --game 'D:\Games\Ex
 
 ## Publier votre fork
 
-Créez un dépôt GitHub public et poussez cet arbre de sources. Le workflow Windows inclus compile et teste les pull requests ainsi que les envois sur la branche principale. Une étiquette comme `v0.2.1` publie aussi les binaires sous forme de version GitHub à l'aide du jeton Actions du dépôt. Aucun jeton n'est stocké dans les sources ni demandé aux utilisateurs finaux.
+Créez un dépôt GitHub public et poussez cet arbre de sources. Le workflow Windows inclus compile et teste les pull requests ainsi que les envois sur la branche principale. Une étiquette comme `v0.2.2` publie aussi les binaires sous forme de version GitHub à l'aide du jeton Actions du dépôt. Aucun jeton n'est stocké dans les sources ni demandé aux utilisateurs finaux.
 
 Consultez [CONTRIBUTING.md](../../CONTRIBUTING.md), [SECURITY.md](../../SECURITY.md) et [THIRD_PARTY_NOTICES.md](../../THIRD_PARTY_NOTICES.md). Ce gestionnaire indépendant est distribué sous licence MIT ; le matériel du mod d'origine conserve ses propres conditions.

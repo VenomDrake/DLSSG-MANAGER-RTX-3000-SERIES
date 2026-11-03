@@ -28,7 +28,7 @@ Un'app desktop per Windows che affianca [DLSSG for SM86](https://github.com/sdli
 
 ## Download e utilizzo
 
-Scarica l'[anteprima pubblica v0.2.1](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/tag/v0.2.1): [ZIP portatile](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.2.1/DLSSGModManager-Portable-win-x64.zip) · [installer Windows](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.2.1/DLSSGModManager-Setup.msi). Consulta [tutte le release](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases) per le versioni successive.
+Scarica l'[anteprima pubblica v0.2.2](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/tag/v0.2.2): [ZIP portatile](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.2.2/DLSSGModManager-Portable-win-x64.zip) · [installer Windows](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.2.2/DLSSGModManager-Setup.msi). Consulta [tutte le release](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases) per le versioni successive.
 
 Usa `DLSSGModManager.exe` dal pacchetto portatile oppure esegui `DLSSGModManager-Setup.msi`, che installa il programma per l'utente corrente. I binari pubblicati non richiedono l'installazione separata di .NET, Python o CUDA Toolkit.
 
@@ -52,6 +52,8 @@ Il gestore controlla le proprie release GitHub in modo silenzioso in background.
 Scegli **Aggiorna e riavvia** quando preferisci, dopo aver terminato l’operazione in corso. Il gestore seleziona automaticamente lo ZIP portatile o l’MSI adatto all’installazione corrente, lo scarica, ne verifica lo SHA-256 confrontandolo con il digest del file della release ufficiale GitHub, si chiude, installa l’aggiornamento e si riapre. Giochi, impostazioni e backup vengono conservati. Gli aggiornamenti successivi non richiedono di visitare GitHub o sostituire manualmente i file.
 
 **Il passaggio dalla 0.1.0 alla 0.2.0 richiede un solo aggiornamento manuale**, perché la 0.1.0 non contiene il sistema di aggiornamento. Chiudi la 0.1.0, poi esegui il nuovo MSI oppure estrai l’intero nuovo pacchetto portatile nella cartella dell’applicazione portatile, usando lo stesso tipo di pacchetto precedente. Dalla 0.2.0, gli aggiornamenti successivi del gestore possono essere installati nell’app.
+
+**Correzione una tantum per le installazioni MSI 0.2.0/0.2.1:** il loro aggiornamento MSI dall’app può fallire con l’errore **1639** di Windows Installer o aprire la sua finestra della guida. Chiudi il manager, scarica ed esegui **una volta l’MSI 0.2.2** dalla release indicata sopra, mantenendo la stessa cartella di installazione. Installare l’MSI 0.2.1 non corregge questo difetto. Dopo aver installato 0.2.2, gli aggiornamenti successivi dall’app usano l’updater corretto. Le installazioni portatili non sono interessate da questo problema MSI.
 
 Gli aggiornamenti del gestore e quelli della mod sono separati. Aggiornare il gestore non installa una nuova mod nei giochi; la procedura d’installazione originale verificata resta la **0.4.1**.
 
@@ -107,6 +109,6 @@ dotnet run --project src/DlssgManager.Desktop -- --read-only --game 'D:\Games\Ex
 
 ## Pubblicare un fork
 
-Crea una repository GitHub pubblica e carica questo albero dei sorgenti. Il workflow Windows incluso compila e testa le pull request e i push sul ramo principale. Un tag come `v0.2.1` pubblica anche i binari come release GitHub usando il token Actions della repository. Nessun token viene salvato nei sorgenti o richiesto agli utenti finali.
+Crea una repository GitHub pubblica e carica questo albero dei sorgenti. Il workflow Windows incluso compila e testa le pull request e i push sul ramo principale. Un tag come `v0.2.2` pubblica anche i binari come release GitHub usando il token Actions della repository. Nessun token viene salvato nei sorgenti o richiesto agli utenti finali.
 
 Consulta [CONTRIBUTING.md](../../CONTRIBUTING.md), [SECURITY.md](../../SECURITY.md) e [THIRD_PARTY_NOTICES.md](../../THIRD_PARTY_NOTICES.md). Questo gestore indipendente è distribuito con licenza MIT; il materiale della mod originale mantiene le proprie condizioni.

@@ -37,7 +37,8 @@ public partial class App : Application
                 if (!result.Success)
                 {
                     try { File.AppendAllText(Path.Combine(DataDirectory, "application.log"), $"{DateTimeOffset.UtcNow:o} Manager update: {result.Code} {result.Detail}\n"); } catch { }
-                    MessageBox.Show(Localization.Get("manager_update_failed"), "DLSSG Mod Manager", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    if (!result.Relaunched)
+                        MessageBox.Show(Localization.Get("manager_update_failed"), "DLSSG Mod Manager", MessageBoxButton.OK, MessageBoxImage.Warning);
                 }
             }
             Shutdown();
