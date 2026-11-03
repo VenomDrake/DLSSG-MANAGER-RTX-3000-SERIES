@@ -19,6 +19,8 @@ public partial class MainWindow
         }
         var assessment = _scan is null ? null : GameSupportAssessment.Evaluate(_scan);
         var state = assessment?.State ?? GameSupportState.NeedsReview;
+        var pcBlocked = state == GameSupportState.RequirementsDetected && PrechecksBlocked();
+        if (pcBlocked) state = GameSupportState.InstallationBlocked;
         var confirmed = state == GameSupportState.RequirementsDetected && _verification?.Evaluated == true;
         var titleKey = _gameSupportAnalyzing ? "support_analyzing" : confirmed ? "verified" : state switch
         {
@@ -41,7 +43,7 @@ public partial class MainWindow
         GameSupportSymbol.Text = _gameSupportAnalyzing ? "…" : symbol;
         GameSupportTitle.Text = Localization.Get(titleKey);
         GameSupportReason.Text = _gameSupportAnalyzing ? "" : confirmed ? Localization.Get("log_scope")
-            : string.Join("\n", assessment!.ReasonKeys.Select(Localization.Get));
+            : pcBlocked ? Localization.Get("support_reason_other") : string.Join("\n", assessment!.ReasonKeys.Select(Localization.Get));
         GameSupportReason.Visibility = string.IsNullOrWhiteSpace(GameSupportReason.Text) ? Visibility.Collapsed : Visibility.Visible;
         GameSupportNotice.Visibility = Visibility.Visible;
     }

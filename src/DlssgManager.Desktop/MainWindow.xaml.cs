@@ -32,7 +32,7 @@ public partial class MainWindow : Window
     private string _statusKey = "idle";
     private string _statusDetail = "";
     private string? _selectedExe;
-    private bool _readOnly => App.Arguments.Contains("--read-only");
+    private bool _readOnly => App.IsLocalUiPreview || App.Arguments.Contains("--read-only");
 
     private sealed record Choice(string Value, string Label) { public override string ToString() => Label; }
     private sealed record CheckRow(string Title, string Detail, string Status, string Symbol, Brush Color);
@@ -40,7 +40,8 @@ public partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
-        if (_readOnly) Title += " · Preview";
+        if (_readOnly) Title += " · " + Localization.Get("ui_preview_title");
+        PreviewNotice.Visibility = _readOnly ? Visibility.Visible : Visibility.Collapsed;
         _changingChoices = true;
         LanguagePicker.ItemsSource = Localization.Languages;
         LanguagePicker.SelectedItem = Localization.Languages.First(l => l.Code == Localization.Current);
@@ -51,6 +52,7 @@ public partial class MainWindow : Window
         Localization.Changed += LanguageChanged;
         _logTimer.Tick += (_, _) => ReadLog(false);
         InitializeManagerUpdates();
+        RefreshPreviewDashboard();
     }
 
     private async void Window_Loaded(object sender, RoutedEventArgs e)
@@ -71,7 +73,7 @@ public partial class MainWindow : Window
         _ = CheckManagerUpdatesAsync();
         await startup;
         ShowManagerUpdateResult();
-        _managerUpdateTimer.Start();
+        if (!_readOnly) _managerUpdateTimer.Start();
     }
 
     private async Task RunAsync(Func<CancellationToken, Task> action, string? compactErrorKey = null)
@@ -189,12 +191,12 @@ public partial class MainWindow : Window
         if (_scan is not null)
         {
             var state = _scan.ModState switch { ModState.Managed => "managed_install", ModState.RecognizedManual => "manual_install", _ => "not_installed" };
-            GameSummary.Text = Localization.Get(state) + (_scan.InstalledVersion is null ? "" : " · v" + _scan.InstalledVersion)
-                + (_scan.RenderingExe is null ? "" : "\n" + _scan.RenderingExe);
+            GameSummary.Text = Localization.Get(state) + (_scan.InstalledVersion is null ? "" : " · v" + _scan.InstalledVersion);
+            GameSummary.ToolTip = _scan.RenderingExe;
             if (IsGameCurrent())
                 GameSummary.Text += "\n" + Localization.Get("up_to_date");
         }
-        else GameSummary.Text = Localization.Get("select_game_first");
+        else { GameSummary.Text = Localization.Get("select_game_first"); GameSummary.ToolTip = null; }
         RefreshGameSupport();
         RefreshButtons();
     }
@@ -212,6 +214,17 @@ public partial class MainWindow : Window
         CheckCountsText.Text = string.Join(" · ", new[] { CheckLevel.Pass, CheckLevel.Warning, CheckLevel.Blocked }
             .Select(level => (level, count: checks.Count(c => c.Level == level))).Where(x => x.count > 0)
             .Select(x => x.count + " " + Localization.Get(x.level.ToString().ToLowerInvariant())));
+        var rows = (CheckList.ItemsSource as IEnumerable<CheckRow>)?.ToList() ?? [];
+        var showMainChecks = _scan is not null && GameSupportAssessment.Evaluate(_scan).State
+            is GameSupportState.RequirementsDetected or GameSupportState.InstallationBlocked;
+        ImportantChecksList.ItemsSource = checks.Zip(rows)
+            .Where(_ => showMainChecks)
+            .Where(pair => pair.First.Level == CheckLevel.Blocked)
+            .DistinctBy(pair => pair.First.Code).Take(3).Select(pair => pair.Second).ToList();
+        QuickSummaryText.Text = _scan is null ? "" : string.Join(" · ", new[] { CheckLevel.Pass, CheckLevel.Blocked }
+            .Select(level => (level, count: checks.Count(c => c.Level == level))).Where(x => x.count > 0)
+            .Select(x => x.count + " " + Localization.Get(x.level.ToString().ToLowerInvariant())));
+        QuickSummaryText.Visibility = showMainChecks ? Visibility.Visible : Visibility.Collapsed;
     }
 
     private void RefreshButtons()
@@ -232,9 +245,10 @@ public partial class MainWindow : Window
         });
         RestoreButton.IsEnabled = idle && !_readOnly && _record is not null;
         DisableButton.IsEnabled = idle && !_readOnly && _record?.State == "Installed";
-        LaunchButton.IsEnabled = idle && _scan?.RenderingExe is not null;
+        LaunchButton.IsEnabled = idle && !_readOnly && _scan?.RenderingExe is not null;
         ReadLogButton.IsEnabled = idle && _scan?.RenderingDirectory is not null;
         RefreshManagerUpdateUi();
+        RefreshPreviewDashboard();
     }
 
     private bool IsGameCurrent()
@@ -292,6 +306,7 @@ public partial class MainWindow : Window
     private void LanguageChanged()
     {
         FlowDirection = Localization.Direction;
+        Title = "DLSSG Mod Manager" + (_readOnly ? " · " + Localization.Get("ui_preview_title") : "");
         FolderPath.FlowDirection = FlowDirection.LeftToRight;
         RebuildChoices(); RefreshSummaries(); RenderChecks(); SetStatus(_statusKey, _statusDetail);
         RefreshManagerUpdateUi();
@@ -366,7 +381,7 @@ public partial class MainWindow : Window
     }
     private void Launch_Click(object sender, RoutedEventArgs e)
     {
-        if (_scan?.RenderingExe is null) return;
+        if (_readOnly || _scan?.RenderingExe is null) return;
         try
         {
             var steam = _steamGames.FirstOrDefault(g => _scan.RenderingExe.StartsWith(Path.TrimEndingDirectorySeparator(g.Directory) + Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase));
@@ -388,7 +403,7 @@ public partial class MainWindow : Window
         VerificationErrors.Text = _verification.Errors.Count == 0 ? Localization.Get("no_errors") : string.Join("\n", _verification.Errors.TakeLast(8));
         RenderChecks();
         RefreshGameSupport();
-        if (showTab) MainTabs.SelectedIndex = 1;
+        if (showTab) DiagnosticsTab.IsSelected = true;
     }
     private void Export_Click(object sender, RoutedEventArgs e)
     {

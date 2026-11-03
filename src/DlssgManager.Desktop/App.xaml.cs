@@ -8,6 +8,11 @@ public partial class App : Application
 {
     public static string DataDirectory { get; private set; } = "";
     public static string[] Arguments { get; private set; } = [];
+#if LOCAL_UI_PREVIEW
+    public static bool IsLocalUiPreview => true;
+#else
+    public static bool IsLocalUiPreview => Arguments.Contains("--ui-preview");
+#endif
     public static string Version => typeof(App).Assembly.GetName().Version?.ToString(3) ?? "0.0.0";
     public static ManagerUpdateResult? UpdateResult { get; private set; }
     protected override async void OnStartup(StartupEventArgs e)
@@ -16,7 +21,8 @@ public partial class App : Application
         Arguments = e.Args;
         var index = Array.IndexOf(e.Args, "--data-dir");
         DataDirectory = index >= 0 && index + 1 < e.Args.Length ? Path.GetFullPath(e.Args[index + 1])
-            : Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "DLSSGModManager");
+            : Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                IsLocalUiPreview ? "DLSSGModManager-UI-Preview" : "DLSSGModManager");
         Directory.CreateDirectory(DataDirectory);
         Localization.Initialize(DataDirectory);
         DispatcherUnhandledException += (_, args) =>
@@ -29,6 +35,7 @@ public partial class App : Application
         var updateIndex = Array.IndexOf(e.Args, "--apply-manager-update");
         if (updateIndex >= 0)
         {
+            if (IsLocalUiPreview) { Shutdown(); return; }
             ShutdownMode = ShutdownMode.OnExplicitShutdown;
             var hashIndex = Array.IndexOf(e.Args, "--plan-sha256");
             if (updateIndex + 1 < e.Args.Length && hashIndex >= 0 && hashIndex + 1 < e.Args.Length)

@@ -28,7 +28,7 @@ public partial class MainWindow
 
     private async Task CheckManagerUpdatesAsync()
     {
-        if (_managerCheckInProgress || _windowClosed) return;
+        if (_readOnly || _managerCheckInProgress || _windowClosed) return;
         _managerCheckInProgress = true;
         try
         {

@@ -14,7 +14,7 @@ A Windows desktop companion for [DLSSG for SM86](https://github.com/sdli1995/dls
 
 ## What it does
 
-- Presents PC checks, game selection and mod settings in a refreshed dark interface with the original mint accents.
+- Organizes game management, mod settings and diagnostics into three clear pages, keeping the original navy background and mint accents.
 - Checks the latest official **complete release asset** on startup, before hardware and game analysis. It downloads a new package automatically and reports when the verified cache is already current.
 - Compares release ID, asset ID and SHA-256, including replacement assets with the same version number. Offline status is distinct from “latest version.”
 - Checks NVIDIA architecture and driver, Windows x64 and GPU scheduling configuration. Scheduling is confirmed as active only when the game's runtime log reports it.
@@ -26,9 +26,15 @@ A Windows desktop companion for [DLSSG for SM86](https://github.com/sdli1995/dls
 - Reads the latest recorded game session. It requires successful creation of NGX feature 11 and its first evaluation to report actual frame generation.
 - Exports a local diagnostic report with user/game paths redacted. There are no accounts or telemetry.
 
+## Find your way around
+
+- **Game management:** choose a game, read the compatibility result and use the main install/update action at the bottom.
+- **Mod settings:** view every available option in one place, with recommended defaults preselected.
+- **Diagnostics:** inspect all checks and the recorded game log, export a report, disable the mod or restore the previous state.
+
 ## Download and use
 
-Get the [v0.2.3 public preview](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/tag/v0.2.3): [portable ZIP](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.2.3/DLSSGModManager-Portable-win-x64.zip) · [Windows installer](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.2.3/DLSSGModManager-Setup.msi). Browse [all releases](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases) for later versions.
+Get the [v0.3.0 public preview](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/tag/v0.3.0): [portable ZIP](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.3.0/DLSSGModManager-Portable-win-x64.zip) · [Windows installer](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.3.0/DLSSGModManager-Setup.msi). Browse [all releases](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases) for later versions.
 
 Use `DLSSGModManager.exe` from the portable package, or run the per-user `DLSSGModManager-Setup.msi`. No separate .NET, Python or CUDA Toolkit installation is needed for the published binaries.
 
@@ -37,11 +43,11 @@ Use `DLSSGModManager.exe` from the portable package, or run the per-user `DLSSGM
 > Using this mod changes game files. We strongly recommend using it only in offline single-player games. Anti-cheat systems or game rules may treat it as an unauthorized modification and issue a ban. No bypass or protection against bans is provided.
 
 1. Open the manager and let it check/download the official mod package.
-2. Choose a Steam game, a game folder, or its rendering EXE.
-3. Review all checks. A detected anti-cheat, unsupported runtime, unknown conflicting loader or running game prevents installation.
-4. Review options; start at **2×**. Choose **Install mod** or **Update mod** and confirm the target.
+2. In **Game management**, choose a Steam game, a game folder, or its rendering EXE.
+3. Read the main result panel; open **Diagnostics** for all checks. A detected anti-cheat, unsupported runtime, unknown conflicting loader or running game prevents installation.
+4. Review all options in **Mod settings**; start at **2×**. Choose **Install mod** or **Update mod** in the bottom action bar and confirm the target.
 5. Launch the game and enable **DLSS Frame Generation** in its graphics settings. Some games require a restart.
-6. Choose **Read game log** to see whether the mod loaded, the feature was created and generation actually began.
+6. In **Diagnostics**, choose **Read game log** to see whether the mod loaded, the feature was created and generation actually began.
 
 The manager does not change HAGS or drivers automatically. It opens the Windows graphics settings or NVIDIA's driver page and gives instructions. Restart Windows after enabling HAGS.
 
@@ -59,7 +65,7 @@ Manager updates and mod updates are separate. Updating the manager does not inst
 
 ## Supported scope and limitations
 
-Version 0.2.0 targets Windows 10/11 x64 and RTX 20/30 GPUs supported by the upstream project. The currently reviewed installation recipe is upstream **0.4.1**, with driver R580 or newer and the 310.9.16 runtime. It still downloads future official releases, but an unknown recipe is marked unsupported until the manager's checks are updated; a new version number is not proof of compatible requirements.
+The manager targets Windows 10/11 x64 and RTX 20/30 GPUs supported by the upstream project. The currently reviewed installation recipe is upstream **0.4.1**, with driver R580 or newer and the 310.9.16 runtime. It still downloads future official releases, but an unknown recipe is marked unsupported until the manager's checks are updated; a new version number is not proof of compatible requirements.
 
 The game must supply native DLSS Frame Generation and run with DirectX 12. Runtime 310.x is supported by the current upstream recipe; old runtime generations are refused. A higher multiplier depends on the game's integration. XeSS is capped at 4×; DLSS 6× requires a game integration that supports it.
 
@@ -109,6 +115,6 @@ dotnet run --project src/DlssgManager.Desktop -- --read-only --game 'D:\Games\Ex
 
 ## Publish your fork
 
-Create a public GitHub repository and push this source tree. The included Windows workflow builds and tests pull requests and main-branch pushes. A tag such as `v0.2.3` also publishes the binaries as a GitHub release using that repository's Actions token. No token is stored in source or required by end users.
+Create a public GitHub repository and push this source tree. The included Windows workflow builds and tests pull requests and main-branch pushes. A tag such as `v0.3.0` also publishes the binaries as a GitHub release using that repository's Actions token. No token is stored in source or required by end users.
 
 See [CONTRIBUTING.md](CONTRIBUTING.md), [SECURITY.md](SECURITY.md), and [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md). This independent manager is MIT-licensed; upstream mod material has its own terms.

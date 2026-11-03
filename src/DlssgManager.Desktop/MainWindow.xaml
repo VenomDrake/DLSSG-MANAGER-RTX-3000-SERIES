@@ -1,142 +1,202 @@
 <Window x:Class="DlssgManager.Desktop.MainWindow"
  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
- Title="DLSSG Mod Manager" Width="1320" Height="940" MinWidth="1060" MinHeight="740" Style="{StaticResource {x:Type Window}}"
- WindowStartupLocation="CenterScreen" Loaded="Window_Loaded" Closing="Window_Closing">
- <Grid Margin="24,20,24,14">
-  <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="*"/><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
+ Title="DLSSG Mod Manager" Width="1240" Height="900" MinWidth="1060" MinHeight="740"
+ Style="{StaticResource {x:Type Window}}" WindowStartupLocation="CenterScreen"
+ Loaded="Window_Loaded" Closing="Window_Closing">
+ <Grid Margin="26,20,26,18">
+  <Grid.RowDefinitions>
+   <RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/>
+   <RowDefinition Height="*"/><RowDefinition Height="Auto"/>
+  </Grid.RowDefinitions>
 
   <Grid Margin="0,0,0,18">
    <Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/><ColumnDefinition Width="180"/></Grid.ColumnDefinitions>
-   <Border Width="50" Height="50" Background="{StaticResource AccentDark}" BorderBrush="#2B6553" BorderThickness="1" CornerRadius="13" Margin="0,0,16,0" VerticalAlignment="Center">
+   <Border Width="48" Height="48" Background="{StaticResource AccentDark}" BorderBrush="#2B6553" BorderThickness="1" CornerRadius="13" Margin="0,0,16,0" VerticalAlignment="Center">
     <Canvas Width="34" Height="34" FlowDirection="LeftToRight"><Rectangle Width="22" Height="16" Stroke="#70E5BB" StrokeThickness="2.5" RadiusX="2" RadiusY="2" Canvas.Top="4" Canvas.Left="2"/><Rectangle Width="22" Height="16" Fill="#183C36" Stroke="#70E5BB" StrokeThickness="2.5" RadiusX="2" RadiusY="2" Canvas.Top="13" Canvas.Left="11"/></Canvas>
    </Border>
-   <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="0,0,20,0">
-    <WrapPanel VerticalAlignment="Center"><TextBlock Text="DLSSG Mod Manager" FontSize="27" FontWeight="SemiBold" VerticalAlignment="Center" Margin="0,0,12,0"/><Border Background="{StaticResource PanelRaised}" BorderBrush="{StaticResource Line}" BorderThickness="1" CornerRadius="5" Padding="8,3" VerticalAlignment="Center"><TextBlock x:Name="ManagerVersionText" FontSize="10.5" Foreground="{StaticResource Muted}"/></Border></WrapPanel>
-    <TextBlock Text="{DynamicResource tagline}" Foreground="{StaticResource Muted}" FontSize="12" Margin="0,5,0,0"/>
+   <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="0,0,22,0">
+    <WrapPanel><TextBlock Text="DLSSG Mod Manager" FontSize="25" FontWeight="SemiBold" Margin="0,0,12,0" VerticalAlignment="Center"/><Border Background="{StaticResource PanelRaised}" CornerRadius="5" Padding="8,4" VerticalAlignment="Center"><TextBlock x:Name="ManagerVersionText" Foreground="{StaticResource Muted}" FontSize="13"/></Border></WrapPanel>
+    <TextBlock Text="{DynamicResource tagline}" Foreground="{StaticResource Muted}" FontSize="13" Margin="0,5,0,0"/>
    </StackPanel>
    <StackPanel Grid.Column="2"><TextBlock Text="{DynamicResource language}" Style="{StaticResource Caption}"/><ComboBox x:Name="LanguagePicker" SelectionChanged="Language_Changed" AutomationProperties.Name="{DynamicResource language}"/></StackPanel>
   </Grid>
 
-  <Border x:Name="ManagerUpdateNotice" Grid.Row="1" Visibility="Collapsed" Background="#142B27" BorderBrush="#2B5F4D" BorderThickness="1" CornerRadius="10" Padding="14,10" Margin="0,0,0,14">
-   <Grid><Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/></Grid.RowDefinitions><Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
-    <Border Width="25" Height="25" Background="#214738" CornerRadius="12" VerticalAlignment="Center" Margin="0,0,11,0"><TextBlock Text="↑" Foreground="{StaticResource Accent}" FontSize="17" FontWeight="SemiBold" HorizontalAlignment="Center" VerticalAlignment="Center"/></Border>
-    <TextBlock x:Name="ManagerUpdateText" Grid.Column="1" VerticalAlignment="Center" FontWeight="SemiBold" FontSize="12" Margin="0,0,14,0"/>
-    <Button x:Name="ManagerUpdateInstallButton" Grid.Column="2" Content="{DynamicResource manager_update_install}" Click="ManagerUpdate_Click" Style="{StaticResource Primary}" Padding="13,7" MinHeight="34"/>
-    <Button x:Name="ManagerUpdateDismissButton" Grid.Column="3" Content="×" Click="ManagerUpdateDismiss_Click" Style="{StaticResource QuietButton}" FontSize="20" Width="34" Padding="0" Margin="8,0,0,0" ToolTip="{DynamicResource manager_update_later}" AutomationProperties.Name="{DynamicResource manager_update_later}"/>
-    <ProgressBar x:Name="ManagerUpdateProgress" Grid.Row="1" Grid.ColumnSpan="4" Height="3" Foreground="{StaticResource Accent}" Background="#264B3C" Margin="0,9,0,0" Visibility="Collapsed"/>
+  <Border x:Name="PreviewNotice" Grid.Row="1" Visibility="Collapsed" Background="#17283B" BorderBrush="#365672" BorderThickness="1" CornerRadius="10" Padding="14,11" Margin="0,0,0,12">
+   <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+    <TextBlock Text="◉" Foreground="#99C4E7" FontSize="18" Margin="0,1,12,0" VerticalAlignment="Top"/>
+    <StackPanel Grid.Column="1"><TextBlock Text="{DynamicResource ui_preview_title}" Foreground="#C2DFF5" FontSize="13" FontWeight="SemiBold"/><TextBlock x:Name="PreviewDescription" Text="{DynamicResource ui_preview_description}" FontSize="13" Foreground="#AFC4D7" Margin="0,4,0,0"/></StackPanel>
    </Grid>
   </Border>
 
-  <TabControl Grid.Row="2" x:Name="MainTabs">
+  <Border x:Name="ManagerUpdateNotice" Grid.Row="2" Visibility="Collapsed" Background="#142B27" BorderBrush="#2B5F4D" BorderThickness="1" CornerRadius="10" Padding="14,10" Margin="0,0,0,12">
+   <Grid><Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/></Grid.RowDefinitions><Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
+    <TextBlock x:Name="ManagerUpdateText" VerticalAlignment="Center" FontWeight="SemiBold" FontSize="13" Margin="0,0,14,0"/>
+    <Button x:Name="ManagerUpdateInstallButton" Grid.Column="1" Content="{DynamicResource manager_update_install}" Click="ManagerUpdate_Click" Style="{StaticResource Primary}" Padding="14,8" MinHeight="38"/>
+    <Button x:Name="ManagerUpdateDismissButton" Grid.Column="2" Content="×" Click="ManagerUpdateDismiss_Click" Style="{StaticResource QuietButton}" FontSize="22" Width="36" Padding="0" Margin="8,0,0,0" ToolTip="{DynamicResource manager_update_later}" AutomationProperties.Name="{DynamicResource manager_update_later}"/>
+    <ProgressBar x:Name="ManagerUpdateProgress" Grid.Row="1" Grid.ColumnSpan="3" Height="3" Foreground="{StaticResource Accent}" Background="#264B3C" Margin="0,9,0,0" Visibility="Collapsed"/>
+   </Grid>
+  </Border>
+
+  <TabControl Grid.Row="3" x:Name="MainTabs">
    <TabItem Header="{DynamicResource workspace}">
-    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Padding="0,14,10,4" Foreground="{StaticResource Text}">
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Padding="0,16,8,2" Foreground="{StaticResource Text}">
      <StackPanel>
       <Grid>
-       <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="14"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
-       <Border Style="{StaticResource Card}" Padding="18,15"><Grid>
-        <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
-        <StackPanel Margin="0,0,14,0"><TextBlock Text="{DynamicResource release_title}" Style="{StaticResource Eyebrow}"/><TextBlock x:Name="PackageVersion" Text="—" FontSize="23" FontWeight="SemiBold" Margin="0,6,0,3"/><TextBlock x:Name="PackageStatus" Text="{DynamicResource checking_update}" Foreground="{StaticResource Muted}" FontSize="11.5"/></StackPanel>
-        <Button x:Name="UpdateButton" Grid.Column="1" Content="↻" Click="Update_Click" Style="{StaticResource IconButton}" VerticalAlignment="Top" ToolTip="{DynamicResource check_update}" AutomationProperties.Name="{DynamicResource check_update}"/>
-       </Grid></Border>
-       <Border Grid.Column="2" Style="{StaticResource Card}" Padding="18,15"><Grid>
-        <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
-        <StackPanel Margin="0,0,14,0"><TextBlock Text="{DynamicResource hardware_title}" Style="{StaticResource Eyebrow}"/><TextBlock x:Name="GpuName" Text="—" FontSize="21" FontWeight="SemiBold" Margin="0,6,0,3"/><TextBlock x:Name="HardwareStatus" Text="{DynamicResource hardware_pending}" Foreground="{StaticResource Muted}" FontSize="11.5"/></StackPanel>
-        <Button x:Name="HardwareButton" Grid.Column="1" Content="↻" Click="Hardware_Click" Style="{StaticResource IconButton}" VerticalAlignment="Top" ToolTip="{DynamicResource refresh_hardware}" AutomationProperties.Name="{DynamicResource refresh_hardware}"/>
-       </Grid></Border>
+       <Grid.ColumnDefinitions><ColumnDefinition Width="1.18*"/><ColumnDefinition Width="16"/><ColumnDefinition Width="1*"/></Grid.ColumnDefinitions>
+
+       <Border Style="{StaticResource Card}" Padding="22" VerticalAlignment="Top">
+        <StackPanel>
+         <TextBlock Text="{DynamicResource ui_choose_step}" FontSize="19" FontWeight="SemiBold" Foreground="{StaticResource Accent}"/>
+         <TextBlock Text="{DynamicResource ui_select_hint}" FontSize="13" Foreground="{StaticResource Muted}" Margin="0,8,0,20"/>
+         <TextBlock Text="{DynamicResource steam_library}" Style="{StaticResource Caption}"/>
+         <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
+          <ComboBox x:Name="SteamPicker" SelectionChanged="Steam_Changed" DisplayMemberPath="Name" MinHeight="46" AutomationProperties.Name="{DynamicResource steam_library}"/>
+          <Button x:Name="SteamButton" Grid.Column="1" Content="↻" Click="SteamRefresh_Click" Style="{StaticResource IconButton}" Height="46" Width="42" Margin="8,0,0,0" ToolTip="{DynamicResource refresh_steam}" AutomationProperties.Name="{DynamicResource refresh_steam}"/>
+         </Grid>
+         <WrapPanel Margin="0,10,0,10">
+          <Button x:Name="FolderButton" Content="{DynamicResource choose_folder}" Click="Folder_Click" Style="{StaticResource QuietButton}" FontSize="13" Margin="0,0,6,0"/>
+          <Button x:Name="ExeButton" Content="{DynamicResource choose_exe}" Click="Exe_Click" Style="{StaticResource QuietButton}" FontSize="13"/>
+         </WrapPanel>
+         <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
+          <TextBox x:Name="FolderPath" ToolTip="{DynamicResource folder_hint}" AutomationProperties.Name="{DynamicResource folder_hint}" KeyDown="Folder_KeyDown" TextChanged="Folder_TextChanged" FlowDirection="LeftToRight" FontSize="13"/>
+          <Button x:Name="AnalyzeButton" Grid.Column="1" Content="{DynamicResource analyze}" Click="Analyze_Click" Margin="8,0,0,0" FontSize="13"/>
+         </Grid>
+         <TextBlock Text="{DynamicResource rendering_exe}" Style="{StaticResource Caption}" Margin="0,18,0,7"/>
+         <ComboBox x:Name="ExePicker" SelectionChanged="Exe_Changed" DisplayMemberPath="Name" AutomationProperties.Name="{DynamicResource rendering_exe}"/>
+        </StackPanel>
+       </Border>
+
+       <Border Grid.Column="2" Style="{StaticResource Card}" Padding="22" VerticalAlignment="Top">
+        <StackPanel>
+         <TextBlock Text="{DynamicResource ui_result_step}" FontSize="19" FontWeight="SemiBold" Foreground="{StaticResource Accent}"/>
+         <TextBlock x:Name="SelectedGameTitle" Text="{DynamicResource select_game_first}" FontSize="23" FontWeight="SemiBold" Margin="0,15,0,0"/>
+         <Border x:Name="GameSupportNotice" Visibility="Collapsed" Background="#162B26" BorderBrush="#2B5F4D" BorderThickness="1" CornerRadius="9" Padding="14" Margin="0,14,0,0" AutomationProperties.LiveSetting="Polite">
+          <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+           <TextBlock x:Name="GameSupportSymbol" Text="•" Foreground="{StaticResource Accent}" FontSize="22" FontWeight="SemiBold" Width="23" Margin="0,0,10,0" VerticalAlignment="Top" TextAlignment="Center"/>
+           <StackPanel Grid.Column="1"><TextBlock x:Name="GameSupportTitle" FontSize="16" FontWeight="SemiBold"/><TextBlock x:Name="GameSupportReason" FontSize="13" Foreground="{StaticResource Muted}" Margin="0,6,0,0"/></StackPanel>
+          </Grid>
+         </Border>
+         <TextBlock x:Name="QuickSummaryText" Foreground="{StaticResource Muted}" FontSize="13" Margin="0,14,0,0"/>
+         <ItemsControl x:Name="ImportantChecksList" Margin="0,10,0,0"><ItemsControl.ItemTemplate><DataTemplate>
+          <Border BorderBrush="{StaticResource Line}" BorderThickness="0,0,0,1" Padding="0,10">
+           <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="24"/><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
+            <TextBlock Text="{Binding Symbol}" Foreground="{Binding Color}" FontWeight="Bold" FontSize="15"/>
+            <TextBlock Grid.Column="1" Text="{Binding Title}" FontSize="13" Margin="0,0,10,0"/>
+            <TextBlock Grid.Column="2" Text="{Binding Status}" Foreground="{Binding Color}" FontSize="13" MaxWidth="110"/>
+           </Grid>
+          </Border>
+         </DataTemplate></ItemsControl.ItemTemplate></ItemsControl>
+         <WrapPanel Margin="0,14,0,0"><Button Content="{DynamicResource ui_view_checks}" Click="ViewChecks_Click" Style="{StaticResource QuietButton}" FontSize="13" Margin="0,0,8,0"/><Button Content="{DynamicResource ui_view_options}" Click="ViewOptions_Click" Style="{StaticResource QuietButton}" FontSize="13"/></WrapPanel>
+        </StackPanel>
+       </Border>
       </Grid>
 
-      <Border Background="#302719" BorderBrush="#725537" BorderThickness="1" CornerRadius="11" Padding="16,12" Margin="0,14,0,0">
-       <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="30"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
-        <Grid Width="22" Height="22" VerticalAlignment="Top" Margin="0,1,0,0" FlowDirection="LeftToRight"><Path Data="M 11 1 L 21 20 L 1 20 Z" Fill="#FFC479"/><Path Data="M 11 7 L 11 12 M 11 15 L 11 16" Stroke="#302719" StrokeThickness="2" StrokeStartLineCap="Round" StrokeEndLineCap="Round"/></Grid>
-        <StackPanel Grid.Column="1"><TextBlock Text="{DynamicResource online_warning_title}" Foreground="#FFD49B" FontWeight="SemiBold" FontSize="13"/><TextBlock Text="{DynamicResource online_warning_text}" Foreground="#E5CCAD" FontSize="11.5" Margin="0,4,0,0"/></StackPanel>
+      <Border Background="#302719" BorderBrush="#725537" BorderThickness="1" CornerRadius="10" Padding="16,13" Margin="0,16,0,0">
+       <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="28"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+        <Grid Width="21" Height="21" VerticalAlignment="Top" FlowDirection="LeftToRight"><Path Data="M 10.5 1 L 20 19 L 1 19 Z" Fill="#FFC479"/><Path Data="M 10.5 6 L 10.5 11 M 10.5 14 L 10.5 15" Stroke="#302719" StrokeThickness="2" StrokeStartLineCap="Round" StrokeEndLineCap="Round"/></Grid>
+        <TextBlock Grid.Column="1" Text="{DynamicResource ui_online_warning_short}" Foreground="#FFD49B" FontSize="13" FontWeight="SemiBold"/>
        </Grid>
       </Border>
 
-      <Border Style="{StaticResource Card}" Margin="0,14,0,14" Padding="18,15"><StackPanel>
-       <Grid Margin="0,0,0,12"><Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
-        <TextBlock Text="{DynamicResource game_title}" Style="{StaticResource Eyebrow}" VerticalAlignment="Center" Margin="0,0,12,0"/>
-        <Button x:Name="FolderButton" Grid.Column="1" Content="{DynamicResource choose_folder}" Click="Folder_Click" Style="{StaticResource QuietButton}"/>
-        <Button x:Name="ExeButton" Grid.Column="2" Content="{DynamicResource choose_exe}" Click="Exe_Click" Style="{StaticResource QuietButton}" Margin="6,0,0,0"/>
-       </Grid>
-       <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
-        <TextBox x:Name="FolderPath" ToolTip="{DynamicResource folder_hint}" AutomationProperties.Name="{DynamicResource folder_hint}" KeyDown="Folder_KeyDown" TextChanged="Folder_TextChanged" FlowDirection="LeftToRight"/>
-        <Button Grid.Column="1" x:Name="AnalyzeButton" Content="{DynamicResource analyze}" Click="Analyze_Click" Style="{StaticResource Primary}" Margin="10,0,0,0"/>
-       </Grid>
-       <Grid Margin="0,13,0,0"><Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="18"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
-        <StackPanel><TextBlock Text="{DynamicResource steam_library}" Style="{StaticResource Caption}"/><Grid><Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions><ComboBox x:Name="SteamPicker" SelectionChanged="Steam_Changed" DisplayMemberPath="Name" AutomationProperties.Name="{DynamicResource steam_library}"/><Button x:Name="SteamButton" Grid.Column="1" Content="↻" Click="SteamRefresh_Click" Style="{StaticResource IconButton}" Height="40" Width="38" Margin="7,0,0,0" ToolTip="{DynamicResource refresh_steam}" AutomationProperties.Name="{DynamicResource refresh_steam}"/></Grid></StackPanel>
-        <StackPanel Grid.Column="2"><TextBlock Text="{DynamicResource rendering_exe}" Style="{StaticResource Caption}"/><ComboBox x:Name="ExePicker" SelectionChanged="Exe_Changed" DisplayMemberPath="Name" AutomationProperties.Name="{DynamicResource rendering_exe}"/></StackPanel>
-       </Grid>
-       <Border x:Name="GameSupportNotice" Visibility="Collapsed" Background="#162B26" BorderBrush="#2B5F4D" BorderThickness="1" CornerRadius="8" Padding="12" Margin="0,12,0,0" AutomationProperties.LiveSetting="Polite">
-        <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
-         <TextBlock x:Name="GameSupportSymbol" Text="•" Foreground="{StaticResource Accent}" FontSize="22" FontWeight="SemiBold" Width="25" Margin="0,0,10,0" VerticalAlignment="Top" TextAlignment="Center"/>
-         <StackPanel Grid.Column="1"><TextBlock x:Name="GameSupportTitle" FontSize="16" FontWeight="SemiBold" TextWrapping="Wrap"/><TextBlock x:Name="GameSupportReason" FontSize="12" Foreground="{StaticResource Muted}" TextWrapping="Wrap" Margin="0,5,0,0"/></StackPanel>
-        </Grid>
-       </Border>
-       <TextBlock x:Name="GameSummary" Text="{DynamicResource select_game_first}" Foreground="{StaticResource Muted}" FontSize="11.5" Margin="0,11,0,0"/>
-      </StackPanel></Border>
-
-      <Grid>
-       <Grid.ColumnDefinitions><ColumnDefinition Width="1.02*"/><ColumnDefinition Width="14"/><ColumnDefinition Width="1*"/></Grid.ColumnDefinitions>
-       <Border Style="{StaticResource Card}" VerticalAlignment="Top" Padding="18"><StackPanel>
-        <Grid Margin="0,0,0,10"><Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions><TextBlock Text="{DynamicResource checks_title}" Style="{StaticResource SectionTitle}"/><TextBlock x:Name="CheckCountsText" Grid.Column="1" Foreground="{StaticResource Muted}" FontSize="10.5" VerticalAlignment="Center" Margin="8,0,0,0"/></Grid>
-        <TextBlock x:Name="CheckEmptyText" Text="{DynamicResource select_game_first}" Foreground="{StaticResource Muted}" FontSize="12" Margin="0,10,0,16"><TextBlock.Style><Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}"><Style.Triggers><DataTrigger Binding="{Binding HasItems, ElementName=CheckList}" Value="True"><Setter Property="Visibility" Value="Collapsed"/></DataTrigger></Style.Triggers></Style></TextBlock.Style></TextBlock>
-        <ScrollViewer MaxHeight="410" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Padding="0,0,4,0"><ItemsControl x:Name="CheckList"><ItemsControl.ItemTemplate><DataTemplate>
-         <Border BorderBrush="{StaticResource Line}" BorderThickness="0,0,0,1" Padding="0,11"><Grid>
-          <Grid.ColumnDefinitions><ColumnDefinition Width="30"/><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
-          <Border Width="22" Height="22" Background="{StaticResource Input}" CornerRadius="11" VerticalAlignment="Top"><TextBlock Text="{Binding Symbol}" Foreground="{Binding Color}" FontWeight="Bold" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center"/></Border>
-          <StackPanel Grid.Column="1" Margin="0,1,12,0"><TextBlock Text="{Binding Title}" FontWeight="SemiBold" FontSize="12"/><TextBlock Text="{Binding Detail}" Foreground="{StaticResource Muted}" FontSize="10.5" Margin="0,4,0,0" TextWrapping="Wrap" ToolTip="{Binding Detail}"/></StackPanel>
-          <Border Grid.Column="2" Background="{StaticResource Input}" CornerRadius="5" Padding="7,4" VerticalAlignment="Top" MaxWidth="91"><TextBlock Text="{Binding Status}" Foreground="{Binding Color}" FontSize="9.5" TextAlignment="Center"/></Border>
-         </Grid></Border>
-        </DataTemplate></ItemsControl.ItemTemplate></ItemsControl></ScrollViewer>
-        <WrapPanel Margin="0,12,0,0"><Button Content="{DynamicResource graphics_settings}" Click="Graphics_Click" Style="{StaticResource QuietButton}" FontSize="11.5" Margin="0,0,6,0"/><Button Content="{DynamicResource driver_page}" Click="Driver_Click" Style="{StaticResource QuietButton}" FontSize="11.5"/></WrapPanel>
-       </StackPanel></Border>
-       <Border Grid.Column="2" Style="{StaticResource Card}" VerticalAlignment="Top" Padding="18"><StackPanel>
-        <TextBlock Text="{DynamicResource options_title}" Style="{StaticResource SectionTitle}"/>
-        <TextBlock Text="{DynamicResource recommended}" Foreground="{StaticResource Accent}" FontSize="11" Margin="0,5,0,17"/>
-        <Grid x:Name="OptionsGrid"><Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="14"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
-         <StackPanel>
-          <TextBlock Text="{DynamicResource engine}" Style="{StaticResource Caption}"/><ComboBox x:Name="EnginePicker" SelectionChanged="Engine_Changed" Margin="0,0,0,12"/>
-          <TextBlock Text="{DynamicResource optimization}" Style="{StaticResource Caption}"/><ComboBox x:Name="OptimizationPicker" Margin="0,0,0,12"/>
-          <TextBlock Text="{DynamicResource super_resolution}" Style="{StaticResource Caption}"/><ComboBox x:Name="SrPicker" Margin="0,0,0,12"/>
-          <TextBlock Text="{DynamicResource flow_resolution}" Style="{StaticResource Caption}"/><ComboBox x:Name="FlowPicker" Margin="0,0,0,12"/>
-          <TextBlock Text="{DynamicResource proxy}" Style="{StaticResource Caption}"/><ComboBox x:Name="ProxyPicker" ToolTip="{DynamicResource proxy_help}"/>
-         </StackPanel>
-         <StackPanel Grid.Column="2">
-          <TextBlock Text="{DynamicResource multiplier}" Style="{StaticResource Caption}"/><ComboBox x:Name="MultiplierPicker" Margin="0,0,0,12"/>
-          <TextBlock Text="{DynamicResource preset}" Style="{StaticResource Caption}"/><ComboBox x:Name="PresetPicker" Margin="0,0,0,12"/>
-          <TextBlock Text="{DynamicResource log_level}" Style="{StaticResource Caption}"/><ComboBox x:Name="LogPicker" Margin="0,0,0,12"/>
-          <TextBlock Text="{DynamicResource hudless}" Style="{StaticResource Caption}"/><ComboBox x:Name="HudPicker" Margin="0,0,0,12"/>
-          <CheckBox x:Name="TimingCheck" Content="{DynamicResource frame_timing}" FontSize="11.5" Margin="0,24,0,0"/>
-         </StackPanel>
-        </Grid>
-        <Border Background="#111E2B" CornerRadius="8" Padding="11" Margin="0,15,0,0"><StackPanel><TextBlock Text="{DynamicResource option_help}" Foreground="{StaticResource Muted}" FontSize="10.5"/><TextBlock Text="{DynamicResource sr_help}" Foreground="{StaticResource Muted}" FontSize="10.5" Margin="0,6,0,0"/></StackPanel></Border>
-       </StackPanel></Border>
+      <Grid Margin="0,14,0,0"><Grid.ColumnDefinitions><ColumnDefinition Width="1*"/><ColumnDefinition Width="16"/><ColumnDefinition Width="1.6*"/></Grid.ColumnDefinitions>
+       <Border Background="{StaticResource Panel}" BorderBrush="{StaticResource Line}" BorderThickness="1" CornerRadius="9" Padding="14,11" ToolTip="{DynamicResource release_title}"><Grid><Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions><TextBlock Text="◈" Foreground="{StaticResource Accent}" FontSize="18" Margin="0,0,10,0"/><TextBlock x:Name="PackageVersion" Grid.Column="1" Text="—" FontWeight="SemiBold" FontSize="15" VerticalAlignment="Center"/></Grid></Border>
+       <Border Grid.Column="2" Background="{StaticResource Panel}" BorderBrush="{StaticResource Line}" BorderThickness="1" CornerRadius="9" Padding="14,11" ToolTip="{DynamicResource hardware_title}"><Grid><Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions><Border Width="23" Height="17" BorderBrush="#7197A7" BorderThickness="1.5" CornerRadius="3" Margin="0,2,11,0" VerticalAlignment="Top"><Ellipse Width="8" Height="8" Stroke="#7197A7" StrokeThickness="1.3"/></Border><TextBlock x:Name="GpuName" Grid.Column="1" Text="—" FontWeight="SemiBold" FontSize="15" VerticalAlignment="Center"/></Grid></Border>
       </Grid>
      </StackPanel>
     </ScrollViewer>
    </TabItem>
 
-   <TabItem Header="{DynamicResource diagnostics}">
-    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Padding="0,14,10,4" Foreground="{StaticResource Text}"><StackPanel>
-     <Border Style="{StaticResource Card}"><StackPanel><TextBlock x:Name="VerificationStatus" Text="{DynamicResource not_verified}" FontSize="23" FontWeight="SemiBold"/><TextBlock Text="{DynamicResource log_scope}" Foreground="{StaticResource Muted}" Margin="0,10,0,0"/><TextBlock x:Name="VerificationDetails" Margin="0,14,0,0"/><TextBlock x:Name="VerificationErrors" Foreground="#FFC479" Margin="0,10,0,0"/></StackPanel></Border>
-     <Border Style="{StaticResource Card}" Margin="0,14,0,0"><StackPanel><TextBlock Text="{DynamicResource hags_help}"/><Button Content="{DynamicResource graphics_settings}" Click="Graphics_Click" HorizontalAlignment="Left" Margin="0,14,0,0"/></StackPanel></Border>
-     <Border Style="{StaticResource Card}" Margin="0,14,0,0"><StackPanel><TextBlock Text="{DynamicResource report_privacy}" Foreground="{StaticResource Muted}"/><Button Content="{DynamicResource export_report}" Click="Export_Click" HorizontalAlignment="Left" Margin="0,14,0,0"/><TextBlock Text="{DynamicResource independent}" Foreground="{StaticResource Muted}" FontSize="11.5" Margin="0,22,0,5"/><TextBlock Text="{DynamicResource software_version}" Foreground="{StaticResource Muted}" FontSize="11.5"/></StackPanel></Border>
-    </StackPanel></ScrollViewer>
+   <TabItem x:Name="SettingsTab" Header="{DynamicResource ui_options_tab}">
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Padding="0,16,8,2" Foreground="{StaticResource Text}">
+     <Border Style="{StaticResource Card}" VerticalAlignment="Top"><StackPanel>
+      <TextBlock Text="{DynamicResource ui_options_tab}" FontSize="23" FontWeight="SemiBold"/>
+      <TextBlock Text="{DynamicResource recommended}" Foreground="{StaticResource Accent}" FontSize="14" Margin="0,8,0,24"/>
+      <Grid x:Name="OptionsGrid">
+       <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="22"/><ColumnDefinition Width="*"/><ColumnDefinition Width="22"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+       <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
+       <StackPanel Grid.Row="0" Grid.Column="0" Margin="0,0,0,20"><TextBlock Text="{DynamicResource engine}" Style="{StaticResource Caption}"/><ComboBox x:Name="EnginePicker" SelectionChanged="Engine_Changed"/></StackPanel>
+       <StackPanel Grid.Row="0" Grid.Column="2" Margin="0,0,0,20"><TextBlock Text="{DynamicResource multiplier}" Style="{StaticResource Caption}"/><ComboBox x:Name="MultiplierPicker"/></StackPanel>
+       <StackPanel Grid.Row="0" Grid.Column="4" Margin="0,0,0,20"><TextBlock Text="{DynamicResource optimization}" Style="{StaticResource Caption}"/><ComboBox x:Name="OptimizationPicker"/></StackPanel>
+       <StackPanel Grid.Row="1" Grid.Column="0" Margin="0,0,0,20"><TextBlock Text="{DynamicResource preset}" Style="{StaticResource Caption}"/><ComboBox x:Name="PresetPicker"/></StackPanel>
+       <StackPanel Grid.Row="1" Grid.Column="2" Margin="0,0,0,20"><TextBlock Text="{DynamicResource super_resolution}" Style="{StaticResource Caption}"/><ComboBox x:Name="SrPicker"/></StackPanel>
+       <StackPanel Grid.Row="1" Grid.Column="4" Margin="0,0,0,20"><TextBlock Text="{DynamicResource flow_resolution}" Style="{StaticResource Caption}"/><ComboBox x:Name="FlowPicker"/></StackPanel>
+       <StackPanel Grid.Row="2" Grid.Column="0" Margin="0,0,0,14"><TextBlock Text="{DynamicResource proxy}" Style="{StaticResource Caption}"/><ComboBox x:Name="ProxyPicker" ToolTip="{DynamicResource proxy_help}"/></StackPanel>
+       <StackPanel Grid.Row="2" Grid.Column="2" Margin="0,0,0,14"><TextBlock Text="{DynamicResource log_level}" Style="{StaticResource Caption}"/><ComboBox x:Name="LogPicker"/></StackPanel>
+       <StackPanel Grid.Row="2" Grid.Column="4" Margin="0,0,0,14"><TextBlock Text="{DynamicResource hudless}" Style="{StaticResource Caption}"/><ComboBox x:Name="HudPicker"/></StackPanel>
+       <CheckBox x:Name="TimingCheck" Grid.Row="3" Grid.ColumnSpan="5" Content="{DynamicResource frame_timing}" FontSize="14" Margin="0,4,0,0"/>
+      </Grid>
+      <Border Background="#111E2B" BorderBrush="{StaticResource Line}" BorderThickness="1" CornerRadius="10" Padding="15" Margin="0,22,0,0"><StackPanel><TextBlock Text="{DynamicResource option_help}" Foreground="{StaticResource Muted}" FontSize="13"/><TextBlock Text="{DynamicResource sr_help}" Foreground="{StaticResource Muted}" FontSize="13" Margin="0,9,0,0"/></StackPanel></Border>
+     </StackPanel></Border>
+    </ScrollViewer>
+   </TabItem>
+
+   <TabItem x:Name="DiagnosticsTab" Header="{DynamicResource diagnostics}">
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Padding="0,16,8,2" Foreground="{StaticResource Text}">
+     <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="1.35*"/><ColumnDefinition Width="16"/><ColumnDefinition Width="1*"/></Grid.ColumnDefinitions>
+      <Border Style="{StaticResource Card}" VerticalAlignment="Top"><StackPanel>
+       <TextBlock Text="{DynamicResource checks_title}" FontSize="22" FontWeight="SemiBold"/>
+       <TextBlock x:Name="CheckCountsText" Foreground="{StaticResource Muted}" FontSize="13" Margin="0,8,0,14"/>
+       <TextBlock x:Name="CheckEmptyText" Text="{DynamicResource select_game_first}" Foreground="{StaticResource Muted}" FontSize="13" Margin="0,4,0,14"><TextBlock.Style><Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}"><Style.Triggers><DataTrigger Binding="{Binding HasItems, ElementName=CheckList}" Value="True"><Setter Property="Visibility" Value="Collapsed"/></DataTrigger></Style.Triggers></Style></TextBlock.Style></TextBlock>
+       <ItemsControl x:Name="CheckList"><ItemsControl.ItemTemplate><DataTemplate>
+        <Border BorderBrush="{StaticResource Line}" BorderThickness="0,0,0,1" Padding="0,13"><Grid>
+         <Grid.ColumnDefinitions><ColumnDefinition Width="29"/><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
+         <TextBlock Text="{Binding Symbol}" Foreground="{Binding Color}" FontWeight="Bold" FontSize="17"/>
+         <StackPanel Grid.Column="1" Margin="0,1,12,0"><TextBlock Text="{Binding Title}" FontWeight="SemiBold" FontSize="14"/><TextBlock Text="{Binding Detail}" Foreground="{StaticResource Muted}" FontSize="13" Margin="0,6,0,0" ToolTip="{Binding Detail}"/></StackPanel>
+         <Border Grid.Column="2" Background="{StaticResource Input}" CornerRadius="5" Padding="8,5" VerticalAlignment="Top" MaxWidth="110"><TextBlock Text="{Binding Status}" Foreground="{Binding Color}" FontSize="13" TextAlignment="Center"/></Border>
+        </Grid></Border>
+       </DataTemplate></ItemsControl.ItemTemplate></ItemsControl>
+      </StackPanel></Border>
+
+      <StackPanel Grid.Column="2">
+       <Border Style="{StaticResource Card}"><StackPanel>
+        <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions><TextBlock Text="{DynamicResource release_title}" Style="{StaticResource Eyebrow}" VerticalAlignment="Center" Margin="0,0,10,0"/><Button x:Name="UpdateButton" Grid.Column="1" Content="↻" Click="Update_Click" Style="{StaticResource IconButton}" ToolTip="{DynamicResource check_update}" AutomationProperties.Name="{DynamicResource check_update}"/></Grid>
+        <TextBlock Text="{Binding Text, ElementName=PackageVersion}" FontSize="21" FontWeight="SemiBold" Margin="0,10,0,7"/>
+        <TextBlock x:Name="PackageStatus" Text="{DynamicResource checking_update}" Foreground="{StaticResource Muted}" FontSize="13"/>
+        <Border BorderBrush="{StaticResource Line}" BorderThickness="0,1,0,0" Margin="0,20,0,18"/>
+        <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions><TextBlock Text="{DynamicResource hardware_title}" Style="{StaticResource Eyebrow}" VerticalAlignment="Center" Margin="0,0,10,0"/><Button x:Name="HardwareButton" Grid.Column="1" Content="↻" Click="Hardware_Click" Style="{StaticResource IconButton}" ToolTip="{DynamicResource refresh_hardware}" AutomationProperties.Name="{DynamicResource refresh_hardware}"/></Grid>
+        <TextBlock Text="{Binding Text, ElementName=GpuName}" FontSize="18" FontWeight="SemiBold" Margin="0,10,0,7"/>
+        <TextBlock x:Name="HardwareStatus" Text="{DynamicResource hardware_pending}" Foreground="{StaticResource Muted}" FontSize="13"/>
+        <TextBlock x:Name="GameSummary" Text="{DynamicResource select_game_first}" Foreground="{StaticResource Muted}" FontSize="13" Margin="0,18,0,0"/>
+       </StackPanel></Border>
+
+       <Border Style="{StaticResource Card}" Margin="0,16,0,0"><StackPanel>
+        <TextBlock x:Name="VerificationStatus" Text="{DynamicResource not_verified}" FontSize="21" FontWeight="SemiBold"/>
+        <TextBlock Text="{DynamicResource log_scope}" Foreground="{StaticResource Muted}" FontSize="13" Margin="0,10,0,0"/>
+        <TextBlock x:Name="VerificationDetails" FontSize="13" Margin="0,13,0,0"/>
+        <TextBlock x:Name="VerificationErrors" Foreground="#FFC479" FontSize="13" Margin="0,10,0,0"/>
+        <Button x:Name="ReadLogButton" Content="{DynamicResource read_log}" Click="ReadLog_Click" IsEnabled="False" HorizontalAlignment="Left" Margin="0,16,0,0"/>
+        <WrapPanel Margin="0,10,0,0"><Button x:Name="DisableButton" Content="{DynamicResource disable}" Click="Disable_Click" IsEnabled="False" Margin="0,0,8,8"/><Button x:Name="RestoreButton" Content="{DynamicResource restore}" Click="Restore_Click" IsEnabled="False" Margin="0,0,0,8"/></WrapPanel>
+       </StackPanel></Border>
+
+       <Border Background="#302719" BorderBrush="#725537" BorderThickness="1" CornerRadius="12" Padding="18" Margin="0,16,0,0"><StackPanel><TextBlock Text="{DynamicResource online_warning_title}" Foreground="#FFD49B" FontWeight="SemiBold" FontSize="14"/><TextBlock Text="{DynamicResource online_warning_text}" Foreground="#E5CCAD" FontSize="13" Margin="0,7,0,0"/></StackPanel></Border>
+
+       <Border Style="{StaticResource Card}" Margin="0,16,0,0"><StackPanel>
+        <TextBlock Text="{DynamicResource hags_help}" FontSize="13"/>
+        <WrapPanel Margin="0,12,0,0"><Button Content="{DynamicResource graphics_settings}" Click="Graphics_Click" FontSize="13" Margin="0,0,8,8"/><Button Content="{DynamicResource driver_page}" Click="Driver_Click" FontSize="13" Margin="0,0,0,8"/></WrapPanel>
+        <TextBlock Text="{DynamicResource report_privacy}" Foreground="{StaticResource Muted}" FontSize="13" Margin="0,14,0,0"/>
+        <Button Content="{DynamicResource export_report}" Click="Export_Click" HorizontalAlignment="Left" Margin="0,12,0,0"/>
+        <TextBlock Text="{DynamicResource independent}" Foreground="{StaticResource Muted}" FontSize="13" Margin="0,22,0,6"/>
+        <TextBlock Text="{DynamicResource software_version}" Foreground="{StaticResource Muted}" FontSize="13"/>
+        <Button Content="{DynamicResource upstream}" Click="Upstream_Click" Style="{StaticResource QuietButton}" HorizontalAlignment="Left" FontSize="13" Margin="0,9,0,0"/>
+       </StackPanel></Border>
+      </StackPanel>
+     </Grid>
+    </ScrollViewer>
    </TabItem>
   </TabControl>
 
-  <Border Grid.Row="3" Background="{StaticResource PanelRaised}" BorderBrush="{StaticResource Line}" BorderThickness="1" CornerRadius="12" Padding="17,12,17,4" Margin="0,12,0,0">
-   <StackPanel>
-    <Grid Margin="0,0,0,10"><Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions><TextBlock Text="{DynamicResource ready_title}" FontSize="13" FontWeight="SemiBold" VerticalAlignment="Center" Margin="0,0,14,0"/><TextBlock Grid.Column="1" Text="{DynamicResource ready_description}" Foreground="{StaticResource Muted}" FontSize="10.5" VerticalAlignment="Center"/></Grid>
-    <WrapPanel><Button x:Name="InstallButton" Content="{DynamicResource install}" Style="{StaticResource Primary}" Click="Install_Click" IsEnabled="False" Margin="0,0,8,8"/><Button x:Name="DisableButton" Content="{DynamicResource disable}" Click="Disable_Click" IsEnabled="False" Margin="0,0,8,8"/><Button x:Name="RestoreButton" Content="{DynamicResource restore}" Click="Restore_Click" IsEnabled="False" Margin="0,0,8,8"/><Button x:Name="LaunchButton" Content="{DynamicResource launch}" Click="Launch_Click" IsEnabled="False" Margin="0,0,8,8"/><Button x:Name="ReadLogButton" Content="{DynamicResource read_log}" Click="ReadLog_Click" IsEnabled="False" Margin="0,0,0,8"/></WrapPanel>
-   </StackPanel>
+  <Border Grid.Row="4" Background="{StaticResource PanelRaised}" BorderBrush="{StaticResource Line}" BorderThickness="1" CornerRadius="12" Padding="18,14" Margin="0,15,0,0">
+   <Grid>
+    <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
+    <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/><ColumnDefinition Width="Auto"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
+    <StackPanel Margin="0,0,20,0" VerticalAlignment="Center"><TextBlock Text="{DynamicResource ui_apply_step}" FontWeight="SemiBold" FontSize="14"/><TextBlock x:Name="NextActionText" Text="{DynamicResource ui_next_select}" Foreground="{StaticResource Muted}" FontSize="13" Margin="0,5,0,0"/></StackPanel>
+    <Button x:Name="InstallButton" Grid.Column="1" Content="{DynamicResource install}" Click="Install_Click" Style="{StaticResource Primary}" IsEnabled="False" MinHeight="46" Padding="22,11" Margin="0,0,10,0" VerticalAlignment="Center"/>
+    <Button x:Name="LaunchButton" Grid.Column="2" Content="{DynamicResource launch}" Click="Launch_Click" IsEnabled="False" MinHeight="46" Padding="18,11" VerticalAlignment="Center"/>
+    <Button x:Name="CancelButton" Grid.Column="3" Content="{DynamicResource cancel}" Click="Cancel_Click" Visibility="Collapsed" Margin="10,0,0,0" VerticalAlignment="Center"/>
+    <ProgressBar x:Name="OperationBar" Grid.Row="1" Grid.ColumnSpan="4" Height="3" Foreground="{StaticResource Accent}" Background="{StaticResource Line}" Visibility="Collapsed" Margin="0,13,0,0"/>
+    <TextBlock x:Name="StatusText" Grid.Row="2" Grid.ColumnSpan="4" Text="{DynamicResource idle}" Foreground="{StaticResource Muted}" FontSize="13" Margin="0,10,0,0"/>
+   </Grid>
   </Border>
-
-  <Grid Grid.Row="4" Margin="0,11,0,0"><Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
-   <StackPanel><ProgressBar x:Name="OperationBar" Height="3" Foreground="{StaticResource Accent}" Background="{StaticResource Line}" Visibility="Collapsed" Margin="0,0,10,7"/><TextBlock x:Name="StatusText" Text="{DynamicResource idle}" Foreground="{StaticResource Muted}" FontSize="11.5"/><TextBlock Text="{DynamicResource privacy_footer}" FontSize="10" Foreground="#73889D" Margin="0,4,0,0"/></StackPanel>
-   <Button Grid.Column="1" Content="{DynamicResource upstream}" Click="Upstream_Click" Style="{StaticResource QuietButton}" FontSize="10.5" Margin="12,0,0,0" VerticalAlignment="Bottom"/>
-   <Button Grid.Column="2" x:Name="CancelButton" Content="{DynamicResource cancel}" Click="Cancel_Click" Visibility="Collapsed" Margin="12,0,0,0" VerticalAlignment="Center"/>
-  </Grid>
  </Grid>
 </Window>

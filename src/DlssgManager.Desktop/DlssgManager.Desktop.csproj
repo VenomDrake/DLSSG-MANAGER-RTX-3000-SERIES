@@ -11,6 +11,10 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <ApplicationIcon>Assets/app.ico</ApplicationIcon>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(LocalUiPreview)' == 'true'">
+    <DefineConstants>$(DefineConstants);LOCAL_UI_PREVIEW</DefineConstants>
+    <AssemblyName>DLSSGModManager.UI.Preview</AssemblyName>
+  </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\DlssgManager.Core\DlssgManager.Core.csproj" />
     <EmbeddedResource Include="Locales\*.json" />

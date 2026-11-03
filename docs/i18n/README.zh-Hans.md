@@ -14,7 +14,7 @@
 
 ## 功能
 
-- 采用焕新的深色界面展示电脑检查、游戏选择和模组设置，并保留原有的薄荷绿点缀。
+- 将界面分为三个清晰的页面：**游戏管理**、**模组设置**和**诊断**，保留原有的深蓝色背景和薄荷绿点缀。
 - 启动时先检查最新官方**完整发布包**，再分析硬件和游戏。自动下载新包，并在已验证的缓存为最新版本时明确提示。
 - 比较发布 ID、附件 ID 和 SHA-256，包括版本号相同但附件已被替换的情况。离线状态与“最新版本”明确区分。
 - 检查 NVIDIA 架构与驱动、Windows x64 和 GPU 调度配置。只有游戏运行时日志报告 GPU 调度已启用时，才确认其处于生效状态。
@@ -28,7 +28,7 @@
 
 ## 下载与使用
 
-下载 [v0.2.3 公开预览版](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/tag/v0.2.3)：[便携 ZIP](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.2.3/DLSSGModManager-Portable-win-x64.zip) · [Windows 安装程序](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.2.3/DLSSGModManager-Setup.msi)。后续版本请查看[所有发布版本](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases)。
+下载 [v0.3.0 公开预览版](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/tag/v0.3.0)：[便携 ZIP](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.3.0/DLSSGModManager-Portable-win-x64.zip) · [Windows 安装程序](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.3.0/DLSSGModManager-Setup.msi)。后续版本请查看[所有发布版本](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases)。
 
 运行便携包中的 `DLSSGModManager.exe`，或使用仅为当前用户安装的 `DLSSGModManager-Setup.msi`。发布的二进制程序无需单独安装 .NET、Python 或 CUDA Toolkit。
 
@@ -36,12 +36,18 @@
 >
 > 使用此模组会修改游戏文件。我们强烈建议仅在离线单人游戏中使用。反作弊系统或游戏规则可能将其视为未经授权的修改，并导致封禁。我们不提供任何绕过措施或防封禁保护。
 
+### 页面导航
+
+- **游戏管理：**选择游戏，查看兼容性结果和下一步操作，然后安装或更新模组。
+- **模组设置：**所有模组选项都在这里；首次测试建议使用 **2×**。
+- **诊断：**查看完整检查列表、游戏日志，以及停用模组和恢复先前状态的工具。
+
 1. 打开管理器，等待它检查并下载官方模组包。
-2. 选择 Steam 游戏、游戏文件夹或其渲染 EXE。
-3. 审阅全部检查结果。检测到反作弊、不受支持的运行库、未知的加载器冲突或游戏正在运行时，将阻止安装。
-4. 检查选项，首次从 **2×** 开始。选择**安装模组（Install mod）**或**更新模组（Update mod）**，并确认目标位置。
+2. 在**游戏管理**中选择 Steam 游戏、游戏文件夹或其渲染 EXE。
+3. 在主页面查看结果，打开**诊断**查看完整检查列表。检测到反作弊、不受支持的运行库、未知的加载器冲突或游戏正在运行时，将阻止安装。
+4. 打开**模组设置**并检查选项，首次从 **2×** 开始。选择**安装模组（Install mod）**或**更新模组（Update mod）**，并确认目标位置。
 5. 启动游戏，在图形设置中启用 **DLSS Frame Generation**。某些游戏需要重新启动。
-6. 选择**读取游戏日志（Read game log）**，检查模组是否加载、功能是否创建，以及帧生成是否真正开始。
+6. 在**诊断**中选择**读取游戏日志（Read game log）**，检查模组是否加载、功能是否创建，以及帧生成是否真正开始。
 
 管理器不会自动更改 HAGS 或驱动。它会打开 Windows 图形设置或 NVIDIA 驱动页面，并提供操作说明。启用 HAGS 后请重启 Windows。
 
@@ -59,7 +65,7 @@
 
 ## 支持范围与限制
 
-0.2.0 版本面向 Windows 10/11 x64，以及原项目支持的 RTX 20/30 显卡。目前已审查的安装规则对应原项目 **0.4.1**，要求 R580 或更新的驱动，并使用 310.9.16 运行库。管理器仍会下载未来的官方版本，但对于未知安装规则，会在管理器的检查逻辑更新前标记为不受支持；新的版本号不代表要求一定兼容。
+管理器面向 Windows 10/11 x64，以及原项目支持的 RTX 20/30 显卡。目前已审查的安装规则对应原项目 **0.4.1**，要求 R580 或更新的驱动，并使用 310.9.16 运行库。管理器仍会下载未来的官方版本，但对于未知安装规则，会在管理器的检查逻辑更新前标记为不受支持；新的版本号不代表要求一定兼容。
 
 游戏本身必须提供原生 DLSS Frame Generation，并以 DirectX 12 运行。当前原项目安装规则支持 310.x 运行库；更旧的运行库代际会被拒绝。更高倍率取决于游戏的集成方式。XeSS 最高为 4×；DLSS 6× 需要游戏集成本身支持。
 
@@ -109,7 +115,7 @@ dotnet run --project src/DlssgManager.Desktop -- --read-only --game 'D:\Games\Ex
 
 ## 发布自己的分支
 
-创建公开的 GitHub 仓库，并推送此源代码目录。随附的 Windows 工作流会对拉取请求和主分支推送进行构建与测试。推送如 `v0.2.3` 的标签时，还会使用该仓库的 Actions 令牌将二进制程序发布为 GitHub release。源代码不存储令牌，终端用户也不需要提供令牌。
+创建公开的 GitHub 仓库，并推送此源代码目录。随附的 Windows 工作流会对拉取请求和主分支推送进行构建与测试。推送如 `v0.3.0` 的标签时，还会使用该仓库的 Actions 令牌将二进制程序发布为 GitHub release。源代码不存储令牌，终端用户也不需要提供令牌。
 
 参阅 [CONTRIBUTING.md](../../CONTRIBUTING.md)、[SECURITY.md](../../SECURITY.md) 和 [THIRD_PARTY_NOTICES.md](../../THIRD_PARTY_NOTICES.md)。此独立管理器采用 MIT 许可证；原项目模组材料遵循各自的条款。
 

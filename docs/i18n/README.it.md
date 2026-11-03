@@ -14,7 +14,7 @@ Un'app desktop per Windows che affianca [DLSSG for SM86](https://github.com/sdli
 
 ## Cosa fa
 
-- Riunisce controlli del PC, scelta del gioco e impostazioni della mod in un’interfaccia scura rinnovata, mantenendo gli accenti verde menta originali.
+- Organizza gestione dei giochi, impostazioni della mod e diagnostica in tre pagine chiare, mantenendo lo sfondo blu scuro e gli accenti verde menta originali.
 - All'avvio verifica l'ultimo **pacchetto completo della release ufficiale**, prima di analizzare hardware e gioco. Scarica automaticamente un nuovo pacchetto e segnala quando la cache verificata è già aggiornata.
 - Confronta ID della release, ID del file e SHA-256, rilevando anche file sostituiti senza cambiare il numero di versione. Lo stato offline viene distinto da “ultima versione”.
 - Controlla architettura e driver NVIDIA, Windows x64 e configurazione della pianificazione GPU. La pianificazione viene confermata come attiva soltanto quando lo indica il log del runtime del gioco.
@@ -26,9 +26,15 @@ Un'app desktop per Windows che affianca [DLSSG for SM86](https://github.com/sdli
 - Legge l'ultima sessione di gioco registrata. Per confermare la generazione effettiva dei fotogrammi richiede la creazione riuscita della funzione NGX 11 e la sua prima elaborazione.
 - Esporta un report diagnostico locale con i percorsi dell'utente e del gioco oscurati. Non richiede account e non raccoglie telemetria.
 
+## Come orientarsi
+
+- **Gestione giochi:** scegli un gioco, leggi l’esito della compatibilità e usa l’azione principale di installazione/aggiornamento in basso.
+- **Impostazioni della mod:** trovi tutte le opzioni disponibili, con i valori consigliati già selezionati.
+- **Diagnostica:** consulta tutti i controlli e il log del gioco, esporta un report, disattiva la mod o ripristina lo stato precedente.
+
 ## Download e utilizzo
 
-Scarica l'[anteprima pubblica v0.2.3](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/tag/v0.2.3): [ZIP portatile](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.2.3/DLSSGModManager-Portable-win-x64.zip) · [installer Windows](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.2.3/DLSSGModManager-Setup.msi). Consulta [tutte le release](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases) per le versioni successive.
+Scarica l'[anteprima pubblica v0.3.0](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/tag/v0.3.0): [ZIP portatile](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.3.0/DLSSGModManager-Portable-win-x64.zip) · [installer Windows](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.3.0/DLSSGModManager-Setup.msi). Consulta [tutte le release](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases) per le versioni successive.
 
 Usa `DLSSGModManager.exe` dal pacchetto portatile oppure esegui `DLSSGModManager-Setup.msi`, che installa il programma per l'utente corrente. I binari pubblicati non richiedono l'installazione separata di .NET, Python o CUDA Toolkit.
 
@@ -37,11 +43,11 @@ Usa `DLSSGModManager.exe` dal pacchetto portatile oppure esegui `DLSSGModManager
 > L’uso di questa mod modifica i file del gioco. Consigliamo vivamente di usarla soltanto nei giochi per giocatore singolo offline. I sistemi anti-cheat o le regole del gioco potrebbero considerarla una modifica non autorizzata e comportare un ban. Non viene fornito alcun aggiramento o protezione contro i ban.
 
 1. Apri il gestore e lascia che controlli/scarichi il pacchetto ufficiale della mod.
-2. Scegli un gioco Steam, una cartella di gioco o il suo EXE di rendering.
-3. Esamina tutti i controlli. Un anti-cheat rilevato, un runtime non supportato, un loader sconosciuto in conflitto o il gioco aperto impediscono l'installazione.
-4. Esamina le opzioni e inizia con **2×**. Seleziona **Installa mod** o **Aggiorna mod** e conferma la destinazione.
+2. In **Gestione giochi**, scegli un gioco Steam, una cartella di gioco o il suo EXE di rendering.
+3. Leggi il riquadro del risultato e apri **Diagnostica** per tutti i controlli. Un anti-cheat rilevato, un runtime non supportato, un loader sconosciuto in conflitto o il gioco aperto impediscono l’installazione.
+4. Esamina tutte le opzioni in **Impostazioni della mod** e inizia con **2×**. Seleziona **Installa mod** o **Aggiorna mod** nella barra delle azioni in basso e conferma la destinazione.
 5. Avvia il gioco e attiva **DLSS Frame Generation** nelle impostazioni grafiche. Alcuni giochi richiedono un riavvio.
-6. Seleziona **Leggi log del gioco** per verificare se la mod è stata caricata, se la funzione è stata creata e se la generazione è effettivamente iniziata.
+6. In **Diagnostica**, seleziona **Leggi log del gioco** per verificare se la mod è stata caricata, se la funzione è stata creata e se la generazione è effettivamente iniziata.
 
 Il gestore non modifica automaticamente HAGS o i driver. Apre le impostazioni grafiche di Windows o la pagina dei driver NVIDIA e fornisce istruzioni. Riavvia Windows dopo aver abilitato HAGS.
 
@@ -59,7 +65,7 @@ Gli aggiornamenti del gestore e quelli della mod sono separati. Aggiornare il ge
 
 ## Ambito supportato e limitazioni
 
-La versione 0.2.0 è destinata a Windows 10/11 x64 e alle GPU RTX 20/30 supportate dal progetto originale. La procedura d'installazione attualmente verificata riguarda la versione **0.4.1** della mod, con driver R580 o successivo e runtime 310.9.16. Il gestore scarica anche le release ufficiali future, ma una procedura sconosciuta viene contrassegnata come non supportata finché i controlli del gestore non vengono aggiornati; un nuovo numero di versione non dimostra che i requisiti siano compatibili.
+Il gestore è destinato a Windows 10/11 x64 e alle GPU RTX 20/30 supportate dal progetto originale. La procedura d'installazione attualmente verificata riguarda la versione **0.4.1** della mod, con driver R580 o successivo e runtime 310.9.16. Il gestore scarica anche le release ufficiali future, ma una procedura sconosciuta viene contrassegnata come non supportata finché i controlli del gestore non vengono aggiornati; un nuovo numero di versione non dimostra che i requisiti siano compatibili.
 
 Il gioco deve includere DLSS Frame Generation nativo ed essere eseguito con DirectX 12. La procedura attuale supporta i runtime 310.x; le vecchie generazioni di runtime vengono rifiutate. I moltiplicatori più alti dipendono dall'integrazione nel gioco. XeSS è limitato a 4×; DLSS 6× richiede un'integrazione che lo supporti.
 
@@ -109,6 +115,6 @@ dotnet run --project src/DlssgManager.Desktop -- --read-only --game 'D:\Games\Ex
 
 ## Pubblicare un fork
 
-Crea una repository GitHub pubblica e carica questo albero dei sorgenti. Il workflow Windows incluso compila e testa le pull request e i push sul ramo principale. Un tag come `v0.2.3` pubblica anche i binari come release GitHub usando il token Actions della repository. Nessun token viene salvato nei sorgenti o richiesto agli utenti finali.
+Crea una repository GitHub pubblica e carica questo albero dei sorgenti. Il workflow Windows incluso compila e testa le pull request e i push sul ramo principale. Un tag come `v0.3.0` pubblica anche i binari come release GitHub usando il token Actions della repository. Nessun token viene salvato nei sorgenti o richiesto agli utenti finali.
 
 Consulta [CONTRIBUTING.md](../../CONTRIBUTING.md), [SECURITY.md](../../SECURITY.md) e [THIRD_PARTY_NOTICES.md](../../THIRD_PARTY_NOTICES.md). Questo gestore indipendente è distribuito con licenza MIT; il materiale della mod originale mantiene le proprie condizioni.
