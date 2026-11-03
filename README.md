@@ -1,6 +1,14 @@
 # DLSSG Mod Manager
 
+**Read in:** **English** · [Italiano](docs/i18n/README.it.md) · [简体中文](docs/i18n/README.zh-Hans.md) · [हिन्दी](docs/i18n/README.hi.md) · [Español](docs/i18n/README.es.md) · [Français](docs/i18n/README.fr.md) · [العربية](docs/i18n/README.ar.md) · [বাংলা](docs/i18n/README.bn.md) · [Português](docs/i18n/README.pt.md) · [Русский](docs/i18n/README.ru.md) · [اردو](docs/i18n/README.ur.md)
+
 A Windows desktop companion for [DLSSG for SM86](https://github.com/sdli1995/dlssg_for_sm86): check a PC and game, install a verified mod package, and keep a recoverable history of changes.
+
+## Credits
+
+- **Original mod:** [DLSSG for SM86](https://github.com/sdli1995/dlssg_for_sm86), by [sdli1995](https://github.com/sdli1995) and the project's contributors.
+- **RTX 20 / SM75 adaptation:** [Coldwood1026](https://github.com/Coldwood1026), credited in the [upstream notices](https://github.com/sdli1995/dlssg_for_sm86/blob/main/THIRD_PARTY_NOTICES.txt).
+- **This manager:** an independent installation and diagnostics interface. Credit for the original mod remains with its authors; the manager does not claim their work or official endorsement.
 
 ![Application preview](docs/screenshot.png)
 
