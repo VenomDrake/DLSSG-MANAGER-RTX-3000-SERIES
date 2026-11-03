@@ -3,7 +3,7 @@ using System.Text.Json;
 using DlssgManager.Core;
 
 // Offline, self-contained tests. No real game, hardware, user profile, registry, or Steam library is inspected.
-// The apparent DLSS-G DLL is a locally compiled, inert assembly containing synthetic version metadata only.
+// DLL fixtures are inspected as files only: a locally compiled inert assembly and a copy of the current .NET runtime metadata.
 int passed = 0;
 void Assert(bool condition, string name)
 {
@@ -90,15 +90,81 @@ WritePe(two, 0x14c);
 var x86 = await scanner.ScanAsync(ambiguous, package, two);
 Assert(!x86.CanInstall && x86.Checks.Any(c => c.Code == "exe_x64" && c.Level == CheckLevel.Blocked), "x86 executable blocked");
 WritePe(two);
-File.Copy(typeof(GameScanner).Assembly.Location, Path.Combine(ambiguous, "nvngx_dlssg.dll"), true);
+File.Copy(typeof(object).Assembly.Location, Path.Combine(ambiguous, "nvngx_dlssg.dll"), true);
 var oldRuntime = await scanner.ScanAsync(ambiguous, package, two);
-Assert(!oldRuntime.CanInstall && oldRuntime.Checks.Any(c => c.Code == "runtime_generation" && c.Level == CheckLevel.Blocked), "non-310 runtime generation blocked");
+Assert(!oldRuntime.CanInstall && oldRuntime.RuntimeVersion is not null && !oldRuntime.RuntimeVersion.StartsWith("310.", StringComparison.Ordinal)
+    && oldRuntime.Checks.Any(c => c.Code == "runtime_generation" && c.Level == CheckLevel.Blocked), "known non-310 runtime generation blocked");
+File.WriteAllBytes(Path.Combine(ambiguous, "nvngx_dlssg.dll"), []);
+var emptyRuntime = await scanner.ScanAsync(ambiguous, package, two);
+Assert(!emptyRuntime.CanInstall && emptyRuntime.RuntimeVersion is null, "empty native runtime keeps installation blocked with unknown metadata");
 File.WriteAllText(Path.Combine(ambiguous, "nvngx_dlssg.dll"), "no version metadata");
 var unknownRuntime = await scanner.ScanAsync(ambiguous, package, two);
 Assert(!unknownRuntime.CanInstall && unknownRuntime.Checks.Any(c => c.Code == "runtime_generation" && c.Level == CheckLevel.Blocked), "unknown runtime version blocked");
 File.Delete(Path.Combine(ambiguous, "nvngx_dlssg.dll"));
 var missingRuntime = await scanner.ScanAsync(ambiguous, package, two);
 Assert(!missingRuntime.CanInstall && missingRuntime.Checks.Any(c => c.Code == "game_dlssg" && c.Level == CheckLevel.Blocked), "missing native FG runtime blocked");
+var ambiguousMissingRuntime = await scanner.ScanAsync(ambiguous, package);
+
+void AssertSupport(GameScan result, GameSupportState expected, string reason, string name)
+{
+    var assessment = GameSupportAssessment.Evaluate(result);
+    Assert(assessment.State == expected && assessment.ReasonKeys.Contains(reason, StringComparer.Ordinal), name);
+}
+AssertSupport(scan, GameSupportState.RequirementsDetected, "support_reason_ready", "detected runtime requirements do not claim verified game compatibility");
+AssertSupport(fromExe, GameSupportState.RequirementsDetected, "support_reason_ready", "manual executable scan receives a requirements-only assessment");
+AssertSupport(managed, GameSupportState.RequirementsDetected, "support_reason_ready", "managed installation does not imply a new compatibility guarantee");
+AssertSupport(manual, GameSupportState.RequirementsDetected, "support_reason_ready", "recognized manual installation keeps file-based assessment");
+AssertSupport(missingPackage, GameSupportState.InstallationBlocked, "support_reason_other", "missing package blocks installation without declaring the game unsupported");
+AssertSupport(conflict, GameSupportState.InstallationBlocked, "support_reason_other", "proxy conflict is distinguished from unsupported game requirements");
+AssertSupport(corruptRecord, GameSupportState.InstallationBlocked, "support_reason_other", "corrupt management record is an installation blocker");
+AssertSupport(anti, GameSupportState.InstallationBlocked, "support_reason_anticheat", "anti-cheat marker clearly blocks installation");
+AssertSupport(ambiguity, GameSupportState.NeedsReview, "support_reason_exe", "ambiguous rendering executable asks for review rather than declaring unsupported");
+AssertSupport(outside, GameSupportState.NeedsReview, "support_reason_exe", "out-of-root executable selection remains a selection problem");
+AssertSupport(selected, GameSupportState.RequirementsDetected, "support_reason_ready", "explicit rendering executable resolves the support assessment");
+AssertSupport(x86, GameSupportState.Unsupported, "support_reason_architecture", "x86 rendering executable gives a clear architecture reason");
+AssertSupport(oldRuntime, GameSupportState.Unsupported, "support_reason_runtime", "non-310 runtime explains the unsupported requirement");
+AssertSupport(emptyRuntime, GameSupportState.NeedsReview, "support_reason_runtime_unknown", "empty runtime metadata asks for review without claiming an unsupported generation");
+AssertSupport(unknownRuntime, GameSupportState.NeedsReview, "support_reason_runtime_unknown", "corrupt runtime metadata asks for review without claiming an unsupported generation");
+AssertSupport(missingRuntime, GameSupportState.Unsupported, "support_reason_no_runtime", "complete scan with no native runtime explains why the mod is unsupported");
+AssertSupport(ambiguousMissingRuntime, GameSupportState.Unsupported, "support_reason_no_runtime", "complete multi-executable folder without a native runtime is unsupported before executable selection");
+var badPath = await scanner.ScanAsync(sandbox.PathFor("DoesNotExist"), package);
+AssertSupport(badPath, GameSupportState.NeedsReview, "support_reason_scan", "invalid game path cannot establish that a game is unsupported");
+string noExecutableDirectory = sandbox.PathFor("NoExecutable"); Directory.CreateDirectory(noExecutableDirectory);
+var noExecutable = await scanner.ScanAsync(noExecutableDirectory, package);
+AssertSupport(noExecutable, GameSupportState.Unsupported, "support_reason_no_runtime", "complete empty folder has no native runtime regardless of executable availability");
+File.Copy(runtimeFixture, Path.Combine(noExecutableDirectory, "nvngx_dlssg.dll"));
+var noExecutableWithRuntime = await scanner.ScanAsync(noExecutableDirectory, package);
+AssertSupport(noExecutableWithRuntime, GameSupportState.NeedsReview, "support_reason_no_exe", "folder with a runtime but no executable asks for the correct game folder");
+var partialMissingRuntime = missingRuntime with { Checks = missingRuntime.Checks.Select(c => c.Code == "game_scan" ? c with { Level = CheckLevel.Blocked } : c).ToArray() };
+AssertSupport(partialMissingRuntime, GameSupportState.NeedsReview, "support_reason_scan", "incomplete scan cannot use a missing runtime to declare a game unsupported");
+var unstarted = new GameScan("synthetic", null, [], null, null, ModState.NotInstalled, null, []);
+AssertSupport(unstarted, GameSupportState.NeedsReview, "support_reason_scan", "empty synthetic scan is incomplete rather than unsupported");
+var missingChecks = scan with { Checks = [new("game_scan", CheckLevel.Pass), new("game_dlssg", CheckLevel.Pass)] };
+AssertSupport(missingChecks, GameSupportState.NeedsReview, "support_reason_scan", "missing technical checks prevent a premature unsupported assessment");
+var uncertainArchitecture = scan with { Checks = scan.Checks.Select(c => c.Code == "exe_x64" ? c with { Level = CheckLevel.Unknown } : c).ToArray() };
+AssertSupport(uncertainArchitecture, GameSupportState.NeedsReview, "support_reason_scan", "unknown architecture is a review requirement rather than a technical rejection");
+string lockedDirectory = sandbox.PathFor("LockedExecutable");
+string lockedExe = Path.Combine(lockedDirectory, "LockedGame.exe"); WritePe(lockedExe);
+File.Copy(runtimeFixture, Path.Combine(lockedDirectory, "nvngx_dlssg.dll"));
+using (var lockHandle = new FileStream(lockedExe, FileMode.Open, FileAccess.Read, FileShare.None))
+{
+    var lockedExecutable = await scanner.ScanAsync(lockedDirectory, package);
+    Assert(!lockedExecutable.CanInstall && lockedExecutable.Checks.Any(c => c.Code == "exe_inspection" && c.Level == CheckLevel.Blocked)
+        && !lockedExecutable.Checks.Any(c => c.Code == "exe_x64"), "locked executable blocks inspection without pretending its architecture is known");
+    AssertSupport(lockedExecutable, GameSupportState.NeedsReview, "support_reason_scan", "locked executable asks for review rather than being labeled x86 or unsupported");
+}
+File.WriteAllText(lockedExe, "corrupt executable fixture");
+var corruptExecutable = await scanner.ScanAsync(lockedDirectory, package);
+Assert(!corruptExecutable.CanInstall && corruptExecutable.Checks.Any(c => c.Code == "exe_inspection" && c.Level == CheckLevel.Blocked), "corrupt executable remains blocked by inspection failure");
+AssertSupport(corruptExecutable, GameSupportState.NeedsReview, "support_reason_scan", "corrupt executable does not establish an unsupported architecture");
+AssertSupport(unknownRuntime with { RuntimeVersion = " ? " }, GameSupportState.NeedsReview, "support_reason_runtime_unknown", "explicit unknown runtime marker remains a review requirement");
+var antiAndUnsupported = missingRuntime with { Checks = missingRuntime.Checks.Append(new("anticheat", CheckLevel.Blocked)).ToArray() };
+var multipleReasons = GameSupportAssessment.Evaluate(antiAndUnsupported);
+Assert(multipleReasons.State == GameSupportState.Unsupported && multipleReasons.ReasonKeys.Contains("support_reason_no_runtime")
+    && multipleReasons.ReasonKeys.Contains("support_reason_anticheat"), "technical rejection preserves the separate anti-cheat blocker reason");
+var runningSynthetic = scan with { Checks = scan.Checks.Select(c => c.Code == "game_closed" ? c with { Level = CheckLevel.Blocked } : c).ToArray() };
+AssertSupport(runningSynthetic, GameSupportState.InstallationBlocked, "support_reason_other", "running game blocks installation without being labeled unsupported");
+Assert(scan.CanInstall && !missingRuntime.CanInstall && !ambiguity.CanInstall, "support assessment leaves CanInstall safety decisions unchanged");
 using (var canceled = new CancellationTokenSource())
 {
     canceled.Cancel();

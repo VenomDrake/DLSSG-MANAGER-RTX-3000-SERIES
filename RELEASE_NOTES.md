@@ -1,11 +1,12 @@
-DLSSG Mod Manager 0.2.0 adds a refreshed dark interface and in-app manager updates.
+DLSSG Mod Manager 0.2.1 makes the selected game's support status clear before installation.
 
-- Clearer PC checks, game selection and mod settings, retaining the original mint accents and all 11 languages.
-- A quiet background check shows a small notice only for a newer stable manager release. Choose **Update and restart** to download, verify and install the correct portable or MSI package, then reopen the manager.
-- Update packages are verified with SHA-256 against the official GitHub release asset digest. Games, settings and backups are preserved.
-- A prominent warning explains online-game ban risks and strongly recommends offline single-player use. No ban protection or bypass is provided.
-- Manager updates are separate from game mod updates. The reviewed DLSSG for SM86 installation recipe remains **0.4.1**; unsupported future recipes remain blocked.
+- A prominent status banner explains whether the game is unsupported, needs review, has the required files, or has installation blocked.
+- Plain-language reasons distinguish a missing native DLSS Frame Generation runtime, unsupported runtime or executable architecture, anti-cheat detection, incomplete folder checks and executable selection issues.
+- Status and reason messages are translated into all 11 manager languages.
+- Passing preliminary file checks does not certify compatibility. Run the game and read its log to confirm actual frame generation.
 
-**Migration:** 0.1.0 has no updater, so install 0.2.0 manually once using the same package type: run the new MSI, or close the old app and extract the complete new portable package into its application folder. Subsequent manager updates can be installed in the app.
+**Update:** Users on 0.2.0 can choose **Update and restart** in the app when this stable release is offered. Portable and MSI updates use the existing verified updater and preserve games, settings and backups. Users on 0.1.0 must install 0.2.1 manually once because 0.1.0 has no updater.
+
+Manager updates are separate from game mod updates. The reviewed DLSSG for SM86 installation recipe remains **0.4.1**. The online-game ban warning and recommendation to use the mod only in offline single-player games remain in place; no ban protection or bypass is provided.
 
 The manager and MSI remain unsigned. Original mod credit belongs to sdli1995 and the upstream contributors; see the README and third-party notices.

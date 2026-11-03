@@ -28,7 +28,7 @@
 
 ## Скачивание и использование
 
-Скачайте [публичную предварительную версию v0.2.0](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/tag/v0.2.0): [портативный ZIP](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.2.0/DLSSGModManager-Portable-win-x64.zip) · [установщик Windows](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.2.0/DLSSGModManager-Setup.msi). Более новые версии доступны в разделе [всех релизов](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases).
+Скачайте [публичную предварительную версию v0.2.1](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/tag/v0.2.1): [портативный ZIP](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.2.1/DLSSGModManager-Portable-win-x64.zip) · [установщик Windows](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.2.1/DLSSGModManager-Setup.msi). Более новые версии доступны в разделе [всех релизов](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases).
 
 Запустите `DLSSGModManager.exe` из портативного пакета или установите `DLSSGModManager-Setup.msi` для текущего пользователя. Для опубликованных исполняемых файлов не требуется отдельная установка .NET, Python или CUDA Toolkit.
 
@@ -107,6 +107,6 @@ dotnet run --project src/DlssgManager.Desktop -- --read-only --game 'D:\Games\Ex
 
 ## Публикация собственного форка
 
-Создайте публичный репозиторий GitHub и отправьте в него это дерево исходного кода. Включённый workflow для Windows собирает приложение и запускает тесты для pull request и отправок в основную ветку. Тег наподобие `v0.2.0` также публикует исполняемые файлы как релиз GitHub с помощью токена Actions этого репозитория. Токены не хранятся в исходном коде и не требуются конечным пользователям.
+Создайте публичный репозиторий GitHub и отправьте в него это дерево исходного кода. Включённый workflow для Windows собирает приложение и запускает тесты для pull request и отправок в основную ветку. Тег наподобие `v0.2.1` также публикует исполняемые файлы как релиз GitHub с помощью токена Actions этого репозитория. Токены не хранятся в исходном коде и не требуются конечным пользователям.
 
 См. [CONTRIBUTING.md](../../CONTRIBUTING.md), [SECURITY.md](../../SECURITY.md) и [THIRD_PARTY_NOTICES.md](../../THIRD_PARTY_NOTICES.md). Независимый менеджер распространяется по лицензии MIT; материалы исходного мода имеют собственные условия.

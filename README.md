@@ -28,7 +28,7 @@ A Windows desktop companion for [DLSSG for SM86](https://github.com/sdli1995/dls
 
 ## Download and use
 
-Get the [v0.2.0 public preview](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/tag/v0.2.0): [portable ZIP](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.2.0/DLSSGModManager-Portable-win-x64.zip) · [Windows installer](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.2.0/DLSSGModManager-Setup.msi). Browse [all releases](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases) for later versions.
+Get the [v0.2.1 public preview](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/tag/v0.2.1): [portable ZIP](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.2.1/DLSSGModManager-Portable-win-x64.zip) · [Windows installer](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.2.1/DLSSGModManager-Setup.msi). Browse [all releases](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases) for later versions.
 
 Use `DLSSGModManager.exe` from the portable package, or run the per-user `DLSSGModManager-Setup.msi`. No separate .NET, Python or CUDA Toolkit installation is needed for the published binaries.
 
@@ -107,6 +107,6 @@ dotnet run --project src/DlssgManager.Desktop -- --read-only --game 'D:\Games\Ex
 
 ## Publish your fork
 
-Create a public GitHub repository and push this source tree. The included Windows workflow builds and tests pull requests and main-branch pushes. A tag such as `v0.2.0` also publishes the binaries as a GitHub release using that repository's Actions token. No token is stored in source or required by end users.
+Create a public GitHub repository and push this source tree. The included Windows workflow builds and tests pull requests and main-branch pushes. A tag such as `v0.2.1` also publishes the binaries as a GitHub release using that repository's Actions token. No token is stored in source or required by end users.
 
 See [CONTRIBUTING.md](CONTRIBUTING.md), [SECURITY.md](SECURITY.md), and [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md). This independent manager is MIT-licensed; upstream mod material has its own terms.

@@ -145,13 +145,20 @@ public partial class MainWindow : Window
     private async Task AnalyzeAsync(CancellationToken token)
     {
         SetStatus("analyzing");
-        _logTimer.Stop();
-        _verification = null;
-        _scan = await _scanner.ScanAsync(FolderPath.Text.Trim().Trim('"'), _package, _selectedExe, token);
-        _record = null;
-        try { _record = _scan.RenderingDirectory is null ? null : await _installer.ReadRecordAsync(_scan.RenderingDirectory, token); }
-        catch (Exception error) when (error is InvalidDataException or IOException or UnauthorizedAccessException)
-        { _record = null; SaveError(error); }
+        _gameSupportAnalyzing = true;
+        ResetGameAnalysis(false);
+        try
+        {
+            var scan = await _scanner.ScanAsync(FolderPath.Text.Trim().Trim('"'), _package, _selectedExe, token);
+            InstallationRecord? record = null;
+            try { record = scan.RenderingDirectory is null ? null : await _installer.ReadRecordAsync(scan.RenderingDirectory, token); }
+            catch (Exception error) when (error is InvalidDataException or IOException or UnauthorizedAccessException)
+            { SaveError(error); }
+            token.ThrowIfCancellationRequested();
+            _scan = scan;
+            _record = record;
+        }
+        finally { _gameSupportAnalyzing = false; RefreshGameSupport(); }
         _changingChoices = true;
         ExePicker.ItemsSource = _scan.Executables;
         ExePicker.SelectedItem = _scan.Executables.FirstOrDefault(x => string.Equals(x.Path, _scan.RenderingExe, StringComparison.OrdinalIgnoreCase));
@@ -160,7 +167,10 @@ public partial class MainWindow : Window
         RefreshSummaries();
         RenderChecks();
         ReadLog(false);
-        SetStatus(PrechecksBlocked() ? "checks_blocked" : _verification?.Evaluated == true ? "verified" : "prechecks_only");
+        var support = GameSupportAssessment.Evaluate(_scan);
+        SetStatus(support.State == GameSupportState.Unsupported ? "support_unsupported"
+            : support.State == GameSupportState.NeedsReview ? "support_requires_action"
+            : PrechecksBlocked() ? "checks_blocked" : _verification?.Evaluated == true ? "verified" : "prechecks_only");
     }
 
     private void RefreshSummaries()
@@ -184,6 +194,8 @@ public partial class MainWindow : Window
             if (IsGameCurrent())
                 GameSummary.Text += "\n" + Localization.Get("up_to_date");
         }
+        else GameSummary.Text = Localization.Get("select_game_first");
+        RefreshGameSupport();
         RefreshButtons();
     }
 
@@ -284,6 +296,7 @@ public partial class MainWindow : Window
         RebuildChoices(); RefreshSummaries(); RenderChecks(); SetStatus(_statusKey, _statusDetail);
         RefreshManagerUpdateUi();
         if (_scan is not null) ReadLog(false);
+        else VerificationStatus.Text = Localization.Get("not_verified");
     }
     private void SetStatus(string key, string detail = "")
     {
@@ -374,6 +387,7 @@ public partial class MainWindow : Window
         VerificationDetails.Text = string.Join(" · ", new[] { _verification.Gpu, _verification.ProcessId is null ? null : "PID " + _verification.ProcessId }.Where(s => s is not null));
         VerificationErrors.Text = _verification.Errors.Count == 0 ? Localization.Get("no_errors") : string.Join("\n", _verification.Errors.TakeLast(8));
         RenderChecks();
+        RefreshGameSupport();
         if (showTab) MainTabs.SelectedIndex = 1;
     }
     private void Export_Click(object sender, RoutedEventArgs e)

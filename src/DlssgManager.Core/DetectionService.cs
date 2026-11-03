@@ -213,7 +213,7 @@ public sealed class GameScanner
         else if (candidates.Count == 1) exe = candidates[0].Path;
         else if (candidates.Count(c => c.Score >= 100) == 1) exe = candidates.Single(c => c.Score >= 100).Path;
         checks.Add(new("render_exe", exe is null ? CheckLevel.Blocked : CheckLevel.Pass, exe ?? string.Join(Environment.NewLine, candidates.Select(c => c.Path))));
-        bool x64 = false, directDx12 = false;
+        bool x64 = false, directDx12 = false, exeInspectionFailed = false;
         if (exe is not null)
         {
             try
@@ -222,8 +222,9 @@ public sealed class GameScanner
                 x64 = pe.X64;
                 directDx12 = pe.Imports.Any(i => i.Equals("d3d12.dll", StringComparison.OrdinalIgnoreCase));
             }
-            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or BadImageFormatException) { }
-            checks.Add(new("exe_x64", x64 ? CheckLevel.Pass : CheckLevel.Blocked, exe));
+            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or BadImageFormatException) { exeInspectionFailed = true; }
+            checks.Add(exeInspectionFailed ? new("exe_inspection", CheckLevel.Blocked, exe)
+                : new("exe_x64", x64 ? CheckLevel.Pass : CheckLevel.Blocked, exe));
         }
         var runtimes = files.Where(p => Path.GetFileName(p).Equals("nvngx_dlssg.dll", StringComparison.OrdinalIgnoreCase)).Select(p => (Path: p, Version: ReadVersion(p))).ToArray();
         var runtime = runtimes.OrderByDescending(r => r.Path.Contains("Streamline", StringComparison.OrdinalIgnoreCase)).ThenByDescending(r => r.Version?.StartsWith("310.", StringComparison.Ordinal) == true).FirstOrDefault();

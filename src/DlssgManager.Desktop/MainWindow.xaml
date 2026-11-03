@@ -60,13 +60,19 @@
         <Button x:Name="ExeButton" Grid.Column="2" Content="{DynamicResource choose_exe}" Click="Exe_Click" Style="{StaticResource QuietButton}" Margin="6,0,0,0"/>
        </Grid>
        <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
-        <TextBox x:Name="FolderPath" ToolTip="{DynamicResource folder_hint}" AutomationProperties.Name="{DynamicResource folder_hint}" KeyDown="Folder_KeyDown" FlowDirection="LeftToRight"/>
+        <TextBox x:Name="FolderPath" ToolTip="{DynamicResource folder_hint}" AutomationProperties.Name="{DynamicResource folder_hint}" KeyDown="Folder_KeyDown" TextChanged="Folder_TextChanged" FlowDirection="LeftToRight"/>
         <Button Grid.Column="1" x:Name="AnalyzeButton" Content="{DynamicResource analyze}" Click="Analyze_Click" Style="{StaticResource Primary}" Margin="10,0,0,0"/>
        </Grid>
        <Grid Margin="0,13,0,0"><Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="18"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
         <StackPanel><TextBlock Text="{DynamicResource steam_library}" Style="{StaticResource Caption}"/><Grid><Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions><ComboBox x:Name="SteamPicker" SelectionChanged="Steam_Changed" DisplayMemberPath="Name" AutomationProperties.Name="{DynamicResource steam_library}"/><Button x:Name="SteamButton" Grid.Column="1" Content="↻" Click="SteamRefresh_Click" Style="{StaticResource IconButton}" Height="40" Width="38" Margin="7,0,0,0" ToolTip="{DynamicResource refresh_steam}" AutomationProperties.Name="{DynamicResource refresh_steam}"/></Grid></StackPanel>
         <StackPanel Grid.Column="2"><TextBlock Text="{DynamicResource rendering_exe}" Style="{StaticResource Caption}"/><ComboBox x:Name="ExePicker" SelectionChanged="Exe_Changed" DisplayMemberPath="Name" AutomationProperties.Name="{DynamicResource rendering_exe}"/></StackPanel>
        </Grid>
+       <Border x:Name="GameSupportNotice" Visibility="Collapsed" Background="#162B26" BorderBrush="#2B5F4D" BorderThickness="1" CornerRadius="8" Padding="12" Margin="0,12,0,0" AutomationProperties.LiveSetting="Polite">
+        <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+         <TextBlock x:Name="GameSupportSymbol" Text="•" Foreground="{StaticResource Accent}" FontSize="22" FontWeight="SemiBold" Width="25" Margin="0,0,10,0" VerticalAlignment="Top" TextAlignment="Center"/>
+         <StackPanel Grid.Column="1"><TextBlock x:Name="GameSupportTitle" FontSize="16" FontWeight="SemiBold" TextWrapping="Wrap"/><TextBlock x:Name="GameSupportReason" FontSize="12" Foreground="{StaticResource Muted}" TextWrapping="Wrap" Margin="0,5,0,0"/></StackPanel>
+        </Grid>
+       </Border>
        <TextBlock x:Name="GameSummary" Text="{DynamicResource select_game_first}" Foreground="{StaticResource Muted}" FontSize="11.5" Margin="0,11,0,0"/>
       </StackPanel></Border>
 

@@ -30,7 +30,7 @@
 
 ## التنزيل والاستخدام
 
-احصل على [المعاينة العامة v0.2.0](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/tag/v0.2.0): [ملف ZIP محمول](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.2.0/DLSSGModManager-Portable-win-x64.zip) · [مثبّت Windows](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.2.0/DLSSGModManager-Setup.msi). تصفّح [جميع الإصدارات](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases) للحصول على الإصدارات الأحدث.
+احصل على [المعاينة العامة v0.2.1](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/tag/v0.2.1): [ملف ZIP محمول](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.2.1/DLSSGModManager-Portable-win-x64.zip) · [مثبّت Windows](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.2.1/DLSSGModManager-Setup.msi). تصفّح [جميع الإصدارات](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases) للحصول على الإصدارات الأحدث.
 
 شغّل `DLSSGModManager.exe` من الحزمة المحمولة، أو شغّل `DLSSGModManager-Setup.msi` لتثبيته للمستخدم الحالي. لا تحتاج الملفات التنفيذية المنشورة إلى تثبيت .NET أو Python أو CUDA Toolkit بصورة منفصلة.
 
@@ -109,7 +109,7 @@ dotnet run --project src/DlssgManager.Desktop -- --read-only --game 'D:\Games\Ex
 
 ## نشر نسختك المتفرعة
 
-أنشئ مستودع GitHub عامًا وادفع إليه شجرة الشيفرة المصدرية هذه. يقوم سير العمل المضمَّن لنظام Windows بالبناء والاختبار عند طلبات السحب وعمليات الدفع إلى الفرع الرئيسي. كما تنشر علامة مثل `v0.2.0` الملفات التنفيذية كإصدار GitHub باستخدام رمز Actions الخاص بذلك المستودع. ولا يُخزَّن أي رمز وصول في الشيفرة المصدرية، ولا يحتاج المستخدمون النهائيون إليه.
+أنشئ مستودع GitHub عامًا وادفع إليه شجرة الشيفرة المصدرية هذه. يقوم سير العمل المضمَّن لنظام Windows بالبناء والاختبار عند طلبات السحب وعمليات الدفع إلى الفرع الرئيسي. كما تنشر علامة مثل `v0.2.1` الملفات التنفيذية كإصدار GitHub باستخدام رمز Actions الخاص بذلك المستودع. ولا يُخزَّن أي رمز وصول في الشيفرة المصدرية، ولا يحتاج المستخدمون النهائيون إليه.
 
 راجع [CONTRIBUTING.md](../../CONTRIBUTING.md) و[SECURITY.md](../../SECURITY.md) و[THIRD_PARTY_NOTICES.md](../../THIRD_PARTY_NOTICES.md). يخضع هذا المدير المستقل لترخيص MIT؛ أما مواد التعديل الأصلي فلها شروطها الخاصة.
 
