@@ -14,6 +14,7 @@ Um aplicativo de desktop para Windows que acompanha o [DLSSG for SM86](https://g
 
 ## Funcionalidades
 
+- Reúne as verificações do PC, a seleção do jogo e as configurações do mod em uma interface escura renovada, mantendo os detalhes originais em verde-menta.
 - Ao iniciar, verifica o **pacote completo da versão oficial mais recente**, antes de analisar o hardware e o jogo. Baixa automaticamente um novo pacote e informa quando o cache verificado já está atualizado.
 - Compara o ID da versão, o ID do arquivo e o SHA-256, incluindo arquivos substituídos sem mudar o número da versão. O estado offline é diferenciado de “versão mais recente”.
 - Verifica a arquitetura e o driver NVIDIA, o Windows x64 e a configuração do agendamento de GPU. O agendamento só é confirmado como ativo quando o log do runtime do jogo informa isso.
@@ -27,9 +28,13 @@ Um aplicativo de desktop para Windows que acompanha o [DLSSG for SM86](https://g
 
 ## Download e uso
 
-Baixe a [prévia pública v0.1.0](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/tag/v0.1.0): [ZIP portátil](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.1.0/DLSSGModManager-Portable-win-x64.zip) · [instalador do Windows](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.1.0/DLSSGModManager-Setup.msi). Consulte [todas as versões](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases) para encontrar versões posteriores.
+Baixe a [prévia pública v0.2.0](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/tag/v0.2.0): [ZIP portátil](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.2.0/DLSSGModManager-Portable-win-x64.zip) · [instalador do Windows](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.2.0/DLSSGModManager-Setup.msi). Consulte [todas as versões](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases) para encontrar versões posteriores.
 
 Use `DLSSGModManager.exe` do pacote portátil ou execute `DLSSGModManager-Setup.msi`, que instala o programa para o usuário atual. Os binários publicados não exigem uma instalação separada de .NET, Python ou CUDA Toolkit.
+
+> **Jogos online: risco de banimento**
+>
+> O uso deste mod altera os arquivos do jogo. Recomendamos fortemente usá-lo somente em jogos offline para um jogador. Os sistemas antitrapaça ou as regras do jogo podem considerá-lo uma modificação não autorizada e aplicar um banimento. Não é fornecido nenhum meio de contornar essas regras nem proteção contra banimentos.
 
 1. Abra o gerenciador e deixe-o verificar ou baixar o pacote oficial do mod.
 2. Escolha um jogo Steam, uma pasta de jogo ou seu EXE de renderização.
@@ -40,9 +45,19 @@ Use `DLSSGModManager.exe` do pacote portátil ou execute `DLSSGModManager-Setup.
 
 O gerenciador não altera HAGS nem os drivers automaticamente. Ele abre as configurações gráficas do Windows ou a página de drivers da NVIDIA e fornece instruções. Reinicie o Windows depois de ativar HAGS.
 
+## Atualizar o gerenciador
+
+O gerenciador verifica silenciosamente suas próprias versões do GitHub em segundo plano. Um pequeno aviso aparece somente quando há uma versão estável mais recente do gerenciador; rascunhos e pré-lançamentos são ignorados.
+
+Escolha **Atualizar e reiniciar** quando for conveniente, após terminar a operação atual. O gerenciador seleciona automaticamente o ZIP portátil ou o MSI adequado à instalação atual, baixa o pacote, verifica seu SHA-256 com o resumo criptográfico do arquivo da versão oficial do GitHub, fecha, instala a atualização e abre novamente. Os jogos, as configurações e os backups são mantidos. As próximas atualizações não exigem visitar o GitHub nem substituir arquivos manualmente.
+
+**A migração de 0.1.0 para 0.2.0 exige uma única atualização manual**, pois a versão 0.1.0 não contém o atualizador. Feche a versão 0.1.0 e execute o novo MSI ou extraia o novo pacote portátil completo na pasta do aplicativo portátil, usando o mesmo tipo de pacote de antes. A partir da versão 0.2.0, as próximas atualizações do gerenciador podem ser instaladas no aplicativo.
+
+As atualizações do gerenciador e do mod são independentes. Atualizar o gerenciador não instala um novo mod em nenhum jogo; o procedimento de instalação revisado do projeto original continua sendo o da versão **0.4.1**.
+
 ## Compatibilidade e limitações
 
-Esta primeira versão é destinada ao Windows 10/11 x64 e às GPUs RTX 20/30 compatíveis com o projeto original. O procedimento de instalação atualmente verificado corresponde à versão **0.4.1** do mod, com driver R580 ou mais recente e runtime 310.9.16. O gerenciador também baixa versões oficiais futuras, mas um procedimento desconhecido é marcado como não compatível até que suas verificações sejam atualizadas; um novo número de versão não comprova que os requisitos sejam compatíveis.
+A versão 0.2.0 é destinada ao Windows 10/11 x64 e às GPUs RTX 20/30 compatíveis com o projeto original. O procedimento de instalação atualmente verificado corresponde à versão **0.4.1** do mod, com driver R580 ou mais recente e runtime 310.9.16. O gerenciador também baixa versões oficiais futuras, mas um procedimento desconhecido é marcado como não compatível até que suas verificações sejam atualizadas; um novo número de versão não comprova que os requisitos sejam compatíveis.
 
 O jogo deve incluir DLSS Frame Generation nativo e ser executado com DirectX 12. O procedimento atual oferece suporte aos runtimes 310.x; gerações antigas são recusadas. Multiplicadores mais altos dependem da integração do jogo. O XeSS é limitado a 4×; DLSS 6× exige uma integração que o suporte.
 
@@ -52,7 +67,7 @@ Instalações manuais existentes que correspondam à versão verificada atual po
 
 A primeira verificação em um log é um teste inicial, não uma garantia de estabilidade em sessões longas nem de duplicação dos FPS renderizados. Os quadros gerados exibidos e a latência dos comandos são medidas diferentes.
 
-O gerenciador e o MSI não são assinados nesta compilação inicial. Nenhum certificado de assinatura é importado. O pacote original 0.4.1 usa um certificado de teste autoassinado cujo nome difere daquele indicado em seu README; a origem do pacote é verificada pelo resumo criptográfico do arquivo no GitHub, e não pela confiança do Windows no editor.
+O gerenciador e o MSI não são assinados nesta compilação. Nenhum certificado de assinatura é importado. O pacote original 0.4.1 usa um certificado de teste autoassinado cujo nome difere daquele indicado em seu README; a origem do pacote é verificada pelo resumo criptográfico do arquivo no GitHub, e não pela confiança do Windows no editor.
 
 ## Idiomas
 
@@ -92,6 +107,6 @@ dotnet run --project src/DlssgManager.Desktop -- --read-only --game 'D:\Games\Ex
 
 ## Publicar seu fork
 
-Crie um repositório público no GitHub e envie esta árvore de código-fonte. O workflow do Windows incluído compila e testa pull requests e envios à branch principal. Uma tag como `v0.1.0` também publica os binários como uma versão do GitHub usando o token do Actions do repositório. Nenhum token é salvo no código-fonte ou exigido dos usuários finais.
+Crie um repositório público no GitHub e envie esta árvore de código-fonte. O workflow do Windows incluído compila e testa pull requests e envios à branch principal. Uma tag como `v0.2.0` também publica os binários como uma versão do GitHub usando o token do Actions do repositório. Nenhum token é salvo no código-fonte ou exigido dos usuários finais.
 
 Consulte [CONTRIBUTING.md](../../CONTRIBUTING.md), [SECURITY.md](../../SECURITY.md) e [THIRD_PARTY_NOTICES.md](../../THIRD_PARTY_NOTICES.md). Este gerenciador independente é distribuído sob licença MIT; o material do mod original mantém seus próprios termos.

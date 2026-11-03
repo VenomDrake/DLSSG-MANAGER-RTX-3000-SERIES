@@ -1,6 +1,10 @@
 param([string]$OutputDirectory)
 $ErrorActionPreference = 'Stop'
 $repoRoot = Split-Path -Parent $PSScriptRoot
+$versionFile = Join-Path $repoRoot 'Version.props'
+$versionDocument = [xml][IO.File]::ReadAllText($versionFile)
+$appVersion = [string]$versionDocument.Project.PropertyGroup.Version
+if ($appVersion -notmatch '^\d+\.\d+\.\d+$') { throw 'Version.props must contain a stable three-part version for Windows Installer.' }
 if ([string]::IsNullOrWhiteSpace($OutputDirectory)) { $OutputDirectory = Join-Path $repoRoot 'artifacts' }
 $OutputDirectory = [IO.Path]::GetFullPath($OutputDirectory)
 New-Item -ItemType Directory -Path $OutputDirectory -Force | Out-Null
@@ -11,6 +15,11 @@ foreach ($name in @('LICENSE', 'THIRD_PARTY_NOTICES.md')) { Copy-Item -LiteralPa
 foreach ($name in @('DOTNET-RUNTIME-LICENSE.txt', 'WPF-LICENSE.txt', 'DOTNET-THIRD-PARTY-NOTICES.txt')) { Copy-Item -LiteralPath (Join-Path $repoRoot "docs/$name") -Destination $publishDirectory -Force }
 $readme = [IO.File]::ReadAllText((Join-Path $repoRoot 'README.md'))
 $readme = [regex]::Replace($readme, '(?m)^!\[Application preview\].*\r?\n', '')
+$repositoryRoot = 'https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/blob/main/'
+$readme = [regex]::Replace($readme, '(?m)(\[[^\]]*\]\()((?:docs/i18n/README\.[A-Za-z-]+\.md|README\.md|CONTRIBUTING\.md|SECURITY\.md|THIRD_PARTY_NOTICES\.md))((?:#[^)]*)?\))', {
+    param($match)
+    $match.Groups[1].Value + $repositoryRoot + $match.Groups[2].Value + $match.Groups[3].Value
+})
 [IO.File]::WriteAllText((Join-Path $publishDirectory 'README.md'), $readme, [Text.UTF8Encoding]::new($false))
 $wixDirectory = Join-Path $repoRoot 'tools/wix'
 $wix = Join-Path $wixDirectory 'wix.exe'
@@ -21,7 +30,7 @@ if (-not (Test-Path -LiteralPath $wix)) {
 & $wix extension add -g WixToolset.UI.wixext/4.0.6
 if ($LASTEXITCODE -ne 0) { throw 'WiX UI extension setup failed.' }
 $msi = Join-Path $OutputDirectory 'DLSSGModManager-Setup.msi'
-& $wix build (Join-Path $repoRoot 'installer/Package.wxs') -arch x64 -ext WixToolset.UI.wixext -d "PublishDir=$publishDirectory" -d "RepoDir=$repoRoot" -o $msi
+& $wix build (Join-Path $repoRoot 'installer/Package.wxs') -arch x64 -ext WixToolset.UI.wixext -d "PublishDir=$publishDirectory" -d "RepoDir=$repoRoot" -d "AppVersion=$appVersion" -o $msi
 if ($LASTEXITCODE -ne 0) { throw 'MSI build failed.' }
 $zip = Join-Path $OutputDirectory 'DLSSGModManager-Portable-win-x64.zip'
 Compress-Archive -Path (Join-Path $publishDirectory '*') -DestinationPath $zip -Force

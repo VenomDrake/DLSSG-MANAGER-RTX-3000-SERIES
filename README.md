@@ -14,6 +14,7 @@ A Windows desktop companion for [DLSSG for SM86](https://github.com/sdli1995/dls
 
 ## What it does
 
+- Presents PC checks, game selection and mod settings in a refreshed dark interface with the original mint accents.
 - Checks the latest official **complete release asset** on startup, before hardware and game analysis. It downloads a new package automatically and reports when the verified cache is already current.
 - Compares release ID, asset ID and SHA-256, including replacement assets with the same version number. Offline status is distinct from “latest version.”
 - Checks NVIDIA architecture and driver, Windows x64 and GPU scheduling configuration. Scheduling is confirmed as active only when the game's runtime log reports it.
@@ -27,9 +28,13 @@ A Windows desktop companion for [DLSSG for SM86](https://github.com/sdli1995/dls
 
 ## Download and use
 
-Get the [v0.1.0 public preview](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/tag/v0.1.0): [portable ZIP](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.1.0/DLSSGModManager-Portable-win-x64.zip) · [Windows installer](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.1.0/DLSSGModManager-Setup.msi). Browse [all releases](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases) for later versions.
+Get the [v0.2.0 public preview](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/tag/v0.2.0): [portable ZIP](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.2.0/DLSSGModManager-Portable-win-x64.zip) · [Windows installer](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.2.0/DLSSGModManager-Setup.msi). Browse [all releases](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases) for later versions.
 
 Use `DLSSGModManager.exe` from the portable package, or run the per-user `DLSSGModManager-Setup.msi`. No separate .NET, Python or CUDA Toolkit installation is needed for the published binaries.
+
+> **Online games: risk of a ban**
+>
+> Using this mod changes game files. We strongly recommend using it only in offline single-player games. Anti-cheat systems or game rules may treat it as an unauthorized modification and issue a ban. No bypass or protection against bans is provided.
 
 1. Open the manager and let it check/download the official mod package.
 2. Choose a Steam game, a game folder, or its rendering EXE.
@@ -40,9 +45,19 @@ Use `DLSSGModManager.exe` from the portable package, or run the per-user `DLSSGM
 
 The manager does not change HAGS or drivers automatically. It opens the Windows graphics settings or NVIDIA's driver page and gives instructions. Restart Windows after enabling HAGS.
 
+## Updating the manager
+
+The manager quietly checks its own GitHub releases in the background. A small notice appears only when a newer stable manager version is available; draft releases and prereleases are ignored.
+
+Choose **Update and restart** when convenient, after the current operation finishes. The manager automatically selects the portable ZIP or MSI for the current installation, downloads it, verifies its SHA-256 against the official GitHub release asset digest, closes, installs the update and reopens. Games, settings and backups are preserved. Future updates do not require visiting GitHub or replacing files manually.
+
+**Moving from 0.1.0 to 0.2.0 requires one manual update**, because 0.1.0 does not contain the updater. Close 0.1.0, then run the new MSI or extract the complete new portable package into your portable application folder, using the same package type as before. Starting with 0.2.0, subsequent manager updates can be installed in the app.
+
+Manager updates and mod updates are separate. Updating the manager does not install a new mod in any game; the reviewed upstream installation recipe remains **0.4.1**.
+
 ## Supported scope and limitations
 
-This first version targets Windows 10/11 x64 and RTX 20/30 GPUs supported by the upstream project. The currently reviewed installation recipe is upstream **0.4.1**, with driver R580 or newer and the 310.9.16 runtime. It still downloads future official releases, but an unknown recipe is marked unsupported until the manager's checks are updated; a new version number is not proof of compatible requirements.
+Version 0.2.0 targets Windows 10/11 x64 and RTX 20/30 GPUs supported by the upstream project. The currently reviewed installation recipe is upstream **0.4.1**, with driver R580 or newer and the 310.9.16 runtime. It still downloads future official releases, but an unknown recipe is marked unsupported until the manager's checks are updated; a new version number is not proof of compatible requirements.
 
 The game must supply native DLSS Frame Generation and run with DirectX 12. Runtime 310.x is supported by the current upstream recipe; old runtime generations are refused. A higher multiplier depends on the game's integration. XeSS is capped at 4×; DLSS 6× requires a game integration that supports it.
 
@@ -52,7 +67,7 @@ Existing manual installations matching the current verified release can be adopt
 
 The first verification in a log is a smoke test, not a guarantee of long gameplay stability or doubled rendered FPS. Displayed generated frames and input latency are different measurements.
 
-The manager and MSI are unsigned in this initial build. No signing certificate is imported. Upstream's 0.4.1 package has a self-signed test certificate whose name differs from its README; package provenance is verified against the GitHub asset digest, not against Windows publisher trust.
+The manager and MSI are unsigned in this build. No signing certificate is imported. Upstream's 0.4.1 package has a self-signed test certificate whose name differs from its README; package provenance is verified against the GitHub asset digest, not against Windows publisher trust.
 
 ## Languages
 
@@ -92,6 +107,6 @@ dotnet run --project src/DlssgManager.Desktop -- --read-only --game 'D:\Games\Ex
 
 ## Publish your fork
 
-Create a public GitHub repository and push this source tree. The included Windows workflow builds and tests pull requests and main-branch pushes. A tag such as `v0.1.0` also publishes the binaries as a GitHub release using that repository's Actions token. No token is stored in source or required by end users.
+Create a public GitHub repository and push this source tree. The included Windows workflow builds and tests pull requests and main-branch pushes. A tag such as `v0.2.0` also publishes the binaries as a GitHub release using that repository's Actions token. No token is stored in source or required by end users.
 
 See [CONTRIBUTING.md](CONTRIBUTING.md), [SECURITY.md](SECURITY.md), and [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md). This independent manager is MIT-licensed; upstream mod material has its own terms.

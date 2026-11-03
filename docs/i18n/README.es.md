@@ -14,6 +14,7 @@ Una aplicación de escritorio para Windows que complementa [DLSSG for SM86](http
 
 ## Funciones
 
+- Reúne las comprobaciones del PC, la selección del juego y los ajustes del mod en una interfaz oscura renovada que conserva los detalles originales en verde menta.
 - Al iniciarse, comprueba el **paquete completo de la última versión oficial**, antes de analizar el hardware y el juego. Descarga automáticamente un paquete nuevo e indica cuándo la caché verificada ya está actualizada.
 - Compara el ID de la versión, el ID del archivo y SHA-256, detectando también archivos reemplazados sin cambiar el número de versión. El estado sin conexión se distingue de “última versión”.
 - Comprueba la arquitectura y el controlador NVIDIA, Windows x64 y la configuración de la programación de GPU. Solo confirma que la programación está activa cuando lo indica el registro del runtime del juego.
@@ -27,9 +28,13 @@ Una aplicación de escritorio para Windows que complementa [DLSSG for SM86](http
 
 ## Descarga y uso
 
-Descarga la [versión preliminar pública v0.1.0](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/tag/v0.1.0): [ZIP portátil](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.1.0/DLSSGModManager-Portable-win-x64.zip) · [instalador de Windows](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.1.0/DLSSGModManager-Setup.msi). Consulta [todas las versiones](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases) para encontrar versiones posteriores.
+Descarga la [versión preliminar pública v0.2.0](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/tag/v0.2.0): [ZIP portátil](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.2.0/DLSSGModManager-Portable-win-x64.zip) · [instalador de Windows](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.2.0/DLSSGModManager-Setup.msi). Consulta [todas las versiones](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases) para encontrar versiones posteriores.
 
 Utiliza `DLSSGModManager.exe` del paquete portátil o ejecuta `DLSSGModManager-Setup.msi`, que instala el programa para el usuario actual. Los binarios publicados no requieren instalar por separado .NET, Python ni CUDA Toolkit.
+
+> **Juegos en línea: riesgo de expulsión**
+>
+> Usar este mod modifica los archivos del juego. Recomendamos encarecidamente usarlo solo en juegos sin conexión para un jugador. Los sistemas antitrampas o las reglas del juego pueden considerarlo una modificación no autorizada y sancionarte con una expulsión. No se proporciona ningún método de evasión ni protección contra expulsiones.
 
 1. Abre el gestor y deja que compruebe o descargue el paquete oficial del mod.
 2. Elige un juego de Steam, una carpeta de juego o su EXE de renderizado.
@@ -40,9 +45,19 @@ Utiliza `DLSSGModManager.exe` del paquete portátil o ejecuta `DLSSGModManager-S
 
 El gestor no modifica HAGS ni los controladores automáticamente. Abre los ajustes gráficos de Windows o la página de controladores de NVIDIA y proporciona instrucciones. Reinicia Windows después de habilitar HAGS.
 
+## Actualizar el gestor
+
+El gestor comprueba silenciosamente sus propias versiones de GitHub en segundo plano. Solo aparece un pequeño aviso cuando hay una versión estable más reciente del gestor; se omiten los borradores y las versiones preliminares.
+
+Elige **Actualizar y reiniciar** cuando te convenga, tras finalizar la operación actual. El gestor selecciona automáticamente el ZIP portable o el MSI adecuado para la instalación actual, lo descarga, verifica su SHA-256 con el resumen del archivo de la versión oficial de GitHub, se cierra, instala la actualización y vuelve a abrirse. Se conservan los juegos, los ajustes y las copias de seguridad. Las próximas actualizaciones no requieren visitar GitHub ni sustituir archivos manualmente.
+
+**El paso de 0.1.0 a 0.2.0 requiere una única actualización manual**, porque 0.1.0 no incluye el actualizador. Cierra 0.1.0 y ejecuta el nuevo MSI o extrae el nuevo paquete portable completo en la carpeta de tu aplicación portable, usando el mismo tipo de paquete que antes. A partir de 0.2.0, las siguientes actualizaciones del gestor se pueden instalar desde la aplicación.
+
+Las actualizaciones del gestor y del mod son independientes. Actualizar el gestor no instala un mod nuevo en ningún juego; el procedimiento de instalación revisado del proyecto original sigue siendo el de **0.4.1**.
+
 ## Compatibilidad y limitaciones
 
-Esta primera versión está destinada a Windows 10/11 x64 y a las GPU RTX 20/30 compatibles con el proyecto original. El procedimiento de instalación actualmente revisado corresponde a la versión **0.4.1** del mod, con controlador R580 o posterior y runtime 310.9.16. El gestor también descarga las futuras versiones oficiales, pero un procedimiento desconocido se marca como no compatible hasta que se actualicen sus comprobaciones; un nuevo número de versión no demuestra que sus requisitos sean compatibles.
+La versión 0.2.0 está destinada a Windows 10/11 x64 y a las GPU RTX 20/30 compatibles con el proyecto original. El procedimiento de instalación actualmente revisado corresponde a la versión **0.4.1** del mod, con controlador R580 o posterior y runtime 310.9.16. El gestor también descarga las futuras versiones oficiales, pero un procedimiento desconocido se marca como no compatible hasta que se actualicen sus comprobaciones; un nuevo número de versión no demuestra que sus requisitos sean compatibles.
 
 El juego debe incluir DLSS Frame Generation nativo y ejecutarse con DirectX 12. El procedimiento actual admite runtimes 310.x; las generaciones antiguas se rechazan. Un multiplicador más alto depende de la integración del juego. XeSS está limitado a 4×; DLSS 6× requiere una integración que lo admita.
 
@@ -52,7 +67,7 @@ Las instalaciones manuales existentes que coincidan con la versión verificada a
 
 La primera verificación en un registro es una prueba inicial, no una garantía de estabilidad en sesiones largas ni de duplicar los FPS renderizados. Los fotogramas generados que se muestran y la latencia de entrada son medidas diferentes.
 
-El gestor y el MSI no están firmados en esta compilación inicial. No se importa ningún certificado de firma. El paquete original 0.4.1 utiliza un certificado de prueba autofirmado cuyo nombre difiere del indicado en su README; la procedencia del paquete se verifica mediante el resumen criptográfico del archivo de GitHub, no mediante la confianza de Windows en el editor.
+El gestor y el MSI no están firmados en esta compilación. No se importa ningún certificado de firma. El paquete original 0.4.1 utiliza un certificado de prueba autofirmado cuyo nombre difiere del indicado en su README; la procedencia del paquete se verifica mediante el resumen criptográfico del archivo de GitHub, no mediante la confianza de Windows en el editor.
 
 ## Idiomas
 
@@ -92,6 +107,6 @@ dotnet run --project src/DlssgManager.Desktop -- --read-only --game 'D:\Games\Ex
 
 ## Publicar tu fork
 
-Crea un repositorio público de GitHub y sube este árbol de código fuente. El flujo de trabajo de Windows incluido compila y prueba las pull requests y los envíos a la rama principal. Una etiqueta como `v0.1.0` también publica los binarios como una versión de GitHub mediante el token de Actions del repositorio. No se guarda ningún token en el código fuente ni se exige a los usuarios finales.
+Crea un repositorio público de GitHub y sube este árbol de código fuente. El flujo de trabajo de Windows incluido compila y prueba las pull requests y los envíos a la rama principal. Una etiqueta como `v0.2.0` también publica los binarios como una versión de GitHub mediante el token de Actions del repositorio. No se guarda ningún token en el código fuente ni se exige a los usuarios finales.
 
 Consulta [CONTRIBUTING.md](../../CONTRIBUTING.md), [SECURITY.md](../../SECURITY.md) y [THIRD_PARTY_NOTICES.md](../../THIRD_PARTY_NOTICES.md). Este gestor independiente tiene licencia MIT; el material del mod original mantiene sus propias condiciones.

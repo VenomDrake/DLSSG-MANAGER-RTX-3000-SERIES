@@ -1,7 +1,8 @@
 <Wix xmlns="http://wixtoolset.org/schemas/v4/wxs" xmlns:ui="http://wixtoolset.org/schemas/v4/wxs/ui">
-  <Package Name="DLSSG Mod Manager" Manufacturer="DLSSG Mod Manager contributors" Version="0.1.0" Language="1033" UpgradeCode="B704AF01-12FC-43EF-AB32-A3859FB716D0" Scope="perUser">
+  <Package Name="DLSSG Mod Manager" Manufacturer="DLSSG Mod Manager contributors" Version="$(var.AppVersion)" Language="1033" UpgradeCode="B704AF01-12FC-43EF-AB32-A3859FB716D0" Scope="perUser">
     <MajorUpgrade DowngradeErrorMessage="A newer version of DLSSG Mod Manager is already installed." />
     <MediaTemplate EmbedCab="yes" />
+    <SetProperty Id="ARPINSTALLLOCATION" Value="[APPFOLDER]" After="CostFinalize" />
     <Launch Condition="VersionNT64" Message="DLSSG Mod Manager requires 64-bit Windows 10 or Windows 11." />
     <StandardDirectory Id="LocalAppDataFolder"><Directory Id="INSTALLFOLDER" Name="Programs"><Directory Id="APPFOLDER" Name="DLSSG Mod Manager">
       <Component Id="ApplicationFiles" Guid="724019F1-7127-4CA5-B115-7F5883888870">
@@ -16,6 +17,7 @@
         <File Source="$(var.PublishDir)/WPF-LICENSE.txt" />
         <File Source="$(var.PublishDir)/DOTNET-THIRD-PARTY-NOTICES.txt" />
         <RegistryValue Root="HKCU" Key="Software\DLSSGModManager" Name="Installed" Type="integer" Value="1" KeyPath="yes" />
+        <RegistryValue Root="HKCU" Key="Software\DLSSGModManager" Name="InstallLocation" Type="string" Value="[APPFOLDER]" />
         <RemoveFolder Id="RemoveApplicationFolder" On="uninstall" />
       </Component>
     </Directory></Directory></StandardDirectory>

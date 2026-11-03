@@ -14,6 +14,7 @@ Une application de bureau Windows qui accompagne [DLSSG for SM86](https://github
 
 ## Fonctionnalités
 
+- Réunit les vérifications du PC, la sélection du jeu et les réglages du mod dans une interface sombre renouvelée, en conservant les touches de vert menthe d’origine.
 - Au démarrage, vérifie le **paquet complet de la dernière version officielle**, avant d'analyser le matériel et le jeu. Télécharge automatiquement un nouveau paquet et indique lorsque le cache vérifié est déjà à jour.
 - Compare l'identifiant de version, l'identifiant du fichier et SHA-256, y compris lorsqu'un fichier est remplacé sans changer le numéro de version. L'état hors ligne est distingué de « dernière version ».
 - Vérifie l'architecture et le pilote NVIDIA, Windows x64 et la configuration de la planification GPU. La planification n'est confirmée comme active que lorsque le journal du runtime du jeu l'indique.
@@ -27,9 +28,13 @@ Une application de bureau Windows qui accompagne [DLSSG for SM86](https://github
 
 ## Téléchargement et utilisation
 
-Téléchargez la [préversion publique v0.1.0](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/tag/v0.1.0) : [ZIP portable](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.1.0/DLSSGModManager-Portable-win-x64.zip) · [programme d'installation Windows](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.1.0/DLSSGModManager-Setup.msi). Consultez [toutes les versions](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases) pour les versions suivantes.
+Téléchargez la [préversion publique v0.2.0](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/tag/v0.2.0) : [ZIP portable](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.2.0/DLSSGModManager-Portable-win-x64.zip) · [programme d'installation Windows](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.2.0/DLSSGModManager-Setup.msi). Consultez [toutes les versions](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases) pour les versions suivantes.
 
 Utilisez `DLSSGModManager.exe` depuis le paquet portable ou exécutez `DLSSGModManager-Setup.msi`, qui installe l'application pour l'utilisateur actuel. Les binaires publiés ne nécessitent pas d'installation séparée de .NET, Python ou CUDA Toolkit.
+
+> **Jeux en ligne : risque de bannissement**
+>
+> L’utilisation de ce mod modifie les fichiers du jeu. Nous recommandons vivement de l’utiliser uniquement dans les jeux solo hors ligne. Les systèmes anti-triche ou les règles du jeu peuvent le considérer comme une modification non autorisée et entraîner un bannissement. Aucun contournement ni aucune protection contre les bannissements n’est fourni.
 
 1. Ouvrez le gestionnaire et laissez-le vérifier ou télécharger le paquet officiel du mod.
 2. Choisissez un jeu Steam, un dossier de jeu ou son EXE de rendu.
@@ -40,9 +45,19 @@ Utilisez `DLSSGModManager.exe` depuis le paquet portable ou exécutez `DLSSGModM
 
 Le gestionnaire ne modifie pas automatiquement HAGS ni les pilotes. Il ouvre les paramètres graphiques de Windows ou la page des pilotes NVIDIA et donne des instructions. Redémarrez Windows après avoir activé HAGS.
 
+## Mettre à jour le gestionnaire
+
+Le gestionnaire vérifie discrètement ses propres versions GitHub en arrière-plan. Un petit avis apparaît uniquement lorsqu’une version stable plus récente du gestionnaire est disponible ; les brouillons et préversions sont ignorés.
+
+Choisissez **Mettre à jour et redémarrer** au moment qui vous convient, après la fin de l’opération en cours. Le gestionnaire sélectionne automatiquement le ZIP portable ou le MSI adapté à l’installation actuelle, le télécharge, vérifie son SHA-256 avec l’empreinte du fichier de la version officielle GitHub, se ferme, installe la mise à jour et se rouvre. Vos jeux, réglages et sauvegardes sont conservés. Les prochaines mises à jour ne nécessitent ni de visiter GitHub ni de remplacer des fichiers manuellement.
+
+**Le passage de 0.1.0 à 0.2.0 nécessite une seule mise à jour manuelle**, car 0.1.0 ne contient pas le système de mise à jour. Fermez 0.1.0, puis lancez le nouveau MSI ou extrayez le nouveau paquet portable complet dans le dossier de votre application portable, avec le même type de paquet qu’auparavant. À partir de 0.2.0, les mises à jour suivantes du gestionnaire peuvent être installées dans l’application.
+
+Les mises à jour du gestionnaire et du mod sont distinctes. Mettre à jour le gestionnaire n’installe aucun nouveau mod dans les jeux ; la procédure d’installation vérifiée du projet d’origine reste celle de **0.4.1**.
+
 ## Prise en charge et limites
 
-Cette première version vise Windows 10/11 x64 et les GPU RTX 20/30 pris en charge par le projet d'origine. La procédure d'installation actuellement vérifiée concerne la version **0.4.1** du mod, avec un pilote R580 ou plus récent et le runtime 310.9.16. Le gestionnaire télécharge aussi les futures versions officielles, mais une procédure inconnue est signalée comme non prise en charge jusqu'à la mise à jour de ses vérifications ; un nouveau numéro de version ne prouve pas que les exigences sont compatibles.
+La version 0.2.0 vise Windows 10/11 x64 et les GPU RTX 20/30 pris en charge par le projet d'origine. La procédure d'installation actuellement vérifiée concerne la version **0.4.1** du mod, avec un pilote R580 ou plus récent et le runtime 310.9.16. Le gestionnaire télécharge aussi les futures versions officielles, mais une procédure inconnue est signalée comme non prise en charge jusqu'à la mise à jour de ses vérifications ; un nouveau numéro de version ne prouve pas que les exigences sont compatibles.
 
 Le jeu doit intégrer nativement DLSS Frame Generation et fonctionner avec DirectX 12. La procédure actuelle prend en charge les runtimes 310.x ; les anciennes générations sont refusées. Un multiplicateur plus élevé dépend de l'intégration du jeu. XeSS est limité à 4× ; DLSS 6× exige une intégration qui le prenne en charge.
 
@@ -52,7 +67,7 @@ Les installations manuelles existantes correspondant à la version vérifiée ac
 
 La première vérification dans un journal est un test initial, pas une garantie de stabilité pendant de longues sessions ni de doublement des FPS rendus. Les images générées affichées et la latence des commandes sont des mesures différentes.
 
-Le gestionnaire et le MSI ne sont pas signés dans cette première compilation. Aucun certificat de signature n'est importé. Le paquet original 0.4.1 possède un certificat de test autosigné dont le nom diffère de celui indiqué dans son README ; la provenance du paquet est vérifiée à partir de l'empreinte du fichier sur GitHub, et non de la confiance accordée à l'éditeur par Windows.
+Le gestionnaire et le MSI ne sont pas signés dans cette compilation. Aucun certificat de signature n'est importé. Le paquet original 0.4.1 possède un certificat de test autosigné dont le nom diffère de celui indiqué dans son README ; la provenance du paquet est vérifiée à partir de l'empreinte du fichier sur GitHub, et non de la confiance accordée à l'éditeur par Windows.
 
 ## Langues
 
@@ -92,6 +107,6 @@ dotnet run --project src/DlssgManager.Desktop -- --read-only --game 'D:\Games\Ex
 
 ## Publier votre fork
 
-Créez un dépôt GitHub public et poussez cet arbre de sources. Le workflow Windows inclus compile et teste les pull requests ainsi que les envois sur la branche principale. Une étiquette comme `v0.1.0` publie aussi les binaires sous forme de version GitHub à l'aide du jeton Actions du dépôt. Aucun jeton n'est stocké dans les sources ni demandé aux utilisateurs finaux.
+Créez un dépôt GitHub public et poussez cet arbre de sources. Le workflow Windows inclus compile et teste les pull requests ainsi que les envois sur la branche principale. Une étiquette comme `v0.2.0` publie aussi les binaires sous forme de version GitHub à l'aide du jeton Actions du dépôt. Aucun jeton n'est stocké dans les sources ni demandé aux utilisateurs finaux.
 
 Consultez [CONTRIBUTING.md](../../CONTRIBUTING.md), [SECURITY.md](../../SECURITY.md) et [THIRD_PARTY_NOTICES.md](../../THIRD_PARTY_NOTICES.md). Ce gestionnaire indépendant est distribué sous licence MIT ; le matériel du mod d'origine conserve ses propres conditions.

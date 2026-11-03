@@ -50,11 +50,12 @@ public partial class MainWindow : Window
         FolderPath.FlowDirection = FlowDirection.LeftToRight;
         Localization.Changed += LanguageChanged;
         _logTimer.Tick += (_, _) => ReadLog(false);
+        InitializeManagerUpdates();
     }
 
     private async void Window_Loaded(object sender, RoutedEventArgs e)
     {
-        await RunAsync(async token =>
+        var startup = RunAsync(async token =>
         {
             await UpdatePackageAsync(token);
             await InspectHardwareAsync(token);
@@ -67,9 +68,13 @@ public partial class MainWindow : Window
             }
             else SetStatus("idle");
         });
+        _ = CheckManagerUpdatesAsync();
+        await startup;
+        ShowManagerUpdateResult();
+        _managerUpdateTimer.Start();
     }
 
-    private async Task RunAsync(Func<CancellationToken, Task> action)
+    private async Task RunAsync(Func<CancellationToken, Task> action, string? compactErrorKey = null)
     {
         if (_operation is not null) return;
         _operation = new CancellationTokenSource();
@@ -81,10 +86,11 @@ public partial class MainWindow : Window
         catch (OperationCanceledException) { SetStatus("canceled"); }
         catch (Exception error)
         {
-            SetStatus("operation_failed", error.Message);
+            SetStatus(compactErrorKey ?? "operation_failed", compactErrorKey is null ? error.Message : "");
             SaveError(error);
-            MessageBox.Show(this, Localization.Get("operation_failed") + "\n\n" + error.Message,
-                Title, MessageBoxButton.OK, MessageBoxImage.Warning);
+            if (compactErrorKey is null)
+                MessageBox.Show(this, Localization.Get("operation_failed") + "\n\n" + error.Message,
+                    Title, MessageBoxButton.OK, MessageBoxImage.Warning);
         }
         finally
         {
@@ -191,6 +197,9 @@ public partial class MainWindow : Window
             { CheckLevel.Pass => "✓", CheckLevel.Blocked => "×", CheckLevel.Warning => "!", _ => "·" },
             new SolidColorBrush((Color)ColorConverter.ConvertFromString(c.Level switch
             { CheckLevel.Pass => "#70E5BB", CheckLevel.Blocked => "#FF8795", CheckLevel.Warning => "#FFC479", _ => "#93B7DD" })))).ToList();
+        CheckCountsText.Text = string.Join(" · ", new[] { CheckLevel.Pass, CheckLevel.Warning, CheckLevel.Blocked }
+            .Select(level => (level, count: checks.Count(c => c.Level == level))).Where(x => x.count > 0)
+            .Select(x => x.count + " " + Localization.Get(x.level.ToString().ToLowerInvariant())));
     }
 
     private void RefreshButtons()
@@ -213,6 +222,7 @@ public partial class MainWindow : Window
         DisableButton.IsEnabled = idle && !_readOnly && _record?.State == "Installed";
         LaunchButton.IsEnabled = idle && _scan?.RenderingExe is not null;
         ReadLogButton.IsEnabled = idle && _scan?.RenderingDirectory is not null;
+        RefreshManagerUpdateUi();
     }
 
     private bool IsGameCurrent()
@@ -272,12 +282,16 @@ public partial class MainWindow : Window
         FlowDirection = Localization.Direction;
         FolderPath.FlowDirection = FlowDirection.LeftToRight;
         RebuildChoices(); RefreshSummaries(); RenderChecks(); SetStatus(_statusKey, _statusDetail);
+        RefreshManagerUpdateUi();
         if (_scan is not null) ReadLog(false);
     }
     private void SetStatus(string key, string detail = "")
     {
         _statusKey = key; _statusDetail = detail;
-        StatusText.Text = Localization.Get(key) + (string.IsNullOrWhiteSpace(detail) ? "" : " · " + detail);
+        var message = Localization.Get(key);
+        StatusText.Text = message.Contains("{0}", StringComparison.Ordinal)
+            ? string.Format(System.Globalization.CultureInfo.CurrentCulture, message, detail)
+            : message + (string.IsNullOrWhiteSpace(detail) ? "" : " · " + detail);
     }
     private void SaveError(Exception error)
     {
@@ -320,7 +334,7 @@ public partial class MainWindow : Window
         await InspectHardwareAsync(token);
         await AnalyzeAsync(token);
         if (_hardware!.Checks.Any(c => c.Level == CheckLevel.Blocked) || !_scan!.CanInstall) { SetStatus("checks_blocked"); return; }
-        if (MessageBox.Show(this, Localization.Get("confirm_install") + $"\n\n{_scan.RenderingDirectory}\nv{_package.Release.Version} · {options.Engine} · {options.Multiplier}× · {options.Proxy}",
+        if (MessageBox.Show(this, Localization.Get("online_warning_title") + "\n" + Localization.Get("online_warning_text") + "\n\n" + Localization.Get("confirm_install") + $"\n\n{_scan.RenderingDirectory}\nv{_package.Release.Version} · {options.Engine} · {options.Multiplier}× · {options.Proxy}",
             Title, MessageBoxButton.OKCancel, MessageBoxImage.Question) != MessageBoxResult.OK) return;
         await _installer.InstallAsync(_scan, _package, options, Progress(), token);
         await AnalyzeAsync(token); SetStatus("install_done");
@@ -377,7 +391,7 @@ public partial class MainWindow : Window
         {
             var report = new
             {
-                ManagerVersion = "0.1.0", GeneratedAt = DateTimeOffset.UtcNow,
+                ManagerVersion = App.Version, GeneratedAt = DateTimeOffset.UtcNow,
                 Package = _package?.Release.Version, PackageSha256 = _package?.Release.Sha256,
                 UpdateState = _updateState?.ToString(), Gpus = _hardware?.Gpus,
                 Checks = (_hardware?.Checks ?? []).Concat(_scan?.Checks ?? []).Select(c => new { c.Code, Level = c.Level.ToString(), Detail = Redact(c.Detail) }),
@@ -398,5 +412,6 @@ public partial class MainWindow : Window
     {
         if (_operation is not null) { e.Cancel = true; _operation.Cancel(); SetStatus("close_busy"); return; }
         _logTimer.Stop(); Localization.Changed -= LanguageChanged; _releases.Dispose();
+        StopManagerUpdates();
     }
 }

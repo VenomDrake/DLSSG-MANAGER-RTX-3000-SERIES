@@ -6,7 +6,6 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <AssemblyName>DLSSGModManager</AssemblyName>
-    <Version>0.1.0</Version>
     <Product>DLSSG Mod Manager</Product>
     <Description>Independent manager for DLSSG for SM86</Description>
     <ApplicationManifest>app.manifest</ApplicationManifest>

@@ -7,6 +7,7 @@
     <Project Path="tests/DetectionTests/DetectionTests.csproj" />
     <Project Path="tests/DlssgManager.Tests/DlssgManager.Tests.csproj" />
     <Project Path="tests/ReleaseTests/ReleaseTests.csproj" />
+    <Project Path="tests/ManagerUpdateTests/ManagerUpdateTests.csproj" />
   </Folder>
   <Folder Name="/tests/Fixtures/">
     <Project Path="tests/Fixtures/DlssgRuntime/DlssgRuntime.csproj" />
