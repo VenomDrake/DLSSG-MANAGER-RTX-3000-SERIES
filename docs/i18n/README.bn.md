@@ -28,7 +28,7 @@
 
 ## ডাউনলোড ও ব্যবহার
 
-[v0.2.2 প্রকাশ্য প্রিভিউ](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/tag/v0.2.2) নিন: [পোর্টেবল ZIP](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.2.2/DLSSGModManager-Portable-win-x64.zip) · [Windows ইনস্টলার](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.2.2/DLSSGModManager-Setup.msi)। পরের সংস্করণগুলোর জন্য [সব রিলিজ](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases) দেখুন।
+[v0.2.3 প্রকাশ্য প্রিভিউ](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/tag/v0.2.3) নিন: [পোর্টেবল ZIP](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.2.3/DLSSGModManager-Portable-win-x64.zip) · [Windows ইনস্টলার](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.2.3/DLSSGModManager-Setup.msi)। পরের সংস্করণগুলোর জন্য [সব রিলিজ](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases) দেখুন।
 
 পোর্টেবল প্যাকেজের `DLSSGModManager.exe` চালান, অথবা শুধু বর্তমান ব্যবহারকারীর জন্য ইনস্টল হওয়া `DLSSGModManager-Setup.msi` চালান। প্রকাশিত বাইনারি চালাতে আলাদাভাবে .NET, Python বা CUDA Toolkit ইনস্টল করতে হয় না।
 
@@ -53,7 +53,7 @@
 
 **0.1.0 থেকে 0.2.0-এ যেতে একবার হাতে আপডেট করতে হবে**, কারণ 0.1.0-এ আপডেটার নেই। 0.1.0 বন্ধ করুন, তারপর নতুন MSI চালান অথবা সম্পূর্ণ নতুন পোর্টেবল প্যাকেজটি আপনার পোর্টেবল অ্যাপের ফোল্ডারে এক্সট্র্যাক্ট করুন; আগের মতো একই প্যাকেজের ধরন ব্যবহার করুন। 0.2.0 থেকে ম্যানেজারের পরবর্তী আপডেট অ্যাপ থেকেই ইনস্টল করা যাবে।
 
-**MSI দিয়ে ইনস্টল করা 0.2.0/0.2.1-এর জন্য একবারের সংশোধন:** এই সংস্করণগুলোর অ্যাপের ভেতর থেকে MSI আপডেট Windows Installer-এর **1639** ত্রুটির কারণে ব্যর্থ হতে পারে বা তার সহায়তা উইন্ডো খুলতে পারে। ম্যানেজার বন্ধ করুন, উপরে লিঙ্ক করা রিলিজ থেকে **0.2.2 MSI ডাউনলোড করে একবার চালান** এবং আগের ইনস্টলেশন ফোল্ডারই রাখুন। 0.2.1 MSI ইনস্টল করলে এই ত্রুটি ঠিক হয় না। 0.2.2 ইনস্টল হওয়ার পর অ্যাপের ভেতরের পরবর্তী আপডেটগুলো সংশোধিত আপডেটার ব্যবহার করবে। পোর্টেবল ইনস্টলেশন এই MSI সমস্যায় প্রভাবিত নয়।
+**MSI দিয়ে ইনস্টল করা 0.2.0/0.2.1-এর জন্য একবারের সংশোধন:** এই সংস্করণগুলোর অ্যাপের ভেতর থেকে MSI আপডেট Windows Installer-এর **1639** ত্রুটির কারণে ব্যর্থ হতে পারে বা তার সহায়তা উইন্ডো খুলতে পারে। ম্যানেজার বন্ধ করুন, উপরে লিঙ্ক করা রিলিজ থেকে **সর্বশেষ MSI (0.2.2 বা পরবর্তী সংস্করণ) ডাউনলোড করে একবার চালান** এবং আগের ইনস্টলেশন ফোল্ডারই রাখুন। 0.2.1 MSI ইনস্টল করলে এই ত্রুটি ঠিক হয় না। 0.2.2 ইনস্টল হওয়ার পর অ্যাপের ভেতরের পরবর্তী আপডেটগুলো সংশোধিত আপডেটার ব্যবহার করবে। পোর্টেবল ইনস্টলেশন এই MSI সমস্যায় প্রভাবিত নয়।
 
 ম্যানেজারের আপডেট ও মডের আপডেট আলাদা। ম্যানেজার আপডেট করলে কোনো গেমে নতুন মড ইনস্টল হয় না; মূল প্রকল্পের পর্যালোচিত ইনস্টলেশন নিয়ম এখনও **0.4.1**-এর।
 
@@ -109,7 +109,7 @@ dotnet run --project src/DlssgManager.Desktop -- --read-only --game 'D:\Games\Ex
 
 ## নিজের ফোর্ক প্রকাশ করুন
 
-একটি প্রকাশ্য GitHub রিপোজিটরি তৈরি করে এই source tree push করুন। সঙ্গে থাকা Windows workflow pull request এবং মূল branch-এ push-এর সময় বিল্ড ও পরীক্ষা চালায়। `v0.2.2`-এর মতো tag দিলে একই রিপোজিটরির Actions token ব্যবহার করে বাইনারিগুলো GitHub release হিসেবেও প্রকাশ করা হয়। source-এ কোনো token সংরক্ষণ করা হয় না এবং শেষ ব্যবহারকারীর token প্রয়োজন হয় না।
+একটি প্রকাশ্য GitHub রিপোজিটরি তৈরি করে এই source tree push করুন। সঙ্গে থাকা Windows workflow pull request এবং মূল branch-এ push-এর সময় বিল্ড ও পরীক্ষা চালায়। `v0.2.3`-এর মতো tag দিলে একই রিপোজিটরির Actions token ব্যবহার করে বাইনারিগুলো GitHub release হিসেবেও প্রকাশ করা হয়। source-এ কোনো token সংরক্ষণ করা হয় না এবং শেষ ব্যবহারকারীর token প্রয়োজন হয় না।
 
 [CONTRIBUTING.md](../../CONTRIBUTING.md), [SECURITY.md](../../SECURITY.md) এবং [THIRD_PARTY_NOTICES.md](../../THIRD_PARTY_NOTICES.md) দেখুন। এই স্বতন্ত্র ম্যানেজার MIT লাইসেন্সে প্রকাশিত; মূল প্রকল্পের মড উপকরণের নিজস্ব শর্ত প্রযোজ্য।
 

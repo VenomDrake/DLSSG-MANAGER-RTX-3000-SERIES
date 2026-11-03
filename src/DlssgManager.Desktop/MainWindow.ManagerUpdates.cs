@@ -47,15 +47,14 @@ public partial class MainWindow
     {
         if (ManagerVersionText is null) return;
         ManagerVersionText.Text = string.Format(Localization.Get("manager_version"), App.Version);
-        var preview = _readOnly && App.Arguments.Contains("--preview-update");
-        var visible = preview || _availableManagerUpdate is not null && _availableManagerUpdate.Version != _dismissedManagerVersion;
+        var visible = _availableManagerUpdate is not null && _availableManagerUpdate.Version != _dismissedManagerVersion;
         ManagerUpdateNotice.Visibility = visible ? Visibility.Visible : Visibility.Collapsed;
-        ManagerUpdateInstallButton.IsEnabled = !preview && !_readOnly && _operation is null && _availableManagerUpdate is not null;
+        ManagerUpdateInstallButton.IsEnabled = !_readOnly && _operation is null && _availableManagerUpdate is not null;
         ManagerUpdateInstallButton.ToolTip = Localization.Get("manager_update_install_note");
         ManagerUpdateDismissButton.IsEnabled = !_managerPreparing;
         ManagerUpdateProgress.Visibility = _managerPreparing ? Visibility.Visible : Visibility.Collapsed;
-        if (!_managerPreparing)
-            ManagerUpdateText.Text = string.Format(Localization.Get("manager_update_available"), _availableManagerUpdate?.Version ?? "0.3.0");
+        if (!_managerPreparing && _availableManagerUpdate is { } available)
+            ManagerUpdateText.Text = string.Format(Localization.Get("manager_update_available"), available.Version);
     }
 
     private async void ManagerUpdate_Click(object sender, RoutedEventArgs e)

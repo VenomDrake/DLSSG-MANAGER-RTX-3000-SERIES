@@ -28,7 +28,7 @@
 
 ## 下载与使用
 
-下载 [v0.2.2 公开预览版](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/tag/v0.2.2)：[便携 ZIP](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.2.2/DLSSGModManager-Portable-win-x64.zip) · [Windows 安装程序](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.2.2/DLSSGModManager-Setup.msi)。后续版本请查看[所有发布版本](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases)。
+下载 [v0.2.3 公开预览版](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/tag/v0.2.3)：[便携 ZIP](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.2.3/DLSSGModManager-Portable-win-x64.zip) · [Windows 安装程序](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.2.3/DLSSGModManager-Setup.msi)。后续版本请查看[所有发布版本](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases)。
 
 运行便携包中的 `DLSSGModManager.exe`，或使用仅为当前用户安装的 `DLSSGModManager-Setup.msi`。发布的二进制程序无需单独安装 .NET、Python 或 CUDA Toolkit。
 
@@ -53,7 +53,7 @@
 
 **从 0.1.0 升级到 0.2.0 需要手动更新一次**，因为 0.1.0 尚未包含更新功能。关闭 0.1.0，然后运行新的 MSI，或将完整的新便携软件包解压到便携应用文件夹，保持与之前相同的软件包类型。从 0.2.0 起，后续管理器更新可在应用内安装。
 
-**MSI 安装版 0.2.0/0.2.1 的一次性修复：** 这些版本的应用内 MSI 更新可能出现 Windows Installer 错误 **1639**，或弹出其帮助窗口。请关闭管理器，从上方链接的发布页下载并**运行一次 0.2.2 MSI 安装程序**，保留原安装目录。安装 0.2.1 MSI 无法修复此缺陷。安装 0.2.2 后，后续应用内更新将使用已修复的更新程序。便携版安装不受此 MSI 问题影响。
+**MSI 安装版 0.2.0/0.2.1 的一次性修复：** 这些版本的应用内 MSI 更新可能出现 Windows Installer 错误 **1639**，或弹出其帮助窗口。请关闭管理器，从上方链接的发布页下载并**运行一次最新版 MSI 安装程序（0.2.2 或更高版本）**，保留原安装目录。安装 0.2.1 MSI 无法修复此缺陷。安装 0.2.2 后，后续应用内更新将使用已修复的更新程序。便携版安装不受此 MSI 问题影响。
 
 管理器更新与模组更新相互独立。更新管理器不会为任何游戏安装新模组；已审查的原项目安装规则仍对应 **0.4.1**。
 
@@ -109,7 +109,7 @@ dotnet run --project src/DlssgManager.Desktop -- --read-only --game 'D:\Games\Ex
 
 ## 发布自己的分支
 
-创建公开的 GitHub 仓库，并推送此源代码目录。随附的 Windows 工作流会对拉取请求和主分支推送进行构建与测试。推送如 `v0.2.2` 的标签时，还会使用该仓库的 Actions 令牌将二进制程序发布为 GitHub release。源代码不存储令牌，终端用户也不需要提供令牌。
+创建公开的 GitHub 仓库，并推送此源代码目录。随附的 Windows 工作流会对拉取请求和主分支推送进行构建与测试。推送如 `v0.2.3` 的标签时，还会使用该仓库的 Actions 令牌将二进制程序发布为 GitHub release。源代码不存储令牌，终端用户也不需要提供令牌。
 
 参阅 [CONTRIBUTING.md](../../CONTRIBUTING.md)、[SECURITY.md](../../SECURITY.md) 和 [THIRD_PARTY_NOTICES.md](../../THIRD_PARTY_NOTICES.md)。此独立管理器采用 MIT 许可证；原项目模组材料遵循各自的条款。
 

@@ -28,7 +28,7 @@ Um aplicativo de desktop para Windows que acompanha o [DLSSG for SM86](https://g
 
 ## Download e uso
 
-Baixe a [prévia pública v0.2.2](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/tag/v0.2.2): [ZIP portátil](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.2.2/DLSSGModManager-Portable-win-x64.zip) · [instalador do Windows](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.2.2/DLSSGModManager-Setup.msi). Consulte [todas as versões](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases) para encontrar versões posteriores.
+Baixe a [prévia pública v0.2.3](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/tag/v0.2.3): [ZIP portátil](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.2.3/DLSSGModManager-Portable-win-x64.zip) · [instalador do Windows](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.2.3/DLSSGModManager-Setup.msi). Consulte [todas as versões](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases) para encontrar versões posteriores.
 
 Use `DLSSGModManager.exe` do pacote portátil ou execute `DLSSGModManager-Setup.msi`, que instala o programa para o usuário atual. Os binários publicados não exigem uma instalação separada de .NET, Python ou CUDA Toolkit.
 
@@ -53,7 +53,7 @@ Escolha **Atualizar e reiniciar** quando for conveniente, após terminar a opera
 
 **A migração de 0.1.0 para 0.2.0 exige uma única atualização manual**, pois a versão 0.1.0 não contém o atualizador. Feche a versão 0.1.0 e execute o novo MSI ou extraia o novo pacote portátil completo na pasta do aplicativo portátil, usando o mesmo tipo de pacote de antes. A partir da versão 0.2.0, as próximas atualizações do gerenciador podem ser instaladas no aplicativo.
 
-**Correção única para instalações MSI 0.2.0/0.2.1:** a atualização MSI pelo aplicativo nessas versões pode falhar com o erro **1639** do Windows Installer ou abrir a janela de ajuda dele. Feche o gerenciador, baixe e execute **uma vez o MSI 0.2.2** da versão indicada acima, mantendo a mesma pasta de instalação. Instalar o MSI 0.2.1 não corrige essa falha. Depois de instalar a versão 0.2.2, as próximas atualizações pelo aplicativo usarão o atualizador corrigido. As instalações portáteis não são afetadas por esse problema de MSI.
+**Correção única para instalações MSI 0.2.0/0.2.1:** a atualização MSI pelo aplicativo nessas versões pode falhar com o erro **1639** do Windows Installer ou abrir a janela de ajuda dele. Feche o gerenciador, baixe e execute **uma vez o MSI mais recente (0.2.2 ou posterior)** da versão indicada acima, mantendo a mesma pasta de instalação. Instalar o MSI 0.2.1 não corrige essa falha. Depois de instalar a versão 0.2.2, as próximas atualizações pelo aplicativo usarão o atualizador corrigido. As instalações portáteis não são afetadas por esse problema de MSI.
 
 As atualizações do gerenciador e do mod são independentes. Atualizar o gerenciador não instala um novo mod em nenhum jogo; o procedimento de instalação revisado do projeto original continua sendo o da versão **0.4.1**.
 
@@ -109,6 +109,6 @@ dotnet run --project src/DlssgManager.Desktop -- --read-only --game 'D:\Games\Ex
 
 ## Publicar seu fork
 
-Crie um repositório público no GitHub e envie esta árvore de código-fonte. O workflow do Windows incluído compila e testa pull requests e envios à branch principal. Uma tag como `v0.2.2` também publica os binários como uma versão do GitHub usando o token do Actions do repositório. Nenhum token é salvo no código-fonte ou exigido dos usuários finais.
+Crie um repositório público no GitHub e envie esta árvore de código-fonte. O workflow do Windows incluído compila e testa pull requests e envios à branch principal. Uma tag como `v0.2.3` também publica os binários como uma versão do GitHub usando o token do Actions do repositório. Nenhum token é salvo no código-fonte ou exigido dos usuários finais.
 
 Consulte [CONTRIBUTING.md](../../CONTRIBUTING.md), [SECURITY.md](../../SECURITY.md) e [THIRD_PARTY_NOTICES.md](../../THIRD_PARTY_NOTICES.md). Este gerenciador independente é distribuído sob licença MIT; o material do mod original mantém seus próprios termos.
