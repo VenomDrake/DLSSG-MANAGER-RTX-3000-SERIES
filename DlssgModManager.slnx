@@ -1,0 +1,14 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/DlssgManager.Core/DlssgManager.Core.csproj" />
+    <Project Path="src/DlssgManager.Desktop/DlssgManager.Desktop.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/DetectionTests/DetectionTests.csproj" />
+    <Project Path="tests/DlssgManager.Tests/DlssgManager.Tests.csproj" />
+    <Project Path="tests/ReleaseTests/ReleaseTests.csproj" />
+  </Folder>
+  <Folder Name="/tests/Fixtures/">
+    <Project Path="tests/Fixtures/DlssgRuntime/DlssgRuntime.csproj" />
+  </Folder>
+</Solution>

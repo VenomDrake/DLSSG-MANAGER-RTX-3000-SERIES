@@ -1,0 +1,12 @@
+**/bin/
+**/obj/
+artifacts/
+tools/
+.vs/
+*.user
+*.suo
+*.log
+*.zip
+*.msi
+*.wixpdb
+.DS_Store

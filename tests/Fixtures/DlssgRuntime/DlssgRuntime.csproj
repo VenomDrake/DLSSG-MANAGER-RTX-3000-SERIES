@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <AssemblyName>nvngx_dlssg</AssemblyName>
+    <RootNamespace>DlssgManager.TestFixtures</RootNamespace>
+    <PlatformTarget>x64</PlatformTarget>
+    <AssemblyVersion>310.9.16.0</AssemblyVersion>
+    <FileVersion>310.9.16.0</FileVersion>
+    <InformationalVersion>310.9.16.0-synthetic-test-fixture</InformationalVersion>
+    <Description>Synthetic metadata fixture. No NVIDIA code or working frame-generation implementation.</Description>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+</Project>
