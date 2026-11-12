@@ -5,10 +5,16 @@ namespace DlssgManager.Core;
 /// <summary>ANR-specific prerequisites. These do not inherit the SM86 runtime, driver or HAGS recipe.</summary>
 public static class AnrSupport
 {
-    public static bool IsSupportedGpu(string name) => !string.IsNullOrWhiteSpace(name)
-        && name.Contains("NVIDIA", StringComparison.OrdinalIgnoreCase)
-        && Regex.IsMatch(name, @"\b(?:RTX\s+(?:20|30|40|50)\d{2}|GTX\s+16\d{2})\b",
-            RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
+    public static bool IsSupportedGpu(string name)
+    {
+        if (string.IsNullOrWhiteSpace(name)) return false;
+        const RegexOptions options = RegexOptions.IgnoreCase | RegexOptions.CultureInvariant;
+        return (name.Contains("NVIDIA", StringComparison.OrdinalIgnoreCase)
+            && Regex.IsMatch(name, @"\b(?:RTX\s+(?:20|30|40|50)\d{2}|GTX\s+16\d{2})\b", options))
+            // Match the reviewed discrete Radeon RX families, not generic Radeon/APU names.
+            // Four model digits and the bounded suffix also reject RX 580, RX 8000 and RX 79000.
+            || Regex.IsMatch(name, @"^\s*(?:AMD\s+)?Radeon(?:\s*\(TM\))?\s+RX\s+[5679][0-9]{3}(?:\s*(?:XTX|XT|GRE|M(?:\s*XT)?|S))?(?:\s+Graphics)?\s*$", options);
+    }
 
     /// <param name="systemDirectory">Optional isolated directory for deterministic prerequisite tests.</param>
     public static HardwareInfo AdaptHardware(HardwareInfo hardware, string? systemDirectory = null)

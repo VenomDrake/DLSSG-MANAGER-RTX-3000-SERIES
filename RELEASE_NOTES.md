@@ -1,17 +1,15 @@
-DLSSG Mod Manager 0.4.1 — stable manager release with SM86 and ANR support.
+DLSSG Mod Manager 0.4.2 — AMD Radeon support for ANR.
 
-Choose **DLSSG for SM86 (NVIDIA DLSS-G / XeSS-FG)** or **Apex Neural Rendering FG** in one manager. This is a normal stable manager release; the upstream ANR FG package itself remains a beta, with the reviewed installation recipe pinned to **FG-V.B15**.
+- The ANR path now accepts the upstream-listed AMD Radeon RX 5000, 6000, 7000 and 9000 families, including recognized mobile and XT/XTX/GRE variants, alongside NVIDIA GTX 16 and RTX 20–50. Generic Radeon/APU names, older Radeon families and unreviewed families stay unsupported. This manager remains Windows 10/11 x64.
+- GPU, driver and hardware messages now follow the selected provider. ANR diagnostics show the AMD driver link on Radeon systems and keep NVIDIA and AMD links separate on mixed systems. SM86 remains limited to its supported NVIDIA RTX 20/30 GPUs.
+- ANR retains its own Visual C++ x64 and Vulkan-loader checks. NVIDIA driver R580 and SM86-specific GPU scheduling instructions are not imposed on Radeon/ANR installations.
+- The official ANR Full/Addon packages, automatic repository update checks, SHA-256 validation, backups, provider switching, disable and restore are unchanged. Existing OptiScaler upscaling settings are preserved. No upstream DLLs or models are bundled with the manager.
+- Updated English and ten translated interfaces/guides, with refreshed screenshots. Regression checks cover supported/rejected GPU names, AMD-only and mixed-adapter systems, missing prerequisites and AMD session logs.
 
-- Separate GPU and prerequisite checks: SM86 targets RTX 20/30; ANR in this manager supports NVIDIA GTX 16 and RTX 20/30/40/50. GTX 10 / Pascal is unsupported.
-- Official Full/Addon downloads with SHA-256 verification, independent caches, inspected layouts and no execution of upstream installers. Unknown future ANR recipes remain blocked from installation until reviewed.
-- Verified backups, a recovery journal, safe provider switching, disable and restore. Existing compatible OptiScaler configurations, loaders and unrelated plugins are preserved.
-- Clearer ANR setup guidance: enable NVIDIA DLSS Frame Generation in the game and start at 2×. A grey multiplier selector can simply mean that only 2× is offered; it is not proof of generation.
-- Diagnostics distinguish a loaded provider from a session with confirmed generated frames. ANR session counters, errors, multiplier and recording time are displayed when available. Truncated or incomplete logs cannot falsely certify a session.
-- HDR reference luminance accepts valid whole-number settings, including values outside the previous preset list.
-- Updated interface and documentation in all 11 languages. Manual smoke tests included Death Stranding 2 and Far Far West on the tested setup; these do not certify every configuration or establish a performance advantage over SM86.
+**Validation scope:** AMD eligibility follows the upstream ANR GPU list and automated fixture tests. No real AMD gameplay test was performed for this manager release; successful generation still needs confirmation in the game's ANR log. ANR itself remains upstream beta FG-V.B15. A loaded DLL or supported GPU name does not prove generated frames or a performance gain.
 
-**Updating:** users on manager 0.3.1 or 0.4.0-beta can choose **Update and restart** when 0.4.1 is offered. Installing a manager update does not automatically replace the mod in any game. Select a game, review its checks and apply a provider deliberately. MSI installations still on 0.2.0/0.2.1 need one manual installation of the latest MSI because their old updater may fail with Windows Installer error 1639; 0.1.0 also needs one manual update.
+**Updating:** 0.4.1, 0.3.1 and 0.4.0-beta users can choose Update and restart when 0.4.2 is offered. Manager updates do not modify games automatically. On a supported Radeon PC, select Apex Neural Rendering in Game management, review the checks, then install deliberately. MSI installations still on 0.2.0/0.2.1 need one manual installation of the latest MSI because their old updater may fail with error 1639; 0.1.0 also needs one manual update.
 
 **Online games: risk of a ban.** Use injected mods only in offline single-player games. No anti-cheat bypass or protection against bans is provided.
 
-Original SM86 mod: **sdli1995** and contributors; RTX 20 / SM75 adaptation: **Coldwood1026**. ANR: **Apex Compute**, with **OptiScaler** and its contributors. Upstream DLLs/models are downloaded from their authors at runtime and are not bundled with this manager. Consult upstream notices and terms; the manager does not relicense that material. The manager EXE and MSI remain unsigned.
+Credits: sdli1995 and contributors (SM86), Coldwood1026 (SM75), Apex Compute (ANR), and OptiScaler contributors. Upstream materials retain their authors' terms. The manager EXE and MSI remain unsigned.

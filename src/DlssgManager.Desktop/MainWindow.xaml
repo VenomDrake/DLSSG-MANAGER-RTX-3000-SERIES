@@ -189,8 +189,9 @@
        <Border Background="#302719" BorderBrush="#725537" BorderThickness="1" CornerRadius="12" Padding="18" Margin="0,16,0,0"><StackPanel><TextBlock Text="{DynamicResource online_warning_title}" Foreground="#FFD49B" FontWeight="SemiBold" FontSize="14"/><TextBlock Text="{DynamicResource online_warning_text}" Foreground="#E5CCAD" FontSize="13" Margin="0,7,0,0"/></StackPanel></Border>
 
        <Border Style="{StaticResource Card}" Margin="0,16,0,0"><StackPanel>
-        <TextBlock Text="{DynamicResource hags_help}" FontSize="13"/>
-        <WrapPanel Margin="0,12,0,0"><Button Content="{DynamicResource graphics_settings}" Click="Graphics_Click" FontSize="13" Margin="0,0,8,8"/><Button Content="{DynamicResource driver_page}" Click="Driver_Click" FontSize="13" Margin="0,0,0,8"/></WrapPanel>
+        <TextBlock x:Name="HardwareHelpText" Text="{DynamicResource hags_help}" FontSize="13"/>
+        <TextBlock x:Name="AnrAmdTestNote" Text="{DynamicResource anr_amd_test_note}" Foreground="{StaticResource Muted}" FontSize="13" Margin="0,10,0,0" Visibility="Collapsed"/>
+        <WrapPanel Margin="0,12,0,0"><Button Content="{DynamicResource graphics_settings}" Click="Graphics_Click" FontSize="13" Margin="0,0,8,8"/><Button x:Name="NvidiaDriverButton" Content="{DynamicResource driver_page}" Click="Driver_Click" FontSize="13" Margin="0,0,8,8"/><Button x:Name="AmdDriverButton" Content="{DynamicResource amd_driver_page}" Click="AmdDriver_Click" FontSize="13" Margin="0,0,0,8" Visibility="Collapsed"/></WrapPanel>
         <TextBlock Text="{DynamicResource report_privacy}" Foreground="{StaticResource Muted}" FontSize="13" Margin="0,14,0,0"/>
         <Button Content="{DynamicResource export_report}" Click="Export_Click" HorizontalAlignment="Left" Margin="0,12,0,0"/>
         <TextBlock Text="{DynamicResource independent}" Foreground="{StaticResource Muted}" FontSize="13" Margin="0,22,0,6"/>

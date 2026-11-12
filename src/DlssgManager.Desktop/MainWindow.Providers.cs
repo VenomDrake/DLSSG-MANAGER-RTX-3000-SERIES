@@ -29,6 +29,14 @@ public partial class MainWindow
         AnrSettingsHint.Visibility = anr ? Visibility.Visible : Visibility.Collapsed;
         AnrGameHelp.Visibility = anr ? Visibility.Visible : Visibility.Collapsed;
         VerificationScopeText.Text = Localization.Get(anr ? "anr_log_scope" : "log_scope");
+        var gpus = _rawHardware?.Gpus ?? _hardware?.Gpus;
+        var detected = gpus is { Count: > 0 };
+        var hasAmd = gpus?.Any(g => g.Name.Contains("Radeon", StringComparison.OrdinalIgnoreCase)) == true;
+        var hasNvidia = gpus?.Any(g => g.Name.Contains("NVIDIA", StringComparison.OrdinalIgnoreCase)) == true;
+        HardwareHelpText.Text = Localization.Get(anr ? "anr_driver_requirements" : "hags_help");
+        AnrAmdTestNote.Visibility = anr && hasAmd ? Visibility.Visible : Visibility.Collapsed;
+        NvidiaDriverButton.Visibility = !anr || !detected || hasNvidia ? Visibility.Visible : Visibility.Collapsed;
+        AmdDriverButton.Visibility = anr && (!detected || hasAmd) ? Visibility.Visible : Visibility.Collapsed;
         Sm86OptionsHelp.Visibility = anr ? Visibility.Collapsed : Visibility.Visible;
         ProxyPicker.ToolTip = Localization.Get(anr ? "anr_options_hint" : "proxy_help");
         foreach (var control in new Control[] { OptimizationPicker, PresetPicker, SrPicker, FlowPicker, HudPicker, LogPicker })

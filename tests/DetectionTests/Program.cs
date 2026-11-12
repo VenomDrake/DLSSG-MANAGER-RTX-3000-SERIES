@@ -254,7 +254,24 @@ Assert(!(await scanner.ScanAsync(anrGame, anrPackage, provider: ModProvider.Anr)
 
 Assert(AnrSupport.IsSupportedGpu("NVIDIA GeForce GTX 1660 SUPER") && AnrSupport.IsSupportedGpu("NVIDIA GeForce RTX 5090 Laptop GPU")
     && AnrSupport.IsSupportedGpu("NVIDIA GeForce RTX 3090") && !AnrSupport.IsSupportedGpu("NVIDIA GeForce GTX 1080 Ti")
-    && !AnrSupport.IsSupportedGpu("AMD Radeon RX 7900 XTX"), "ANR manager supports only the declared NVIDIA GTX16 and RTX20-50 families; Pascal and other vendors are not silently accepted");
+    && !AnrSupport.IsSupportedGpu("Intel Arc A770"), "ANR retains the declared NVIDIA GTX16 and RTX20-50 families while Pascal and Intel remain unsupported");
+foreach (var gpuName in new[]
+{
+    "AMD Radeon RX 5700 XT", "Radeon RX 5600", "AMD Radeon(TM) RX 5500M",
+    "AMD Radeon RX 6800 XT", "Radeon RX 6650M XT", "AMD Radeon RX 6800S",
+    "AMD Radeon RX 7900 XTX", "Radeon RX 7900 GRE", "AMD Radeon RX 7700S",
+    "Radeon(TM) RX 7600M XT", "AMD Radeon RX 9070 XT", "Radeon RX 9060 XT Graphics", "amd radeon rx 9070xt"
+})
+    Assert(AnrSupport.IsSupportedGpu(gpuName) && !HardwareService.IsSupportedSm86Gpu(gpuName),
+        "reviewed Radeon name is eligible for ANR and never SM86: " + gpuName);
+foreach (var gpuName in new[]
+{
+    "AMD Radeon RX 580", "AMD Radeon RX Vega 64", "AMD Radeon Graphics", "AMD Radeon(TM) 780M",
+    "AMD Radeon RX 8000", "AMD Radeon RX 8800 XT", "AMD Radeon RX 79000 XTX", "AMD Radeon RX 7900XYZ",
+    "AMD Radeon RX 7900 XTXExtra", "AMD Radeon RX 7900 Pro", "AMD Radeon RX 5٧00", "AMD Custom GPU 0405", "Intel Arc B580",
+    "RX 7900 XTX", "NVIDIA Radeon RX 7900 XTX", "", "  "
+})
+    Assert(!AnrSupport.IsSupportedGpu(gpuName), "unreviewed, generic or malformed GPU name remains blocked for ANR: " + gpuName);
 Assert(!HardwareService.IsSupportedSm86Gpu("NVIDIA GeForce GTX 1650", 7.5)
     && !HardwareService.IsSupportedSm86Gpu("NVIDIA GeForce GTX 1660 SUPER", 7.5)
     && AnrSupport.IsSupportedGpu("NVIDIA GeForce GTX 1650") && AnrSupport.IsSupportedGpu("NVIDIA GeForce GTX 1660 SUPER"),
@@ -278,8 +295,42 @@ var rawHardware = new HardwareInfo([new("NVIDIA GeForce GTX 1660", "550.00", 7.5
 var anrHardware = AnrSupport.AdaptHardware(rawHardware, systemFixture);
 Assert(anrHardware.Gpus[0].Eligible && !anrHardware.Checks.Any(c => c.Level == CheckLevel.Blocked)
     && !anrHardware.Checks.Any(c => c.Code is "driver_r580" or "hags_configured"), "ANR hardware checks do not inherit undocumented SM86 driver/HAGS blockers");
+var amdHardware = rawHardware with { Gpus = [new("AMD Radeon RX 7900 XTX", "32.0.13031.4034", null, false)] };
+var adaptedAmd = AnrSupport.AdaptHardware(amdHardware, systemFixture);
+Assert(adaptedAmd.Gpus.Single().Eligible && !adaptedAmd.Checks.Any(c => c.Level == CheckLevel.Blocked)
+    && adaptedAmd.Checks.Any(c => c.Code == "anr_gpu_supported" && c.Level == CheckLevel.Pass)
+    && adaptedAmd.Checks.Any(c => c.Code == "anr_driver_requirements" && c.Level == CheckLevel.Warning && c.Detail.Contains("32.0.13031.4034"))
+    && adaptedAmd.Checks.Any(c => c.Code == "anr_hags" && c.Level == CheckLevel.Info),
+    "AMD-only ANR hardware uses its own eligibility and preserves driver/HAGS review without NVIDIA-only blockers");
+var mixedHardware = amdHardware with
+{
+    Gpus = [new("Intel(R) UHD Graphics 770", "31.0", null, false), new("AMD Radeon RX 9070 XT", "32.0", null, false),
+        new("NVIDIA GeForce RTX 3090", "580.00", 8.6, true)],
+    Checks = amdHardware.Checks.Append(new("gpu_multiple", CheckLevel.Warning)).ToArray()
+};
+var adaptedMixed = AnrSupport.AdaptHardware(mixedHardware, systemFixture);
+Assert(!adaptedMixed.Gpus[0].Eligible && adaptedMixed.Gpus[1].Eligible && adaptedMixed.Gpus[2].Eligible
+    && adaptedMixed.Checks.Any(c => c.Code == "gpu_multiple" && c.Level == CheckLevel.Warning)
+    && adaptedMixed.Checks.Any(c => c.Code == "anr_gpu_supported" && c.Level == CheckLevel.Pass),
+    "mixed Intel/AMD/NVIDIA hardware marks only supported ANR adapters eligible and retains the active-GPU review");
+var unsupportedAmd = AnrSupport.AdaptHardware(amdHardware with { Gpus = [new("AMD Radeon RX 580", "32.0", null, true)] }, systemFixture);
+Assert(!unsupportedAmd.Gpus.Single().Eligible && unsupportedAmd.Checks.Any(c => c.Code == "anr_gpu_supported" && c.Level == CheckLevel.Blocked),
+    "ANR recomputes unsupported AMD eligibility instead of trusting a previous provider's flag");
+var unsupportedOs = AnrSupport.AdaptHardware(amdHardware with
+{
+    WindowsSupported = false,
+    Checks = amdHardware.Checks.Select(c => c.Code == "windows_x64" ? c with { Level = CheckLevel.Blocked } : c).ToArray()
+}, systemFixture);
+Assert(!unsupportedOs.WindowsSupported && unsupportedOs.Checks.Any(c => c.Code == "windows_x64" && c.Level == CheckLevel.Blocked),
+    "an eligible AMD GPU never removes the Windows x64 requirement or admits Linux");
+WritePe(Path.Combine(systemFixture, "vulkan-1.dll"), 0x014c);
+Assert(AnrSupport.AdaptHardware(amdHardware, systemFixture).Checks.Any(c => c.Code == "anr_vulkan_loader" && c.Level == CheckLevel.Blocked),
+    "AMD ANR requires an x64 Vulkan loader and rejects a present x86 loader");
+WritePe(Path.Combine(systemFixture, "vulkan-1.dll"));
 File.Delete(Path.Combine(systemFixture, "VCRUNTIME140_1.dll"));
 Assert(AnrSupport.AdaptHardware(rawHardware, systemFixture).Checks.Any(c => c.Code == "anr_vc_runtime" && c.Level == CheckLevel.Blocked), "missing x64 VC runtime blocks ANR prerequisites");
+Assert(AnrSupport.AdaptHardware(amdHardware, systemFixture).Checks.Any(c => c.Code == "anr_vc_runtime" && c.Level == CheckLevel.Blocked),
+    "AMD ANR retains the missing x64 Visual C++ runtime blocker");
 
 string anrLogs = sandbox.PathFor("AnrLogs");
 string logDirectory = Path.Combine(anrLogs, "OptiScaler", "custom", "Apex Neural Rendering FG", "dlssg");
@@ -291,6 +342,10 @@ string anrSuccess = AnrLine("nr_fg DLSS-G provider in " + logDirectory) + AnrLin
     + AnrLine("GPU ms (medians): frame in 0.043 pair 0.821, per generated frame phase 0.603 out 0.121, 2X (600 generated evaluations, 0 generation errors)");
 File.WriteAllText(anrOldLog, anrSuccess);
 Assert(AnrLogReader.ReadLatest(anrLogs).Evaluated && AnrLogReader.ReadLatest(anrLogs).Gpu == "NVIDIA GeForce RTX 3090", "ANR verifies an explicit positive generated-evaluation summary in its latest session");
+File.WriteAllText(anrOldLog, anrSuccess.Replace("NVIDIA GeForce RTX 3090", "AMD Radeon RX 7900 XTX", StringComparison.Ordinal));
+Assert(AnrLogReader.ReadLatest(anrLogs) is { Evaluated: true, Gpu: "AMD Radeon RX 7900 XTX", GeneratedEvaluations: 600, GenerationErrors: 0 },
+    "ANR log verification reads an AMD adapter without changing the generated-frame success requirements");
+File.WriteAllText(anrOldLog, anrSuccess);
 string anrNewLog = Path.Combine(logDirectory, "nr_fg-20261112-130000.log");
 File.WriteAllText(anrNewLog, AnrLine("nr_fg DLSS-G provider in " + logDirectory) + AnrLine("frame generation feature: 1920x1080, render 1280x720")
     + AnrLine("our frame generation ready for PQ10 colors (coopmat)") + AnrLine("evaluate 1: index 1 of 1"));

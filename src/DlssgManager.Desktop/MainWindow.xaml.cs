@@ -213,6 +213,9 @@ public partial class MainWindow : Window
         GpuName.Text = _hardware?.Gpus.FirstOrDefault(g => g.Eligible)?.Name ?? _hardware?.Gpus.FirstOrDefault()?.Name ?? "—";
         HardwareStatus.Text = _hardware is null ? Localization.Get("hardware_pending")
             : string.Join(" · ", _hardware.Gpus.Select(g => $"{g.Name} / {g.DriverVersion}"));
+        if (_hardware is not null && !_hardware.Gpus.Any(g => g.Eligible))
+            HardwareStatus.Text = Localization.Get(_provider == ModProvider.Anr ? "anr_no_gpu" : "no_gpu")
+                + (string.IsNullOrWhiteSpace(HardwareStatus.Text) ? "" : "\n" + HardwareStatus.Text);
         if (_scan is not null)
         {
             var state = _scan.ModState switch { ModState.Managed => "managed_install", ModState.RecognizedManual => "manual_install", _ => "not_installed" };
@@ -490,7 +493,8 @@ public partial class MainWindow : Window
     private static void Open(string target) => Process.Start(new ProcessStartInfo(target) { UseShellExecute = true });
     private void Upstream_Click(object sender, RoutedEventArgs e) => Open(_provider == ModProvider.Anr ? AnrReleaseService.RepositoryUrl : ReleaseService.RepositoryUrl);
     private void Driver_Click(object sender, RoutedEventArgs e) => Open("https://www.nvidia.com/Download/index.aspx");
-    private void Graphics_Click(object sender, RoutedEventArgs e) { Open("ms-settings:display-advancedgraphics"); SetStatus("hags_help"); }
+    private void AmdDriver_Click(object sender, RoutedEventArgs e) => Open("https://www.amd.com/en/support/download/drivers.html");
+    private void Graphics_Click(object sender, RoutedEventArgs e) { Open("ms-settings:display-advancedgraphics"); SetStatus(_provider == ModProvider.Anr ? "anr_driver_requirements" : "hags_help"); }
     private void Window_Closing(object? sender, CancelEventArgs e)
     {
         if (_operation is not null) { e.Cancel = true; _operation.Cancel(); SetStatus("close_busy"); return; }

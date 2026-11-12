@@ -10,11 +10,12 @@
 - **RTX 20 / SM75 适配：** [Coldwood1026](https://github.com/Coldwood1026)，其贡献列于[原项目声明](https://github.com/sdli1995/dlssg_for_sm86/blob/main/THIRD_PARTY_NOTICES.txt)。
 - **本管理器：** 独立的安装和诊断界面。原始模组的功劳归其作者所有；本管理器不将其成果归为己有，也不声称获得官方认可。
 
-## ANR 集成 — 稳定版管理器 0.4.1
+## ANR 集成 — 稳定版管理器 0.4.2
 
-[下载稳定版 v0.4.1](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/tag/v0.4.1): [便携 ZIP](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.4.1/DLSSGModManager-Portable-win-x64.zip) · [Windows 安装程序](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.4.1/DLSSGModManager-Setup.msi). 管理器现为稳定版。**ANR 本身仍是上游测试版 FG-V.B15**；“测试版”标签指的是该技术，而非本次管理器发布。
+[下载稳定版 v0.4.2](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/tag/v0.4.2): [便携 ZIP](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.4.2/DLSSGModManager-Portable-win-x64.zip) · [Windows 安装程序](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.4.2/DLSSGModManager-Setup.msi). 管理器现为稳定版。**ANR 本身仍是上游测试版 FG-V.B15**；“测试版”标签指的是该技术，而非本次管理器发布。
 
-- 选择**帧生成技术**：原有 SM86（NVIDIA DLSS-G / XeSS-FG）或 **Apex Neural Rendering · 测试版**。管理器支持 NVIDIA **GTX 16 和 RTX 20–50** 上的 ANR；**不支持 GTX 10 / Pascal**。游戏必须通过 **Direct3D 12 或 Vulkan** 提供原生 DLSS Frame Generation。
+- 选择**帧生成技术**：原有 SM86（NVIDIA DLSS-G / XeSS-FG）或 **Apex Neural Rendering · 测试版**。管理器支持 **NVIDIA GTX 16 / RTX 20–50** 和 **AMD Radeon RX 5000/6000/7000/9000** 上的 ANR；**不支持 GTX 10 / Pascal**。游戏必须通过 **Direct3D 12 或 Vulkan** 提供原生 DLSS Frame Generation。
+- 本管理器仅在 **Windows 10/11 x64** 上支持 ANR；**Linux、Steam Deck 和 Intel Arc 不在本次发布的支持范围内**。AMD 支持已通过自动化测试检查，但尚未在 AMD 硬件上进行游戏实测。请通过游戏日志确认实际帧生成。
 - 没有 OptiScaler 时管理器选择 **Full**，已有兼容 OptiScaler 时选择 **Addon**。软件包直接从上游官方发布下载，并验证 SHA-256；管理器**不捆绑 ANR 和 OptiScaler 的二进制文件或模型**。已审核的 ANR 安装规则为 **FG-V.B15**，未知的后续规则会被阻止。 如果已选择 ANR，管理器会在启动时检查 ANR 官方仓库，每次选择 ANR 时也会检查。发现新版本时会自动下载；缓存已是同一版本时会提示已为最新版。只有点击更新操作后，才会在完成检查和备份后更新相应游戏。
 - 安装或切换前请关闭游戏。管理器会检查冲突、记录管理的文件，并在更改前创建可恢复备份。切换提供程序、禁用和恢复共用事务日志及历史记录；未知或外部修改的文件会受到保护。Addon 保留现有 OptiScaler 加载器。使用**恢复先前状态**可撤销切换。
 - 先离线测试 **2×**。ANR 有自己的计算路径、HDR 亮度、场景切换设置和日志；SM86 专用选项不适用。倍数取决于游戏。日志确认只是初步测试，不能保证长时间游戏稳定。请勿在受反作弊保护的在线游戏中使用任何提供程序。
@@ -32,10 +33,10 @@
 - 将界面分为三个清晰的页面：**游戏管理**、**模组设置**和**诊断**，保留原有的深蓝色背景和薄荷绿点缀。
 - 启动时先检查最新官方**完整发布包**，再分析硬件和游戏。自动下载新包，并在已验证的缓存为最新版本时明确提示。
 - 比较发布 ID、附件 ID 和 SHA-256，包括版本号相同但附件已被替换的情况。离线状态与“最新版本”明确区分。
-- 检查 NVIDIA 架构与驱动、Windows x64 和 GPU 调度配置。只有游戏运行时日志报告 GPU 调度已启用时，才确认其处于生效状态。
+- 根据所选技术检查 Windows x64、GPU 架构与驱动：SM86 仅支持 NVIDIA，ANR 支持符合要求的 NVIDIA 或 AMD 显卡。SM86 要求硬件加速 GPU 调度（HAGS）；只有游戏运行时日志确认后，才视为已生效。ANR 上游未指定 HAGS 要求。
 - 支持选择游戏文件夹或渲染 EXE，并发现各个 Steam 库中的已安装游戏。识别 Unreal 渲染程序；存在多个候选项时可由用户选择。
-- 检查 x64 架构、游戏原生 DLSS-G 运行库代际、DirectX 12 相关证据、已知反作弊特征、现有加载器、游戏进程和磁盘空间。静态文件检查不能保证游戏实际可用。
-- 显示生成引擎、倍率、优化级别、预设、超分辨率覆盖、XeSS 光流/HUD 设置、加载器和日志选项。**建议默认使用 DLSS、2×、精确输出优化，并关闭超分辨率覆盖。**
+- 检查 x64 架构、游戏原生 DLSS-G 运行库代际、DirectX 12 / Vulkan 相关证据、已知反作弊特征、现有加载器、游戏进程和磁盘空间。静态文件检查不能保证游戏实际可用。
+- **SM86:** 显示生成引擎、倍率、优化级别、预设、超分辨率覆盖、XeSS 光流/HUD 设置、加载器和日志选项。**建议默认使用 DLSS、2×、精确输出优化，并关闭超分辨率覆盖。**
 - 仅在用户审阅并确认后安装或更新。先暂存已验证的文件并备份原状态；替换运行库前停用旧加载器，最后才启用新加载器。
 - 提供停用和恢复功能，保护在管理器外修改的文件，并记录恢复日志以处理意外中断。保留备份，包括操作中移出的额外文件。
 - **SM86:** 读取最新记录的游戏会话。只有 NGX 功能 11 创建成功并完成首次评估后，才报告帧生成确实开始运行。
@@ -44,7 +45,7 @@
 
 ## 下载与使用
 
-[下载稳定版 v0.4.1](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/tag/v0.4.1): [便携 ZIP](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.4.1/DLSSGModManager-Portable-win-x64.zip) · [Windows 安装程序](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.4.1/DLSSGModManager-Setup.msi).
+[下载稳定版 v0.4.2](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/tag/v0.4.2): [便携 ZIP](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.4.2/DLSSGModManager-Portable-win-x64.zip) · [Windows 安装程序](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.4.2/DLSSGModManager-Setup.msi).
 
 运行便携包中的 `DLSSGModManager.exe`，或使用仅为当前用户安装的 `DLSSGModManager-Setup.msi`。发布的二进制程序无需单独安装 .NET、Python 或 CUDA Toolkit。
 
@@ -65,13 +66,13 @@
 5. 启动游戏，在图形设置中启用 **DLSS Frame Generation**。某些游戏需要重新启动。
 6. 在**诊断**中选择**读取游戏日志（Read game log）**，检查模组是否加载、功能是否创建，以及帧生成是否真正开始。
 
-管理器不会自动更改 HAGS 或驱动。它会打开 Windows 图形设置或 NVIDIA 驱动页面，并提供操作说明。启用 HAGS 后请重启 Windows。
+管理器不会自动更改 HAGS 或驱动。它会打开 Windows 图形设置及适用的 NVIDIA 或 AMD 驱动页面。使用 SM86 时，请启用 HAGS、重启 Windows，再通过游戏日志确认生效。ANR 上游未指定 HAGS 要求。
 
 ## 更新管理器
 
 管理器会在后台静默检查自身的 GitHub 发布版本。只有发现更新的稳定版管理器时，才会显示一条小提示；草稿和预发布版本会被忽略。
 
-稳定版 **0.3.1** 和 **0.4.0 测试版**均可通过**更新并重启**升级至稳定版 **0.4.1**。稳定版更新通道会提供此版本，无需选择参与测试。
+稳定版 **0.3.1 / 0.4.1** 和 **0.4.0 测试版**均可通过**更新并重启**升级至稳定版 **0.4.2**。稳定版更新通道会提供此版本，无需选择参与测试。
 
 请在当前操作结束后，选择合适的时间点击 **更新并重启**。管理器会自动选择适合当前安装方式的便携 ZIP 或 MSI，下载软件包，将其 SHA-256 与 GitHub 官方发布文件的摘要进行核对，然后关闭、安装更新并重新打开。游戏、设置和备份都会保留。以后的更新无需访问 GitHub 或手动替换文件。
 
@@ -83,7 +84,7 @@
 
 ## 支持范围与限制
 
-管理器运行于 **Windows 10/11 x64**。**SM86** 面向受支持的 **RTX 20/30** 显卡；已审核规则对应模组 **0.4.1**，要求 **R580 或更新的驱动**及 **310.9.16** 运行库。**ANR** 支持 **GTX 16 和 RTX 20–50**，需要游戏通过 **Direct3D 12 或 Vulkan** 提供原生 DLSS Frame Generation，已审核规则为 **FG-V.B15**。**不支持 GTX 10 / Pascal。** 下载更新的上游版本并不代表其要求已获确认：未知规则仍会被阻止，直到管理器更新。
+管理器运行于 **Windows 10/11 x64**。**SM86** 面向受支持的 **RTX 20/30** 显卡；已审核规则对应模组 **0.4.1**，要求 **R580 或更新的驱动**及 **310.9.16** 运行库。**ANR** 支持 **NVIDIA GTX 16 / RTX 20–50** 和 **AMD Radeon RX 5000/6000/7000/9000**，需要游戏通过 **Direct3D 12 或 Vulkan** 提供原生 DLSS Frame Generation，已审核规则为 **FG-V.B15**。**不支持 GTX 10 / Pascal。** 下载更新的上游版本并不代表其要求已获确认：未知规则仍会被阻止，直到管理器更新。
 
 **SM86:** 游戏本身必须提供原生 DLSS Frame Generation，并以 DirectX 12 运行。当前原项目安装规则支持 310.x 运行库；更旧的运行库代际会被拒绝。更高倍率取决于游戏的集成方式。XeSS 最高为 4×；DLSS 6× 需要游戏集成本身支持。
 
@@ -121,7 +122,7 @@
 
 构建脚本会在 `artifacts` 中生成自包含单文件应用、便携 ZIP、MSI 和 SHA-256 校验和。需要时，会将 WiX 4.0.6 作为构建工具安装在 `tools` 下。输出中不包含下载的模组 DLL。
 
-测试使用合成发布包和无害的、带版本信息的 x64 测试 DLL。不需要游戏、NVIDIA 硬件或网络连接。如需执行可选的在线发布检查，可运行 `dotnet run --project tests/ReleaseTests -- --live`。
+测试使用合成发布包和无害的、带版本信息的 x64 测试 DLL。不需要游戏、NVIDIA 或 AMD 硬件或网络连接。如需执行可选的在线发布检查，可运行 `dotnet run --project tests/ReleaseTests -- --live`。
 
 对本地游戏进行只读界面预览：
 
@@ -133,7 +134,7 @@ dotnet run --project src/DlssgManager.Desktop -- --read-only --game 'D:\Games\Ex
 
 ## 发布自己的分支
 
-创建公开的 GitHub 仓库，并推送此源代码目录。随附的 Windows 工作流会对拉取请求和主分支推送进行构建与测试。推送如 `v0.4.1` 的标签时，还会使用该仓库的 Actions 令牌将二进制程序发布为 GitHub release。源代码不存储令牌，终端用户也不需要提供令牌。
+创建公开的 GitHub 仓库，并推送此源代码目录。随附的 Windows 工作流会对拉取请求和主分支推送进行构建与测试。推送如 `v0.4.2` 的标签时，还会使用该仓库的 Actions 令牌将二进制程序发布为 GitHub release。源代码不存储令牌，终端用户也不需要提供令牌。
 
 参阅 [CONTRIBUTING.md](../../CONTRIBUTING.md)、[SECURITY.md](../../SECURITY.md) 和 [THIRD_PARTY_NOTICES.md](../../THIRD_PARTY_NOTICES.md)。此独立管理器采用 MIT 许可证；原项目模组材料遵循各自的条款。
 
