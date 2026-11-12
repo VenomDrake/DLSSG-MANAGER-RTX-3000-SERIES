@@ -45,6 +45,69 @@ await Test("ANR beta remains opt-in and a later stable release can update the be
     Assert(laterStable?.Version == "0.4.1", "The beta application could not discover a later stable update.");
     return Task.CompletedTask;
 });
+await Test("repository rename accepts only the exact canonical and legacy release identities", () =>
+{
+    const string legacy = "VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES";
+    Assert(ManagerUpdateService.Repository == "VenomDrake/DLSSG-Mod-Manager"
+        && ManagerUpdateService.LatestReleaseUrl == "https://api.github.com/repos/VenomDrake/DLSSG-Mod-Manager/releases/latest",
+        "The updater still uses the retired repository endpoint.");
+    foreach (var htmlRepository in new[] { ManagerUpdateService.Repository, legacy })
+    foreach (var portableRepository in new[] { ManagerUpdateService.Repository, legacy })
+    foreach (var installerRepository in new[] { ManagerUpdateService.Repository, legacy })
+    {
+        var release = Release("v0.4.3", repository: htmlRepository);
+        release["assets"]![0]!["browser_download_url"] = AssetUrl(portableRepository, "v0.4.3", ManagerUpdateService.PortableAssetName);
+        release["assets"]![1]!["browser_download_url"] = AssetUrl(installerRepository, "v0.4.3", ManagerUpdateService.InstallerAssetName);
+        foreach (var current in new[] { "0.4.1", "0.4.2" })
+        {
+            var info = ManagerUpdateService.ParseRelease(Bytes(release), current);
+            Assert(info?.Version == "0.4.3", "A legitimate old/new repository URL combination lost its update.");
+            ManagerUpdateService.ValidateInfo(info!);
+        }
+        Assert(ManagerUpdateService.ParseRelease(Bytes(release), "0.4.3") is null, "The renamed repository reoffered the current version.");
+    }
+    return Task.CompletedTask;
+});
+await Test("repository aliases do not weaken release, asset, digest or duplicate validation", () =>
+{
+    foreach (var repository in new[] { ManagerUpdateService.Repository, "VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES" })
+    foreach (var invalid in new Func<string, string>[]
+    {
+        url => url.Replace("VenomDrake/", "OtherOwner/", StringComparison.Ordinal),
+        url => url.Replace(repository + "/", repository + "-fork/", StringComparison.Ordinal),
+        url => url.Replace("https://github.com/", "https://github.com.evil.invalid/", StringComparison.Ordinal),
+        url => url.Replace("https://github.com/", "https://untrusted@github.com/", StringComparison.Ordinal),
+        url => url.Replace("https://github.com/", "https://github.com:8443/", StringComparison.Ordinal),
+        url => url.Replace("https://", "http://", StringComparison.Ordinal),
+        url => url.Replace("v0.4.3", "v0.4.2", StringComparison.Ordinal),
+        url => url + "?download=1", url => url + "#release", url => url + "/"
+    })
+    {
+        var release = Release("v0.4.3", repository: repository);
+        release["html_url"] = invalid(release["html_url"]!.GetValue<string>());
+        Assert(ManagerUpdateService.ParseRelease(Bytes(release), "0.4.2") is null, "An invalid canonical/legacy release URL was accepted.");
+        var validInfo = ManagerUpdateService.ParseRelease(Bytes(Release("v0.4.3", repository: repository)), "0.4.2")!;
+        ThrowsSync<InvalidDataException>(() => ManagerUpdateService.ValidateInfo(validInfo with { ReleaseUrl = invalid(validInfo.ReleaseUrl) }));
+        foreach (var assetIndex in new[] { 0, 1 })
+        {
+            release = Release("v0.4.3", repository: ManagerUpdateService.Repository);
+            var assetName = assetIndex == 0 ? ManagerUpdateService.PortableAssetName : ManagerUpdateService.InstallerAssetName;
+            release["assets"]![assetIndex]!["browser_download_url"] = invalid(AssetUrl(repository, "v0.4.3", assetName));
+            Assert(ManagerUpdateService.ParseRelease(Bytes(release), "0.4.2") is null, "A malformed alias mixed into valid metadata was accepted.");
+            var invalidAsset = (assetIndex == 0 ? validInfo.PortableAsset : validInfo.InstallerAsset) with
+                { DownloadUrl = invalid(AssetUrl(repository, "v0.4.3", assetName)) };
+            ThrowsSync<InvalidDataException>(() => ManagerUpdateService.ValidateInfo(assetIndex == 0
+                ? validInfo with { PortableAsset = invalidAsset } : validInfo with { InstallerAsset = invalidAsset }));
+        }
+    }
+    var legacyRelease = Release("v0.4.3", repository: "VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES");
+    legacyRelease["assets"]![0]!["digest"] = "sha256:invalid";
+    Assert(ManagerUpdateService.ParseRelease(Bytes(legacyRelease), "0.4.2") is null, "The legacy alias bypassed the asset digest check.");
+    legacyRelease = Release("v0.4.3", repository: "VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES");
+    legacyRelease["assets"]!.AsArray().Add(legacyRelease["assets"]![0]!.DeepClone());
+    Assert(ManagerUpdateService.ParseRelease(Bytes(legacyRelease), "0.4.2") is null, "The legacy alias bypassed duplicate asset rejection.");
+    return Task.CompletedTask;
+});
 await Test("background check is quiet on offline, malformed, missing, huge or untrusted metadata", async () =>
 {
     using var temp = new Temp();
@@ -342,14 +405,16 @@ static void ThrowsSync<T>(Action run) where T : Exception
 static byte[] Bytes(JsonNode node) => Encoding.UTF8.GetBytes(node.ToJsonString());
 static string Fixture(string name) => System.IO.Path.Combine(AppContext.BaseDirectory, "Fixtures", name);
 static HttpResponseMessage Response(string body) => new(HttpStatusCode.OK) { Content = new StringContent(body) };
-static JsonObject Release(string tag = "v0.3.0", bool prerelease = false)
+static string AssetUrl(string repository, string tag, string name) => "https://github.com/" + repository + "/releases/download/" + tag + "/" + name;
+static JsonObject Release(string tag = "v0.3.0", bool prerelease = false, string? repository = null)
 {
+    repository ??= ManagerUpdateService.Repository;
     var assets = new JsonArray();
     foreach (var name in new[] { ManagerUpdateService.PortableAssetName, ManagerUpdateService.InstallerAssetName })
         assets.Add(new JsonObject { ["name"] = name, ["size"] = 1000, ["digest"] = "sha256:" + new string('a', 64),
-            ["browser_download_url"] = "https://github.com/" + ManagerUpdateService.Repository + "/releases/download/" + tag + "/" + name });
+            ["browser_download_url"] = AssetUrl(repository, tag, name) });
     return new JsonObject { ["draft"] = false, ["prerelease"] = prerelease, ["tag_name"] = tag,
-        ["html_url"] = "https://github.com/" + ManagerUpdateService.Repository + "/releases/tag/" + tag, ["assets"] = assets };
+        ["html_url"] = "https://github.com/" + repository + "/releases/tag/" + tag, ["assets"] = assets };
 }
 static void Zip(string path, IEnumerable<(string Name, string Content, int Attributes)> files)
 {

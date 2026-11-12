@@ -117,7 +117,7 @@
   "close_busy": "هناك عملية قيد التنفيذ. ألغها وانتظر اكتمال التنظيف قبل الإغلاق.",
   "step_detect": "جارٍ الاكتشاف",
   "demo": "معاينة / للقراءة فقط",
-  "software_version": "DLSSG Mod Manager 0.4.2",
+  "software_version": "DLSSG Mod Manager 0.4.3",
   "launch_note": "فعّل DLSS Frame Generation من قائمة الرسومات في اللعبة. سيقرأ المدير السجل ما دامت هذه النافذة مفتوحة.",
   "no_steam_games": "لم يُعثر على ألعاب Steam مثبتة. لا يزال بإمكانك اختيار مجلد يدويًا.",
   "manual_install": "تم اكتشاف تثبيت يدوي تم التحقق منه",

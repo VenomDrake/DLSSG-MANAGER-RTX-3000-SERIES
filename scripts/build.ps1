@@ -17,7 +17,7 @@ $readme = [IO.File]::ReadAllText((Join-Path $repoRoot 'README.md'))
 $readme = [regex]::Replace($readme, '(?m)^!\[[^\]\r\n]*\]\([^\r\n]*\)\r?\n', '')
 $prereleaseLabel = [string]$versionDocument.Project.PropertyGroup.PrereleaseLabel
 $documentationRef = if ($prereleaseLabel) { "v$appVersion-$prereleaseLabel" } else { 'main' }
-$repositoryRoot = "https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/blob/$documentationRef/"
+$repositoryRoot = "https://github.com/VenomDrake/DLSSG-Mod-Manager/blob/$documentationRef/"
 $readme = [regex]::Replace($readme, '(?m)(\[[^\]]*\]\()((?:docs/i18n/README\.[A-Za-z-]+\.md|README\.md|CONTRIBUTING\.md|SECURITY\.md|THIRD_PARTY_NOTICES\.md))((?:#[^)]*)?\))', {
     param($match)
     $match.Groups[1].Value + $repositoryRoot + $match.Groups[2].Value + $match.Groups[3].Value

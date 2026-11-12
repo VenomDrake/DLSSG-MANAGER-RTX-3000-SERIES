@@ -12,9 +12,9 @@
 - **التكييف لبطاقات RTX 20 / SM75:** [Coldwood1026](https://github.com/Coldwood1026)، المذكور في [إشعارات المشروع الأصلي](https://github.com/sdli1995/dlssg_for_sm86/blob/main/THIRD_PARTY_NOTICES.txt).
 - **هذا المدير:** واجهة مستقلة للتثبيت والتشخيص. يظل الفضل في التعديل الأصلي لمؤلفيه؛ ولا ينسب المدير أعمالهم إلى نفسه أو يدّعي تأييدًا رسميًا منهم.
 
-## دمج ANR — المدير المستقر 0.4.2
+## دمج ANR — المدير المستقر 0.4.3
 
-[تنزيل الإصدار المستقر v0.4.2](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/tag/v0.4.2): [ZIP محمول](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.4.2/DLSSGModManager-Portable-win-x64.zip) · [مثبّت Windows](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.4.2/DLSSGModManager-Setup.msi). المدير إصدار مستقر. **يبقى ANR نفسه نسخة تجريبية من المشروع الأصلي، FG-V.B15**؛ وتشير علامة «تجريبي» إلى هذه التقنية لا إلى إصدار المدير.
+[تنزيل الإصدار المستقر v0.4.3](https://github.com/VenomDrake/DLSSG-Mod-Manager/releases/tag/v0.4.3): [ZIP محمول](https://github.com/VenomDrake/DLSSG-Mod-Manager/releases/download/v0.4.3/DLSSGModManager-Portable-win-x64.zip) · [مثبّت Windows](https://github.com/VenomDrake/DLSSG-Mod-Manager/releases/download/v0.4.3/DLSSGModManager-Setup.msi). المدير إصدار مستقر. **يبقى ANR نفسه نسخة تجريبية من المشروع الأصلي، FG-V.B15**؛ وتشير علامة «تجريبي» إلى هذه التقنية لا إلى إصدار المدير.
 
 - اختر **تقنية توليد الإطارات**: مسار SM86 الأصلي (NVIDIA DLSS-G / XeSS-FG)، أو **Apex Neural Rendering · تجريبي**. يدعم المدير ANR على **NVIDIA GTX 16 / RTX 20–50** و**AMD Radeon RX 5000/6000/7000/9000**؛ **GTX 10 / Pascal غير مدعومة**. يجب أن توفر اللعبة DLSS Frame Generation الأصلي عبر **Direct3D 12 أو Vulkan**.
 - يدعم هذا المدير ANR على **Windows 10/11 x64** فقط؛ **لا يشمل نطاق دعم هذا الإصدار Linux أو Steam Deck أو Intel Arc**. جرى فحص دعم AMD باختبارات آلية، دون اختبار فعلي داخل لعبة على أجهزة AMD. أكّد توليد الإطارات الفعلي في سجل اللعبة.
@@ -47,7 +47,7 @@
 
 ## التنزيل والاستخدام
 
-[تنزيل الإصدار المستقر v0.4.2](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/tag/v0.4.2): [ZIP محمول](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.4.2/DLSSGModManager-Portable-win-x64.zip) · [مثبّت Windows](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.4.2/DLSSGModManager-Setup.msi).
+[تنزيل الإصدار المستقر v0.4.3](https://github.com/VenomDrake/DLSSG-Mod-Manager/releases/tag/v0.4.3): [ZIP محمول](https://github.com/VenomDrake/DLSSG-Mod-Manager/releases/download/v0.4.3/DLSSGModManager-Portable-win-x64.zip) · [مثبّت Windows](https://github.com/VenomDrake/DLSSG-Mod-Manager/releases/download/v0.4.3/DLSSGModManager-Setup.msi).
 
 شغّل `DLSSGModManager.exe` من الحزمة المحمولة، أو شغّل `DLSSGModManager-Setup.msi` لتثبيته للمستخدم الحالي. لا تحتاج الملفات التنفيذية المنشورة إلى تثبيت .NET أو Python أو CUDA Toolkit بصورة منفصلة.
 
@@ -74,7 +74,7 @@
 
 يتحقق المدير بهدوء من إصداراته الخاصة على GitHub في الخلفية. لا يظهر تنبيه صغير إلا عند توفر إصدار مستقر أحدث من المدير؛ ويجري تجاهل المسودات والإصدارات التجريبية.
 
-يمكن للإصدار المستقر **0.3.1 / 0.4.1** ولإصدارات **0.4.0 التجريبية** التحديث إلى المستقر **0.4.2** عبر **التحديث وإعادة التشغيل**. يُقدّم هذا الإصدار عبر قناة التحديث المستقرة، دون الاشتراك في النسخ التجريبية.
+**أُعيدت تسمية المستودع إلى [VenomDrake/DLSSG-Mod-Manager](https://github.com/VenomDrake/DLSSG-Mod-Manager).** إذا لم يعد المدير **0.4.2 أو أقدم** يكتشف التحديثات بعد النقل، فأغلق المدير وثبّت **0.4.3** مرة واحدة باستخدام أحدث MSI، أو استبدل الحزمة المحمولة كاملةً. تبقى الألعاب والنسخ الاحتياطية محفوظة؛ وتستخدم التحديثات التالية المستودع الجديد.
 
 اختر **التحديث وإعادة التشغيل** في الوقت المناسب لك، بعد اكتمال العملية الحالية. يختار المدير تلقائيًا ملف ZIP المحمول أو MSI المناسب للتثبيت الحالي، وينزّله، ويتحقق من SHA-256 بمقارنته بملخص ملف الإصدار الرسمي على GitHub، ثم يُغلق ويثبّت التحديث ويُفتح مجددًا. تُحفظ الألعاب والإعدادات والنسخ الاحتياطية. لن تتطلب التحديثات التالية زيارة GitHub أو استبدال الملفات يدويًا.
 
@@ -136,7 +136,7 @@ dotnet run --project src/DlssgManager.Desktop -- --read-only --game 'D:\Games\Ex
 
 ## نشر نسختك المتفرعة
 
-أنشئ مستودع GitHub عامًا وادفع إليه شجرة الشيفرة المصدرية هذه. يقوم سير العمل المضمَّن لنظام Windows بالبناء والاختبار عند طلبات السحب وعمليات الدفع إلى الفرع الرئيسي. كما تنشر علامة مثل `v0.4.2` الملفات التنفيذية كإصدار GitHub باستخدام رمز Actions الخاص بذلك المستودع. ولا يُخزَّن أي رمز وصول في الشيفرة المصدرية، ولا يحتاج المستخدمون النهائيون إليه.
+أنشئ مستودع GitHub عامًا وادفع إليه شجرة الشيفرة المصدرية هذه. يقوم سير العمل المضمَّن لنظام Windows بالبناء والاختبار عند طلبات السحب وعمليات الدفع إلى الفرع الرئيسي. كما تنشر علامة مثل `v0.4.3` الملفات التنفيذية كإصدار GitHub باستخدام رمز Actions الخاص بذلك المستودع. ولا يُخزَّن أي رمز وصول في الشيفرة المصدرية، ولا يحتاج المستخدمون النهائيون إليه.
 
 راجع [CONTRIBUTING.md](../../CONTRIBUTING.md) و[SECURITY.md](../../SECURITY.md) و[THIRD_PARTY_NOTICES.md](../../THIRD_PARTY_NOTICES.md). يخضع هذا المدير المستقل لترخيص MIT؛ أما مواد التعديل الأصلي فلها شروطها الخاصة.
 

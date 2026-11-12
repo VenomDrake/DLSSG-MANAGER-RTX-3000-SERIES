@@ -12,7 +12,8 @@ namespace DlssgManager.Core;
 /// <summary>Checks this manager's own releases; downloaded code is never started by this service.</summary>
 public sealed class ManagerUpdateService : IDisposable
 {
-    public const string Repository = "VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES";
+    public const string Repository = "VenomDrake/DLSSG-Mod-Manager";
+    private const string LegacyRepository = "VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES";
     public const string LatestReleaseUrl = "https://api.github.com/repos/" + Repository + "/releases/latest";
     public const string ExeName = "DLSSGModManager.exe";
     public const string PortableAssetName = "DLSSGModManager-Portable-win-x64.zip";
@@ -70,10 +71,7 @@ public sealed class ManagerUpdateService : IDisposable
         if (!Regex.IsMatch(tag, @"^v?\d+\.\d+\.\d+$", RegexOptions.CultureInvariant)
             || !TryVersion(tag, out var next) || next <= current) return null;
         var releaseUrl = root.GetProperty("html_url").GetString() ?? "";
-        if (!Uri.TryCreate(releaseUrl, UriKind.Absolute, out var releaseUri) || releaseUri.Scheme != "https"
-            || !releaseUri.Host.Equals("github.com", StringComparison.OrdinalIgnoreCase)
-            || !releaseUri.IsDefaultPort || releaseUri.UserInfo.Length != 0 || releaseUri.Fragment.Length != 0
-            || releaseUri.AbsolutePath != "/" + Repository + "/releases/tag/" + tag || releaseUri.Query.Length != 0) return null;
+        if (!ValidRepositoryUrl(releaseUrl, "/releases/tag/" + tag)) return null;
         var assets = root.GetProperty("assets").EnumerateArray().ToArray();
         ManagerUpdateAsset? Asset(string name)
         {
@@ -179,6 +177,7 @@ public sealed class ManagerUpdateService : IDisposable
     {
         if (info.Tag is null || !Regex.IsMatch(info.Tag, @"\Av?\d+\.\d+\.\d+\z", RegexOptions.CultureInvariant)
             || !TryVersion(info.Version, out var version) || !TryVersion(info.Tag, out var tagVersion) || version != tagVersion
+            || !ValidRepositoryUrl(info.ReleaseUrl, "/releases/tag/" + info.Tag)
             || info.PortableAsset is null || info.InstallerAsset is null) throw new InvalidDataException("Invalid manager update metadata.");
         foreach (var pair in new[] { (info.PortableAsset, PortableAssetName), (info.InstallerAsset, InstallerAssetName) })
             if (pair.Item1.Name != pair.Item2 || !ValidAssetUrl(pair.Item1.DownloadUrl, info.Tag, pair.Item2)
@@ -366,9 +365,12 @@ public sealed class ManagerUpdateService : IDisposable
     internal static bool IsWithin(string parent, string path) => Path.GetFullPath(path).StartsWith(Path.TrimEndingDirectorySeparator(Path.GetFullPath(parent)) + Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase);
     internal static void EnsureSpace(string path, long bytes)
     { if (new DriveInfo(Path.GetPathRoot(Path.GetFullPath(path))!).AvailableFreeSpace < bytes) throw new IOException("Not enough free disk space for the manager update and backup."); }
-    private static bool ValidAssetUrl(string url, string tag, string name) => Uri.TryCreate(url, UriKind.Absolute, out var uri)
+    private static bool ValidAssetUrl(string url, string tag, string name) => ValidRepositoryUrl(url, "/releases/download/" + tag + "/" + name);
+    private static bool ValidRepositoryUrl(string url, string releasePath) => Uri.TryCreate(url, UriKind.Absolute, out var uri)
         && uri.Scheme == "https" && uri.Host.Equals("github.com", StringComparison.OrdinalIgnoreCase) && uri.IsDefaultPort && uri.UserInfo.Length == 0
-        && uri.AbsolutePath == "/" + Repository + "/releases/download/" + tag + "/" + name && uri.Query.Length == 0 && uri.Fragment.Length == 0;
+        // Only this owner's two exact repository names identify the same renamed project.
+        && (uri.AbsolutePath == "/" + Repository + releasePath || uri.AbsolutePath == "/" + LegacyRepository + releasePath)
+        && uri.Query.Length == 0 && uri.Fragment.Length == 0;
     private static void ValidateTrustedUri(Uri uri)
     { if (uri.Scheme != "https" || !TrustedHosts.Contains(uri.Host) || uri.UserInfo.Length != 0 || !uri.IsDefaultPort) throw new InvalidDataException("Untrusted manager update destination."); }
     private static async Task<byte[]> ReadBoundedAsync(HttpContent content, int maximum, CancellationToken token)

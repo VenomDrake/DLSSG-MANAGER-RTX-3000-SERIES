@@ -10,9 +10,9 @@ A Windows desktop companion for [DLSSG for SM86](https://github.com/sdli1995/dls
 - **RTX 20 / SM75 adaptation:** [Coldwood1026](https://github.com/Coldwood1026), credited in the [upstream notices](https://github.com/sdli1995/dlssg_for_sm86/blob/main/THIRD_PARTY_NOTICES.txt).
 - **This manager:** an independent installation and diagnostics interface. Credit for the original mod remains with its authors; the manager does not claim their work or official endorsement.
 
-## ANR integration — stable manager 0.4.2
+## ANR integration — stable manager 0.4.3
 
-[Download stable v0.4.2](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/tag/v0.4.2): [portable ZIP](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.4.2/DLSSGModManager-Portable-win-x64.zip) · [Windows installer](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.4.2/DLSSGModManager-Setup.msi). The manager is a stable release. **ANR itself remains upstream beta FG-V.B15**; its Beta label refers to the provider, not to this manager release.
+[Download stable v0.4.3](https://github.com/VenomDrake/DLSSG-Mod-Manager/releases/tag/v0.4.3): [portable ZIP](https://github.com/VenomDrake/DLSSG-Mod-Manager/releases/download/v0.4.3/DLSSGModManager-Portable-win-x64.zip) · [Windows installer](https://github.com/VenomDrake/DLSSG-Mod-Manager/releases/download/v0.4.3/DLSSGModManager-Setup.msi). The manager is a stable release. **ANR itself remains upstream beta FG-V.B15**; its Beta label refers to the provider, not to this manager release.
 
 - Choose **Frame generation technology**: the original SM86 path (NVIDIA DLSS-G / XeSS-FG), or **Apex Neural Rendering · Beta**. The manager supports ANR on **NVIDIA GTX 16 / RTX 20–50** and **AMD Radeon RX 5000/6000/7000/9000**; **GTX 10 / Pascal is unsupported**. The game must provide native DLSS Frame Generation through **Direct3D 12 or Vulkan**.
 - This manager supports ANR on **Windows 10/11 x64** only; **Linux, Steam Deck and Intel Arc are outside this release’s supported scope**. AMD coverage was checked with automated tests, not an in-game test on AMD hardware. Confirm actual generation in the game log.
@@ -51,7 +51,7 @@ In the game, enable **NVIDIA DLSS Frame Generation**. A grey or locked **2×** s
 
 ## Download and use
 
-[Download stable v0.4.2](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/tag/v0.4.2): [portable ZIP](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.4.2/DLSSGModManager-Portable-win-x64.zip) · [Windows installer](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.4.2/DLSSGModManager-Setup.msi).
+[Download stable v0.4.3](https://github.com/VenomDrake/DLSSG-Mod-Manager/releases/tag/v0.4.3): [portable ZIP](https://github.com/VenomDrake/DLSSG-Mod-Manager/releases/download/v0.4.3/DLSSGModManager-Portable-win-x64.zip) · [Windows installer](https://github.com/VenomDrake/DLSSG-Mod-Manager/releases/download/v0.4.3/DLSSGModManager-Setup.msi).
 
 Use `DLSSGModManager.exe` from the portable package, or run the per-user `DLSSGModManager-Setup.msi`. No separate .NET, Python or CUDA Toolkit installation is needed for the published binaries.
 
@@ -72,7 +72,7 @@ The manager does not change HAGS or drivers automatically. It opens Windows grap
 
 The manager quietly checks its own GitHub releases in the background. A small notice appears only when a newer stable manager version is available; draft releases and prereleases are ignored.
 
-Both stable **0.3.1 / 0.4.1** and **0.4.0 beta** installations can update to stable **0.4.2** through **Update and restart**. The stable updater offers this release; no beta opt-in is required.
+**Repository renamed to [VenomDrake/DLSSG-Mod-Manager](https://github.com/VenomDrake/DLSSG-Mod-Manager).** If manager **0.4.2 or earlier** no longer detects updates after the move, install **0.4.3** once from the latest MSI or replace the complete portable package with the manager closed. Games and backups are preserved; subsequent updates use the new repository.
 
 Choose **Update and restart** when convenient, after the current operation finishes. The manager automatically selects the portable ZIP or MSI for the current installation, downloads it, verifies its SHA-256 against the official GitHub release asset digest, closes, installs the update and reopens. Games, settings and backups are preserved. Future updates do not require visiting GitHub or replacing files manually.
 
@@ -134,6 +134,6 @@ dotnet run --project src/DlssgManager.Desktop -- --read-only --game 'D:\Games\Ex
 
 ## Publish your fork
 
-Create a public GitHub repository and push this source tree. The included Windows workflow builds and tests pull requests and main-branch pushes. A tag such as `v0.4.2` also publishes the binaries as a GitHub release using that repository's Actions token. No token is stored in source or required by end users.
+Create a public GitHub repository and push this source tree. The included Windows workflow builds and tests pull requests and main-branch pushes. A tag such as `v0.4.3` also publishes the binaries as a GitHub release using that repository's Actions token. No token is stored in source or required by end users.
 
 See [CONTRIBUTING.md](CONTRIBUTING.md), [SECURITY.md](SECURITY.md), and [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md). This independent manager is MIT-licensed; upstream mod material has its own terms.

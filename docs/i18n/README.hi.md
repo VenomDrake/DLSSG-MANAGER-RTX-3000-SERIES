@@ -10,9 +10,9 @@
 - **RTX 20 / SM75 अनुकूलन:** [Coldwood1026](https://github.com/Coldwood1026), जिनका उल्लेख [मूल परियोजना के नोटिस](https://github.com/sdli1995/dlssg_for_sm86/blob/main/THIRD_PARTY_NOTICES.txt) में है।
 - **यह मैनेजर:** इंस्टॉलेशन और निदान के लिए स्वतंत्र इंटरफ़ेस है। मूल मॉड का श्रेय उसके लेखकों को ही जाता है; यह मैनेजर उनके कार्य पर अपना अधिकार या किसी आधिकारिक समर्थन का दावा नहीं करता।
 
-## ANR एकीकरण — स्थिर मैनेजर 0.4.2
+## ANR एकीकरण — स्थिर मैनेजर 0.4.3
 
-[स्थिर v0.4.2 डाउनलोड करें](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/tag/v0.4.2): [पोर्टेबल ZIP](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.4.2/DLSSGModManager-Portable-win-x64.zip) · [Windows इंस्टॉलर](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.4.2/DLSSGModManager-Setup.msi). मैनेजर अब स्थिर रिलीज़ है। **ANR स्वयं मूल परियोजना का बीटा FG-V.B15 है**; बीटा लेबल उस तकनीक के लिए है, मैनेजर की इस रिलीज़ के लिए नहीं।
+[स्थिर v0.4.3 डाउनलोड करें](https://github.com/VenomDrake/DLSSG-Mod-Manager/releases/tag/v0.4.3): [पोर्टेबल ZIP](https://github.com/VenomDrake/DLSSG-Mod-Manager/releases/download/v0.4.3/DLSSGModManager-Portable-win-x64.zip) · [Windows इंस्टॉलर](https://github.com/VenomDrake/DLSSG-Mod-Manager/releases/download/v0.4.3/DLSSGModManager-Setup.msi). मैनेजर अब स्थिर रिलीज़ है। **ANR स्वयं मूल परियोजना का बीटा FG-V.B15 है**; बीटा लेबल उस तकनीक के लिए है, मैनेजर की इस रिलीज़ के लिए नहीं।
 
 - **फ़्रेम जनरेशन तकनीक** चुनें: मूल SM86 (NVIDIA DLSS-G / XeSS-FG) या **Apex Neural Rendering · बीटा**। यह मैनेजर **NVIDIA GTX 16 / RTX 20–50** और **AMD Radeon RX 5000/6000/7000/9000** पर ANR समर्थित करता है; **GTX 10 / Pascal समर्थित नहीं है**। गेम में **Direct3D 12 या Vulkan** के ज़रिए मूल DLSS Frame Generation होना चाहिए।
 - यह मैनेजर ANR को केवल **Windows 10/11 x64** पर समर्थन देता है; **Linux, Steam Deck और Intel Arc इस रिलीज़ के समर्थित दायरे में नहीं हैं**। AMD समर्थन की जाँच स्वचालित परीक्षणों से हुई है, AMD हार्डवेयर पर गेम चलाकर नहीं। वास्तविक फ़्रेम जनरेशन की पुष्टि गेम के लॉग से करें।
@@ -45,7 +45,7 @@
 
 ## डाउनलोड और उपयोग
 
-[स्थिर v0.4.2 डाउनलोड करें](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/tag/v0.4.2): [पोर्टेबल ZIP](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.4.2/DLSSGModManager-Portable-win-x64.zip) · [Windows इंस्टॉलर](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.4.2/DLSSGModManager-Setup.msi).
+[स्थिर v0.4.3 डाउनलोड करें](https://github.com/VenomDrake/DLSSG-Mod-Manager/releases/tag/v0.4.3): [पोर्टेबल ZIP](https://github.com/VenomDrake/DLSSG-Mod-Manager/releases/download/v0.4.3/DLSSGModManager-Portable-win-x64.zip) · [Windows इंस्टॉलर](https://github.com/VenomDrake/DLSSG-Mod-Manager/releases/download/v0.4.3/DLSSGModManager-Setup.msi).
 
 पोर्टेबल पैकेज से `DLSSGModManager.exe` चलाएँ या केवल वर्तमान उपयोगकर्ता के लिए इंस्टॉल होने वाला `DLSSGModManager-Setup.msi` चलाएँ। प्रकाशित बाइनरी चलाने के लिए अलग से .NET, Python या CUDA Toolkit इंस्टॉल करने की आवश्यकता नहीं है।
 
@@ -72,7 +72,7 @@
 
 मैनेजर पृष्ठभूमि में चुपचाप अपनी GitHub रिलीज़ की जाँच करता है। छोटा सूचना संदेश केवल तब दिखाई देता है जब मैनेजर का नया स्थिर संस्करण उपलब्ध हो; ड्राफ़्ट और पूर्व-रिलीज़ को छोड़ दिया जाता है।
 
-स्थिर **0.3.1 / 0.4.1** और **0.4.0 बीटा** दोनों से **अपडेट करके फिर शुरू करें** के ज़रिए स्थिर **0.4.2** पर जा सकते हैं। यह स्थिर अपडेट चैनल में मिलेगा; बीटा चुनने की आवश्यकता नहीं है।
+**रिपॉज़िटरी का नाम बदलकर [VenomDrake/DLSSG-Mod-Manager](https://github.com/VenomDrake/DLSSG-Mod-Manager) कर दिया गया है।** यदि स्थानांतरण के बाद मैनेजर **0.4.2 या उससे पुराने संस्करण** में अपडेट मिलने बंद हो जाएँ, तो मैनेजर बंद करके नवीनतम MSI से एक बार **0.4.3** इंस्टॉल करें या पूरा पोर्टेबल पैकेज बदलें। गेम और बैकअप सुरक्षित रहते हैं; बाद के अपडेट नई रिपॉज़िटरी का उपयोग करते हैं।
 
 वर्तमान कार्य पूरा होने के बाद अपनी सुविधा से **अपडेट करें और पुनः शुरू करें** चुनें। मैनेजर वर्तमान इंस्टॉलेशन के लिए पोर्टेबल ZIP या MSI अपने-आप चुनता है, उसे डाउनलोड करता है, आधिकारिक GitHub रिलीज़ फ़ाइल के डाइजेस्ट से उसके SHA-256 का मिलान करता है, बंद होता है, अपडेट इंस्टॉल करता है और फिर खुलता है। आपके गेम, सेटिंग्स और बैकअप सुरक्षित रहते हैं। आगे के अपडेट के लिए GitHub पर जाने या फ़ाइलें हाथ से बदलने की आवश्यकता नहीं होगी।
 
@@ -134,7 +134,7 @@ dotnet run --project src/DlssgManager.Desktop -- --read-only --game 'D:\Games\Ex
 
 ## अपना फ़ोर्क प्रकाशित करें
 
-एक सार्वजनिक GitHub रिपॉज़िटरी बनाएँ और इस स्रोत ट्री को पुश करें। शामिल Windows वर्कफ़्लो पुल रिक्वेस्ट और मुख्य ब्रांच पर पुश के लिए बिल्ड तथा परीक्षण करता है। `v0.4.2` जैसा टैग उसी रिपॉज़िटरी के Actions टोकन से बाइनरी को GitHub रिलीज़ के रूप में भी प्रकाशित करता है। स्रोत में कोई टोकन संग्रहीत नहीं होता और अंतिम उपयोगकर्ताओं को टोकन नहीं देना पड़ता।
+एक सार्वजनिक GitHub रिपॉज़िटरी बनाएँ और इस स्रोत ट्री को पुश करें। शामिल Windows वर्कफ़्लो पुल रिक्वेस्ट और मुख्य ब्रांच पर पुश के लिए बिल्ड तथा परीक्षण करता है। `v0.4.3` जैसा टैग उसी रिपॉज़िटरी के Actions टोकन से बाइनरी को GitHub रिलीज़ के रूप में भी प्रकाशित करता है। स्रोत में कोई टोकन संग्रहीत नहीं होता और अंतिम उपयोगकर्ताओं को टोकन नहीं देना पड़ता।
 
 [CONTRIBUTING.md](../../CONTRIBUTING.md), [SECURITY.md](../../SECURITY.md) और [THIRD_PARTY_NOTICES.md](../../THIRD_PARTY_NOTICES.md) देखें। यह स्वतंत्र मैनेजर MIT लाइसेंस के अंतर्गत है; मूल परियोजना की मॉड सामग्री पर उसकी अपनी शर्तें लागू होती हैं।
 

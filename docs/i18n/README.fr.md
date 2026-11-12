@@ -10,9 +10,9 @@ Une application de bureau Windows qui accompagne [DLSSG for SM86](https://github
 - **Adaptation RTX 20 / SM75 :** [Coldwood1026](https://github.com/Coldwood1026), cité dans les [mentions du projet d'origine](https://github.com/sdli1995/dlssg_for_sm86/blob/main/THIRD_PARTY_NOTICES.txt).
 - **Ce gestionnaire :** une interface indépendante d'installation et de diagnostic. Le mérite du mod d'origine revient à ses auteurs ; le gestionnaire ne s'attribue pas leur travail et ne prétend pas bénéficier de leur approbation officielle.
 
-## Intégration ANR — gestionnaire stable 0.4.2
+## Intégration ANR — gestionnaire stable 0.4.3
 
-[Télécharger la version stable v0.4.2](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/tag/v0.4.2): [ZIP portable](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.4.2/DLSSGModManager-Portable-win-x64.zip) · [installateur Windows](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.4.2/DLSSGModManager-Setup.msi). Le gestionnaire est une version stable. **ANR reste une bêta du projet amont, FG-V.B15** ; la mention Bêta désigne cette technologie, pas cette version du gestionnaire.
+[Télécharger la version stable v0.4.3](https://github.com/VenomDrake/DLSSG-Mod-Manager/releases/tag/v0.4.3): [ZIP portable](https://github.com/VenomDrake/DLSSG-Mod-Manager/releases/download/v0.4.3/DLSSGModManager-Portable-win-x64.zip) · [installateur Windows](https://github.com/VenomDrake/DLSSG-Mod-Manager/releases/download/v0.4.3/DLSSGModManager-Setup.msi). Le gestionnaire est une version stable. **ANR reste une bêta du projet amont, FG-V.B15** ; la mention Bêta désigne cette technologie, pas cette version du gestionnaire.
 
 - Choisissez **Technologie de génération d’images** : SM86 d’origine (NVIDIA DLSS-G / XeSS-FG) ou **Apex Neural Rendering · Bêta**. Le gestionnaire prend en charge ANR sur **NVIDIA GTX 16 / RTX 20–50** et **AMD Radeon RX 5000/6000/7000/9000** ; **GTX 10 / Pascal n’est pas pris en charge**. Le jeu doit proposer DLSS Frame Generation natif via **Direct3D 12 ou Vulkan**.
 - Ce gestionnaire prend en charge ANR uniquement sous **Windows 10/11 x64** ; **Linux, Steam Deck et Intel Arc ne font pas partie du périmètre pris en charge par cette version**. La prise en charge AMD a été vérifiée par des tests automatisés, sans essai en jeu sur du matériel AMD. Confirmez la génération effective dans le journal du jeu.
@@ -51,7 +51,7 @@ Activez **NVIDIA DLSS Frame Generation** dans le jeu. Le sélecteur **2×** gris
 
 ## Téléchargement et utilisation
 
-[Télécharger la version stable v0.4.2](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/tag/v0.4.2): [ZIP portable](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.4.2/DLSSGModManager-Portable-win-x64.zip) · [installateur Windows](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.4.2/DLSSGModManager-Setup.msi).
+[Télécharger la version stable v0.4.3](https://github.com/VenomDrake/DLSSG-Mod-Manager/releases/tag/v0.4.3): [ZIP portable](https://github.com/VenomDrake/DLSSG-Mod-Manager/releases/download/v0.4.3/DLSSGModManager-Portable-win-x64.zip) · [installateur Windows](https://github.com/VenomDrake/DLSSG-Mod-Manager/releases/download/v0.4.3/DLSSGModManager-Setup.msi).
 
 Utilisez `DLSSGModManager.exe` depuis le paquet portable ou exécutez `DLSSGModManager-Setup.msi`, qui installe l'application pour l'utilisateur actuel. Les binaires publiés ne nécessitent pas d'installation séparée de .NET, Python ou CUDA Toolkit.
 
@@ -72,7 +72,7 @@ Le gestionnaire ne modifie pas automatiquement HAGS ni les pilotes. Il ouvre les
 
 Le gestionnaire vérifie discrètement ses propres versions GitHub en arrière-plan. Un petit avis apparaît uniquement lorsqu’une version stable plus récente du gestionnaire est disponible ; les brouillons et préversions sont ignorés.
 
-Les installations stables **0.3.1 / 0.4.1** et **0.4.0 bêta** peuvent passer à la stable **0.4.2** via **Mettre à jour et redémarrer**. Cette version est proposée sur le canal stable, sans inscription aux bêtas.
+**Le dépôt a été renommé [VenomDrake/DLSSG-Mod-Manager](https://github.com/VenomDrake/DLSSG-Mod-Manager).** Si le gestionnaire **0.4.2 ou antérieur** ne détecte plus les mises à jour après le déplacement, installez **0.4.3** une fois avec le dernier MSI ou remplacez tout le paquet portable, gestionnaire fermé. Les jeux et les sauvegardes sont conservés ; les mises à jour suivantes utilisent le nouveau dépôt.
 
 Choisissez **Mettre à jour et redémarrer** au moment qui vous convient, après la fin de l’opération en cours. Le gestionnaire sélectionne automatiquement le ZIP portable ou le MSI adapté à l’installation actuelle, le télécharge, vérifie son SHA-256 avec l’empreinte du fichier de la version officielle GitHub, se ferme, installe la mise à jour et se rouvre. Vos jeux, réglages et sauvegardes sont conservés. Les prochaines mises à jour ne nécessitent ni de visiter GitHub ni de remplacer des fichiers manuellement.
 
@@ -134,6 +134,6 @@ dotnet run --project src/DlssgManager.Desktop -- --read-only --game 'D:\Games\Ex
 
 ## Publier votre fork
 
-Créez un dépôt GitHub public et poussez cet arbre de sources. Le workflow Windows inclus compile et teste les pull requests ainsi que les envois sur la branche principale. Une étiquette comme `v0.4.2` publie aussi les binaires sous forme de version GitHub à l'aide du jeton Actions du dépôt. Aucun jeton n'est stocké dans les sources ni demandé aux utilisateurs finaux.
+Créez un dépôt GitHub public et poussez cet arbre de sources. Le workflow Windows inclus compile et teste les pull requests ainsi que les envois sur la branche principale. Une étiquette comme `v0.4.3` publie aussi les binaires sous forme de version GitHub à l'aide du jeton Actions du dépôt. Aucun jeton n'est stocké dans les sources ni demandé aux utilisateurs finaux.
 
 Consultez [CONTRIBUTING.md](../../CONTRIBUTING.md), [SECURITY.md](../../SECURITY.md) et [THIRD_PARTY_NOTICES.md](../../THIRD_PARTY_NOTICES.md). Ce gestionnaire indépendant est distribué sous licence MIT ; le matériel du mod d'origine conserve ses propres conditions.

@@ -10,9 +10,9 @@
 - **RTX 20 / SM75 适配：** [Coldwood1026](https://github.com/Coldwood1026)，其贡献列于[原项目声明](https://github.com/sdli1995/dlssg_for_sm86/blob/main/THIRD_PARTY_NOTICES.txt)。
 - **本管理器：** 独立的安装和诊断界面。原始模组的功劳归其作者所有；本管理器不将其成果归为己有，也不声称获得官方认可。
 
-## ANR 集成 — 稳定版管理器 0.4.2
+## ANR 集成 — 稳定版管理器 0.4.3
 
-[下载稳定版 v0.4.2](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/tag/v0.4.2): [便携 ZIP](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.4.2/DLSSGModManager-Portable-win-x64.zip) · [Windows 安装程序](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.4.2/DLSSGModManager-Setup.msi). 管理器现为稳定版。**ANR 本身仍是上游测试版 FG-V.B15**；“测试版”标签指的是该技术，而非本次管理器发布。
+[下载稳定版 v0.4.3](https://github.com/VenomDrake/DLSSG-Mod-Manager/releases/tag/v0.4.3): [便携 ZIP](https://github.com/VenomDrake/DLSSG-Mod-Manager/releases/download/v0.4.3/DLSSGModManager-Portable-win-x64.zip) · [Windows 安装程序](https://github.com/VenomDrake/DLSSG-Mod-Manager/releases/download/v0.4.3/DLSSGModManager-Setup.msi). 管理器现为稳定版。**ANR 本身仍是上游测试版 FG-V.B15**；“测试版”标签指的是该技术，而非本次管理器发布。
 
 - 选择**帧生成技术**：原有 SM86（NVIDIA DLSS-G / XeSS-FG）或 **Apex Neural Rendering · 测试版**。管理器支持 **NVIDIA GTX 16 / RTX 20–50** 和 **AMD Radeon RX 5000/6000/7000/9000** 上的 ANR；**不支持 GTX 10 / Pascal**。游戏必须通过 **Direct3D 12 或 Vulkan** 提供原生 DLSS Frame Generation。
 - 本管理器仅在 **Windows 10/11 x64** 上支持 ANR；**Linux、Steam Deck 和 Intel Arc 不在本次发布的支持范围内**。AMD 支持已通过自动化测试检查，但尚未在 AMD 硬件上进行游戏实测。请通过游戏日志确认实际帧生成。
@@ -45,7 +45,7 @@
 
 ## 下载与使用
 
-[下载稳定版 v0.4.2](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/tag/v0.4.2): [便携 ZIP](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.4.2/DLSSGModManager-Portable-win-x64.zip) · [Windows 安装程序](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.4.2/DLSSGModManager-Setup.msi).
+[下载稳定版 v0.4.3](https://github.com/VenomDrake/DLSSG-Mod-Manager/releases/tag/v0.4.3): [便携 ZIP](https://github.com/VenomDrake/DLSSG-Mod-Manager/releases/download/v0.4.3/DLSSGModManager-Portable-win-x64.zip) · [Windows 安装程序](https://github.com/VenomDrake/DLSSG-Mod-Manager/releases/download/v0.4.3/DLSSGModManager-Setup.msi).
 
 运行便携包中的 `DLSSGModManager.exe`，或使用仅为当前用户安装的 `DLSSGModManager-Setup.msi`。发布的二进制程序无需单独安装 .NET、Python 或 CUDA Toolkit。
 
@@ -72,7 +72,7 @@
 
 管理器会在后台静默检查自身的 GitHub 发布版本。只有发现更新的稳定版管理器时，才会显示一条小提示；草稿和预发布版本会被忽略。
 
-稳定版 **0.3.1 / 0.4.1** 和 **0.4.0 测试版**均可通过**更新并重启**升级至稳定版 **0.4.2**。稳定版更新通道会提供此版本，无需选择参与测试。
+**仓库已重命名为 [VenomDrake/DLSSG-Mod-Manager](https://github.com/VenomDrake/DLSSG-Mod-Manager)。** 如果管理器 **0.4.2 或更早版本**在迁移后无法再检测更新，请关闭管理器后，使用最新版 MSI 安装一次 **0.4.3**，或替换整个便携软件包。游戏和备份会保留；后续更新将使用新仓库。
 
 请在当前操作结束后，选择合适的时间点击 **更新并重启**。管理器会自动选择适合当前安装方式的便携 ZIP 或 MSI，下载软件包，将其 SHA-256 与 GitHub 官方发布文件的摘要进行核对，然后关闭、安装更新并重新打开。游戏、设置和备份都会保留。以后的更新无需访问 GitHub 或手动替换文件。
 
@@ -134,7 +134,7 @@ dotnet run --project src/DlssgManager.Desktop -- --read-only --game 'D:\Games\Ex
 
 ## 发布自己的分支
 
-创建公开的 GitHub 仓库，并推送此源代码目录。随附的 Windows 工作流会对拉取请求和主分支推送进行构建与测试。推送如 `v0.4.2` 的标签时，还会使用该仓库的 Actions 令牌将二进制程序发布为 GitHub release。源代码不存储令牌，终端用户也不需要提供令牌。
+创建公开的 GitHub 仓库，并推送此源代码目录。随附的 Windows 工作流会对拉取请求和主分支推送进行构建与测试。推送如 `v0.4.3` 的标签时，还会使用该仓库的 Actions 令牌将二进制程序发布为 GitHub release。源代码不存储令牌，终端用户也不需要提供令牌。
 
 参阅 [CONTRIBUTING.md](../../CONTRIBUTING.md)、[SECURITY.md](../../SECURITY.md) 和 [THIRD_PARTY_NOTICES.md](../../THIRD_PARTY_NOTICES.md)。此独立管理器采用 MIT 许可证；原项目模组材料遵循各自的条款。
 
