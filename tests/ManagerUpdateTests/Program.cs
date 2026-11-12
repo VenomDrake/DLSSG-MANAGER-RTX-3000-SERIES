@@ -34,6 +34,17 @@ await Test("release metadata requires a newer stable version and both verified o
     Assert(ManagerUpdateService.ParseRelease(Bytes(release), "0.2.0") is null, "Unexpected HTTPS port allowed.");
     return Task.CompletedTask;
 });
+await Test("ANR beta remains opt-in and a later stable release can update the beta application", () =>
+{
+    var beta = Release("v0.4.0-beta.1", prerelease: true);
+    Assert(ManagerUpdateService.ParseRelease(Bytes(beta), "0.3.1") is null, "The ANR beta was offered to stable users.");
+    var stable = Release("v0.3.1");
+    Assert(ManagerUpdateService.ParseRelease(Bytes(stable), "0.3.1") is null, "The unchanged stable release was offered again.");
+    Assert(ManagerUpdateService.ParseRelease(Bytes(stable), "0.4.0") is null, "The beta application was offered a stable downgrade.");
+    var laterStable = ManagerUpdateService.ParseRelease(Bytes(Release("v0.4.1")), "0.4.0");
+    Assert(laterStable?.Version == "0.4.1", "The beta application could not discover a later stable update.");
+    return Task.CompletedTask;
+});
 await Test("background check is quiet on offline, malformed, missing, huge or untrusted metadata", async () =>
 {
     using var temp = new Temp();
@@ -331,14 +342,13 @@ static void ThrowsSync<T>(Action run) where T : Exception
 static byte[] Bytes(JsonNode node) => Encoding.UTF8.GetBytes(node.ToJsonString());
 static string Fixture(string name) => System.IO.Path.Combine(AppContext.BaseDirectory, "Fixtures", name);
 static HttpResponseMessage Response(string body) => new(HttpStatusCode.OK) { Content = new StringContent(body) };
-static JsonObject Release()
+static JsonObject Release(string tag = "v0.3.0", bool prerelease = false)
 {
-    var tag = "v0.3.0";
     var assets = new JsonArray();
     foreach (var name in new[] { ManagerUpdateService.PortableAssetName, ManagerUpdateService.InstallerAssetName })
         assets.Add(new JsonObject { ["name"] = name, ["size"] = 1000, ["digest"] = "sha256:" + new string('a', 64),
             ["browser_download_url"] = "https://github.com/" + ManagerUpdateService.Repository + "/releases/download/" + tag + "/" + name });
-    return new JsonObject { ["draft"] = false, ["prerelease"] = false, ["tag_name"] = tag,
+    return new JsonObject { ["draft"] = false, ["prerelease"] = prerelease, ["tag_name"] = tag,
         ["html_url"] = "https://github.com/" + ManagerUpdateService.Repository + "/releases/tag/" + tag, ["assets"] = assets };
 }
 static void Zip(string path, IEnumerable<(string Name, string Content, int Attributes)> files)

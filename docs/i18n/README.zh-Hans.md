@@ -10,6 +10,17 @@
 - **RTX 20 / SM75 适配：** [Coldwood1026](https://github.com/Coldwood1026)，其贡献列于[原项目声明](https://github.com/sdli1995/dlssg_for_sm86/blob/main/THIRD_PARTY_NOTICES.txt)。
 - **本管理器：** 独立的安装和诊断界面。原始模组的功劳归其作者所有；本管理器不将其成果归为己有，也不声称获得官方认可。
 
+## ANR 集成 — 预发布版 0.4.0-beta.1
+
+[下载实验性测试版](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/tag/v0.4.0-beta.1)：[便携 ZIP](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.4.0-beta.1/DLSSGModManager-Portable-win-x64.zip) · [Windows 安装程序](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.4.0-beta.1/DLSSGModManager-Setup.msi)。**v0.3.1 仍是最新稳定版，不会自动收到此测试版。** 安装测试版需要用户主动选择。除本节说明的差异外，以下指南介绍稳定版 SM86 路径。
+
+- 选择**帧生成技术**：原有 SM86（NVIDIA DLSS-G / XeSS-FG）或 **Apex Neural Rendering · 测试版**。本测试版管理器支持 NVIDIA **GTX 16 和 RTX 20–50** 上的 ANR；**不支持 GTX 10 / Pascal**。游戏必须通过 **Direct3D 12 或 Vulkan** 提供原生 DLSS Frame Generation。
+- 没有 OptiScaler 时管理器选择 **Full**，已有兼容 OptiScaler 时选择 **Addon**。软件包直接从上游官方发布下载，并验证 SHA-256；管理器**不捆绑 ANR 和 OptiScaler 的二进制文件或模型**。已审核的 ANR 安装规则为 **FG-V.B15**，未知的后续规则会被阻止。
+- 安装或切换前请关闭游戏。管理器会检查冲突、记录管理的文件，并在更改前创建可恢复备份。切换提供程序、禁用和恢复共用事务日志及历史记录；未知或外部修改的文件会受到保护。Addon 保留现有 OptiScaler 加载器。使用**恢复先前状态**可撤销切换。
+- 先离线测试 **2×**。ANR 有自己的计算路径、HDR 亮度、场景切换设置和日志；SM86 专用选项不适用。倍数取决于游戏。日志确认只是初步测试，不能保证长时间游戏稳定。请勿在受反作弊保护的在线游戏中使用任何提供程序。
+
+**ANR 致谢：**[Apex Compute / Apex Neural Rendering](https://github.com/apex-compute/ANR)；[OptiScaler](https://github.com/optiscaler/OptiScaler) 及其贡献者。OptiScaler 使用 GPL-3.0；ANR 代码、二进制文件和模型仍遵循作者的条款。管理器不更改上游材料的许可。参见[许可问题](https://github.com/apex-compute/ANR/issues/9)。
+
 ![应用预览](../screenshot.png)
 
 ## 功能

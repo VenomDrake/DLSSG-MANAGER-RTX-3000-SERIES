@@ -201,6 +201,94 @@ Assert(LogReader.Read(log, "Synthetic.exe").ProcessId == 2, "EXE filtering exclu
 File.AppendAllText(log, Row(1, "{\"event\":\"log_session\"}") + Row(1, "{\"event\":\"install\",\"active\":true}"));
 var reused = LogReader.Read(log, "Synthetic.exe");
 Assert(reused.ProcessId == 1 && !reused.Evaluated && reused.Errors.Count == 0, "session boundary protects against reused PIDs and earlier errors");
+
+// ANR has a separate native-runtime and GPU recipe; no downloaded code is executed.
+var anrPackage = package with { Provider = ModProvider.Anr, Variant = "full" };
+string anrGame = sandbox.PathFor("AnrSynthetic");
+string anrExe = Path.Combine(anrGame, "Anr.exe");
+WritePe(anrExe);
+WritePe(Path.Combine(anrGame, "nvngx_dlssg.dll"));
+var anrScan = await scanner.ScanAsync(anrGame, anrPackage, cancellationToken: default, provider: ModProvider.Anr);
+Assert(anrScan.Provider == ModProvider.Anr && anrScan.CanInstall && !anrScan.Checks.Any(c => c.Code == "runtime_generation"), "ANR accepts an inspected x64 native runtime without inheriting the SM86 310 generation constraint");
+AssertSupport(anrScan, GameSupportState.RequirementsDetected, "support_reason_ready", "ANR support assessment uses its own runtime prerequisite");
+Assert(AnrSupport.RequiredVariant(anrScan) == "full", "ANR clean target selects full package");
+var wrongPackage = await scanner.ScanAsync(anrGame, package, provider: ModProvider.Anr);
+Assert(!wrongPackage.CanInstall && wrongPackage.Checks.Any(c => c.Code == "package_ready" && c.Level == CheckLevel.Blocked), "a verified SM86 package cannot satisfy the ANR prerequisite");
+File.Delete(Path.Combine(anrGame, "nvngx_dlssg.dll"));
+string fakeProvider = Path.Combine(anrGame, "OptiScaler", "custom", "Apex Neural Rendering FG", "dlssg", "nvngx_dlssg.dll");
+WritePe(fakeProvider);
+var onlyProvider = await scanner.ScanAsync(anrGame, anrPackage, provider: ModProvider.Anr);
+Assert(!onlyProvider.CanInstall && onlyProvider.Checks.Any(c => c.Code == "game_dlssg" && c.Level == CheckLevel.Blocked), "installed ANR provider DLL cannot be mistaken for the game's native DLSS frame generation runtime");
+File.Delete(fakeProvider);
+Directory.Delete(Path.Combine(anrGame, "OptiScaler"), true);
+WritePe(Path.Combine(anrGame, "nvngx_dlssg.dll"));
+Directory.CreateDirectory(Path.Combine(anrGame, "EasyAntiCheat"));
+var anrAnti = await scanner.ScanAsync(anrGame, anrPackage, provider: ModProvider.Anr);
+Assert(!anrAnti.CanInstall && anrAnti.Checks.Any(c => c.Code == "anticheat" && c.Level == CheckLevel.Blocked), "ANR retains anti-cheat installation blocking");
+Directory.Delete(Path.Combine(anrGame, "EasyAntiCheat"));
+File.WriteAllText(Path.Combine(anrGame, "OptiScaler.ini"), "[FrameGen]\nFGNvngxReplacement=auto\n");
+WritePe(Path.Combine(anrGame, "dxgi.dll"));
+var unknownOpti = await scanner.ScanAsync(anrGame, anrPackage, provider: ModProvider.Anr);
+Assert(!unknownOpti.CanInstall && unknownOpti.Checks.Any(c => c.Code == "anr_addon" && c.Level == CheckLevel.Blocked), "ANR refuses an unverified OptiScaler loader instead of overwriting it");
+
+File.Delete(Path.Combine(anrGame, "OptiScaler.ini"));
+File.Delete(Path.Combine(anrGame, "dxgi.dll"));
+var managedAnrFiles = new List<PackageFile>();
+foreach (var path in new[] { "dxgi.dll", "OptiScaler.ini", "OptiScaler/custom/Apex Neural Rendering FG/dlssg/nvngx_dlssg.dll", "OptiScaler/custom/Apex Neural Rendering FG/dlssg/nr_fg.ini" })
+{
+    var full = Path.Combine(anrGame, path.Replace('/', Path.DirectorySeparatorChar));
+    if (path.EndsWith(".dll", StringComparison.Ordinal)) WritePe(full);
+    else { Directory.CreateDirectory(Path.GetDirectoryName(full)!); File.WriteAllText(full, "synthetic configuration"); }
+    managedAnrFiles.Add(new(path, new FileInfo(full).Length, Convert.ToHexString(SHA256.HashData(File.ReadAllBytes(full)))));
+}
+File.WriteAllText(Path.Combine(anrGame, ".dlssg-manager.json"), JsonSerializer.Serialize(new
+{
+    SchemaVersion = 1, Provider = ModProvider.Anr, Version = "FG-V.B15", GameDirectory = anrGame, Proxy = "dxgi.dll", Files = managedAnrFiles
+}));
+var managedAnrScan = await scanner.ScanAsync(anrGame, anrPackage, provider: ModProvider.Anr);
+Assert(managedAnrScan.ModState == ModState.Managed && managedAnrScan.CanInstall, "ANR managed inventory is recognized through its own provider selection");
+var managedAnrForSwitch = await scanner.ScanAsync(anrGame, package, provider: ModProvider.Sm86);
+Assert(managedAnrForSwitch.ModState == ModState.Managed, "a managed ANR record remains recognized while selecting SM86 for a controlled switch");
+File.WriteAllText(Path.Combine(anrGame, "winmm.dll"), "foreign loader");
+Assert(!(await scanner.ScanAsync(anrGame, anrPackage, provider: ModProvider.Anr)).CanInstall, "an additional foreign loader blocks a managed ANR target");
+
+Assert(AnrSupport.IsSupportedGpu("NVIDIA GeForce GTX 1660 SUPER") && AnrSupport.IsSupportedGpu("NVIDIA GeForce RTX 5090 Laptop GPU")
+    && AnrSupport.IsSupportedGpu("NVIDIA GeForce RTX 3090") && !AnrSupport.IsSupportedGpu("NVIDIA GeForce GTX 1080 Ti")
+    && !AnrSupport.IsSupportedGpu("AMD Radeon RX 7900 XTX"), "ANR manager supports only the declared NVIDIA GTX16 and RTX20-50 families; Pascal and other vendors are not silently accepted");
+string systemFixture = sandbox.PathFor("SyntheticSystem");
+foreach (var file in new[] { "MSVCP140.dll", "VCRUNTIME140.dll", "VCRUNTIME140_1.dll", "vulkan-1.dll" }) WritePe(Path.Combine(systemFixture, file));
+var rawHardware = new HardwareInfo([new("NVIDIA GeForce GTX 1660", "550.00", 7.5, false)], true, false, null,
+    [new("windows_x64", CheckLevel.Pass), new("gpu_supported", CheckLevel.Blocked), new("driver_r580", CheckLevel.Blocked), new("hags_configured", CheckLevel.Blocked)]);
+var anrHardware = AnrSupport.AdaptHardware(rawHardware, systemFixture);
+Assert(anrHardware.Gpus[0].Eligible && !anrHardware.Checks.Any(c => c.Level == CheckLevel.Blocked)
+    && !anrHardware.Checks.Any(c => c.Code is "driver_r580" or "hags_configured"), "ANR hardware checks do not inherit undocumented SM86 driver/HAGS blockers");
+File.Delete(Path.Combine(systemFixture, "VCRUNTIME140_1.dll"));
+Assert(AnrSupport.AdaptHardware(rawHardware, systemFixture).Checks.Any(c => c.Code == "anr_vc_runtime" && c.Level == CheckLevel.Blocked), "missing x64 VC runtime blocks ANR prerequisites");
+
+string anrLogs = sandbox.PathFor("AnrLogs");
+string logDirectory = Path.Combine(anrLogs, "OptiScaler", "custom", "Apex Neural Rendering FG", "dlssg");
+Directory.CreateDirectory(logDirectory);
+string anrOldLog = Path.Combine(logDirectory, "nr_fg-20261112-120000.log");
+string AnrLine(string message, string level = "info") => "[12:00:00.000] [" + level + "] " + message + "\n";
+string anrSuccess = AnrLine("nr_fg DLSS-G provider in " + logDirectory) + AnrLine("frame generation feature: 1920x1080, render 1280x720")
+    + AnrLine("our frame generation ready for PQ10 colors (coopmat)") + AnrLine("GPU: NVIDIA GeForce RTX 3090, Vulkan 1.4")
+    + AnrLine("GPU ms (medians): frame in 0.043 pair 0.821, per generated frame phase 0.603 out 0.121, 2X (600 generated evaluations, 0 generation errors)");
+File.WriteAllText(anrOldLog, anrSuccess);
+Assert(AnrLogReader.ReadLatest(anrLogs).Evaluated && AnrLogReader.ReadLatest(anrLogs).Gpu == "NVIDIA GeForce RTX 3090", "ANR verifies an explicit positive generated-evaluation summary in its latest session");
+string anrNewLog = Path.Combine(logDirectory, "nr_fg-20261112-130000.log");
+File.WriteAllText(anrNewLog, AnrLine("nr_fg DLSS-G provider in " + logDirectory) + AnrLine("frame generation feature: 1920x1080, render 1280x720")
+    + AnrLine("our frame generation ready for PQ10 colors (coopmat)") + AnrLine("evaluate 1: index 1 of 1"));
+Assert(!AnrLogReader.ReadLatest(anrLogs).Evaluated && AnrLogReader.ReadLatest(anrLogs).FrameGenerationCreated, "ANR ignores an older log's success and does not verify merely attempted evaluation");
+File.AppendAllText(anrNewLog, anrSuccess + AnrLine("frame generation feature: 1920x1080, render 1280x720"));
+Assert(!AnrLogReader.ReadLatest(anrLogs).Evaluated, "ANR feature recreation clears the previous feature's successful generation");
+File.WriteAllText(anrNewLog, anrSuccess + AnrLine("GPU ms: 2X (620 generated evaluations, 3 generation errors)"));
+Assert(!AnrLogReader.ReadLatest(anrLogs).Evaluated && AnrLogReader.ReadLatest(anrLogs).Errors.Count == 1, "ANR nonzero generation errors prevent verified success");
+File.WriteAllText(anrNewLog, anrSuccess + AnrLine("device lost", "error"));
+Assert(AnrLogReader.ReadLatest(anrLogs).Summary == "log_errors" && !AnrLogReader.ReadLatest(anrLogs).Evaluated, "ANR current-session errors override an earlier successful summary");
+File.WriteAllText(anrNewLog, anrSuccess + AnrLine("nr_fg DLSS-G provider in " + logDirectory));
+Assert(!AnrLogReader.ReadLatest(anrLogs).Evaluated && AnrLogReader.ReadLatest(anrLogs).Errors.Count == 0, "ANR appended provider session resets status and errors");
+Assert(AnrLogReader.ReadLatest(anrLogs, Path.Combine(sandbox.PathFor("OtherGame"), "Other.exe")).Summary == "log_missing", "ANR log lookup rejects an executable outside the selected rendering directory");
+
 Console.WriteLine($"All {passed} detection/log checks passed using synthetic fixtures only.");
 
 static ReleasePackage MakePackage(string directory, string fixture)

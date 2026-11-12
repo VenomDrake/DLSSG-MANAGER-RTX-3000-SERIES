@@ -46,7 +46,7 @@ public partial class MainWindow
     private void RefreshManagerUpdateUi()
     {
         if (ManagerVersionText is null) return;
-        ManagerVersionText.Text = string.Format(Localization.Get("manager_version"), App.Version);
+        ManagerVersionText.Text = string.Format(Localization.Get("manager_version"), App.DisplayVersion);
         var visible = _availableManagerUpdate is not null && _availableManagerUpdate.Version != _dismissedManagerVersion;
         ManagerUpdateNotice.Visibility = visible ? Visibility.Visible : Visibility.Collapsed;
         ManagerUpdateInstallButton.IsEnabled = !_readOnly && _operation is null && _availableManagerUpdate is not null;

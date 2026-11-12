@@ -1,7 +1,7 @@
 param([switch]$Live)
 $ErrorActionPreference = 'Stop'
 $repoRoot = Split-Path -Parent $PSScriptRoot
-foreach ($project in @('tests/ReleaseTests/ReleaseTests.csproj', 'tests/DetectionTests/DetectionTests.csproj', 'tests/DlssgManager.Tests/DlssgManager.Tests.csproj', 'tests/ManagerUpdateTests/ManagerUpdateTests.csproj')) {
+foreach ($project in @('tests/ReleaseTests/ReleaseTests.csproj', 'tests/AnrReleaseTests/AnrReleaseTests.csproj', 'tests/DetectionTests/DetectionTests.csproj', 'tests/DlssgManager.Tests/DlssgManager.Tests.csproj', 'tests/ManagerUpdateTests/ManagerUpdateTests.csproj')) {
     & dotnet run --project (Join-Path $repoRoot $project) --configuration Release
     if ($LASTEXITCODE -ne 0) { throw "Test project failed: $project" }
 }

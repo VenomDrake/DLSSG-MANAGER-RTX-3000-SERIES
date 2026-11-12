@@ -10,6 +10,7 @@ public sealed record GameSupportAssessment(GameSupportState State, IReadOnlyList
         ArgumentNullException.ThrowIfNull(scan);
         bool Has(string code, CheckLevel level) => scan.Checks.Any(c => c.Code == code && c.Level == level);
         bool IsKnown(string code) => Has(code, CheckLevel.Pass) || Has(code, CheckLevel.Blocked);
+        string runtimeCheck = scan.Provider == ModProvider.Anr ? "anr_runtime" : "runtime_generation";
         GameSupportAssessment Result(GameSupportState state, params string[] reasons) => new(state, Array.AsReadOnly(reasons));
 
         // A partial directory scan cannot establish that a required file is absent.
@@ -21,18 +22,18 @@ public sealed record GameSupportAssessment(GameSupportState State, IReadOnlyList
             return Has("anticheat", CheckLevel.Blocked)
                 ? Result(GameSupportState.Unsupported, "support_reason_no_runtime", "support_reason_anticheat")
                 : Result(GameSupportState.Unsupported, "support_reason_no_runtime");
-        if (Has("game_dlssg", CheckLevel.Pass) && Has("runtime_generation", CheckLevel.Blocked)
+        if (Has("game_dlssg", CheckLevel.Pass) && Has(runtimeCheck, CheckLevel.Blocked)
             && (string.IsNullOrWhiteSpace(scan.RuntimeVersion) || scan.RuntimeVersion.Trim() == "?"))
             return Result(GameSupportState.NeedsReview, "support_reason_runtime_unknown");
         if (string.IsNullOrWhiteSpace(scan.RenderingExe))
             return Result(GameSupportState.NeedsReview, scan.Executables.Count > 0 ? "support_reason_exe" : "support_reason_no_exe");
         if (!Has("render_exe", CheckLevel.Pass) || !IsKnown("exe_x64") || !IsKnown("game_dlssg")
-            || Has("game_dlssg", CheckLevel.Pass) && !IsKnown("runtime_generation"))
+            || Has("game_dlssg", CheckLevel.Pass) && !IsKnown(runtimeCheck))
             return Result(GameSupportState.NeedsReview, "support_reason_scan");
 
         var technicalReasons = new List<string>();
         if (Has("exe_x64", CheckLevel.Blocked)) technicalReasons.Add("support_reason_architecture");
-        if (Has("runtime_generation", CheckLevel.Blocked)) technicalReasons.Add("support_reason_runtime");
+        if (Has(runtimeCheck, CheckLevel.Blocked)) technicalReasons.Add("support_reason_runtime");
         bool antiCheat = Has("anticheat", CheckLevel.Blocked);
         if (technicalReasons.Count > 0)
         {

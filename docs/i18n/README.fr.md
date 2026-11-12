@@ -10,6 +10,17 @@ Une application de bureau Windows qui accompagne [DLSSG for SM86](https://github
 - **Adaptation RTX 20 / SM75 :** [Coldwood1026](https://github.com/Coldwood1026), cité dans les [mentions du projet d'origine](https://github.com/sdli1995/dlssg_for_sm86/blob/main/THIRD_PARTY_NOTICES.txt).
 - **Ce gestionnaire :** une interface indépendante d'installation et de diagnostic. Le mérite du mod d'origine revient à ses auteurs ; le gestionnaire ne s'attribue pas leur travail et ne prétend pas bénéficier de leur approbation officielle.
 
+## Intégration ANR — préversion 0.4.0-beta.1
+
+[Télécharger la bêta expérimentale](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/tag/v0.4.0-beta.1) : [ZIP portable](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.4.0-beta.1/DLSSGModManager-Portable-win-x64.zip) · [installateur Windows](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.4.0-beta.1/DLSSGModManager-Setup.msi). **La v0.3.1 reste la dernière version stable et ne reçoit pas automatiquement cette bêta.** Installer la bêta est un choix explicite. Le reste du guide décrit la solution SM86 stable, sauf les différences précisées ici.
+
+- Choisissez **Technologie de génération d’images** : SM86 d’origine (NVIDIA DLSS-G / XeSS-FG) ou **Apex Neural Rendering · Bêta**. Cette bêta prend en charge ANR sur NVIDIA **GTX 16 et RTX 20–50** ; **GTX 10 / Pascal n’est pas pris en charge**. Le jeu doit proposer DLSS Frame Generation natif via **Direct3D 12 ou Vulkan**.
+- Le gestionnaire choisit **Full** sans OptiScaler, ou **Addon** pour une installation OptiScaler compatible. Il télécharge les paquets directement depuis la publication officielle et vérifie SHA-256 ; les binaires et modèles ANR et OptiScaler **ne sont pas inclus dans le gestionnaire**. La procédure ANR vérifiée est **FG-V.B15** ; une future procédure inconnue reste bloquée.
+- Fermez le jeu avant l’installation ou le changement. Le gestionnaire vérifie les conflits, inventorie les fichiers gérés et crée des sauvegardes récupérables avant modification. Changement de fournisseur, désactivation et restauration partagent journal et historique ; les fichiers inconnus ou modifiés ailleurs sont protégés. Addon conserve le chargeur OptiScaler existant. Utilisez **Restaurer l’état précédent** pour annuler un changement.
+- Commencez hors ligne en **2×**. ANR possède ses réglages de chemin de calcul, luminance HDR et changements de scène, ainsi que son journal ; les options propres à SM86 ne s’appliquent pas. Les multiplicateurs dépendent du jeu. La confirmation du journal est un premier test, pas une garantie de stabilité prolongée. N’utilisez aucun fournisseur dans les jeux en ligne protégés par anti-triche.
+
+**Crédits ANR :** [Apex Compute / Apex Neural Rendering](https://github.com/apex-compute/ANR) ; [OptiScaler](https://github.com/optiscaler/OptiScaler) et ses contributeurs. OptiScaler est sous GPL-3.0 ; code, binaires et modèles ANR gardent les conditions de leurs auteurs. Le gestionnaire ne modifie pas leurs licences. Voir la [question sur la licence](https://github.com/apex-compute/ANR/issues/9).
+
 ![Aperçu de l'application](../screenshot.png)
 
 ## Fonctionnalités

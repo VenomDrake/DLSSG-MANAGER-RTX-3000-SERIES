@@ -4,6 +4,7 @@
     <Project Path="src/DlssgManager.Desktop/DlssgManager.Desktop.csproj" />
   </Folder>
   <Folder Name="/tests/">
+    <Project Path="tests/AnrReleaseTests/AnrReleaseTests.csproj" />
     <Project Path="tests/DetectionTests/DetectionTests.csproj" />
     <Project Path="tests/DlssgManager.Tests/DlssgManager.Tests.csproj" />
     <Project Path="tests/ReleaseTests/ReleaseTests.csproj" />

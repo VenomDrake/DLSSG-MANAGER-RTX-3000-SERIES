@@ -14,6 +14,8 @@ public partial class App : Application
     public static bool IsLocalUiPreview => Arguments.Contains("--ui-preview");
 #endif
     public static string Version => typeof(App).Assembly.GetName().Version?.ToString(3) ?? "0.0.0";
+    public static string DisplayVersion => typeof(App).Assembly.GetCustomAttributes(typeof(System.Reflection.AssemblyInformationalVersionAttribute), false)
+        .OfType<System.Reflection.AssemblyInformationalVersionAttribute>().FirstOrDefault()?.InformationalVersion.Split('+')[0] ?? Version;
     public static ManagerUpdateResult? UpdateResult { get; private set; }
     protected override async void OnStartup(StartupEventArgs e)
     {

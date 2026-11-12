@@ -15,6 +15,7 @@ namespace DlssgManager.Desktop;
 public partial class MainWindow : Window
 {
     private readonly ReleaseService _releases = new(Path.Combine(App.DataDirectory, "cache"));
+    private readonly AnrReleaseService _anrReleases = new(Path.Combine(App.DataDirectory, "anr-cache"));
     private readonly InstallService _installer = new();
     private readonly GameScanner _scanner = new();
     private readonly HardwareService _hardwareService = new();
@@ -23,6 +24,9 @@ public partial class MainWindow : Window
     private ReleasePackage? _package;
     private UpdateState? _updateState;
     private HardwareInfo? _hardware;
+    private HardwareInfo? _rawHardware;
+    private ModProvider _provider;
+    private string _anrVariant = "full";
     private GameScan? _scan;
     private InstallationRecord? _record;
     private LogVerification? _verification;
@@ -42,10 +46,12 @@ public partial class MainWindow : Window
         InitializeComponent();
         if (_readOnly) Title += " · " + Localization.Get("ui_preview_title");
         PreviewNotice.Visibility = _readOnly ? Visibility.Visible : Visibility.Collapsed;
+        PrereleaseNotice.Visibility = App.DisplayVersion.Contains('-') ? Visibility.Visible : Visibility.Collapsed;
         _changingChoices = true;
         LanguagePicker.ItemsSource = Localization.Languages;
         LanguagePicker.SelectedItem = Localization.Languages.First(l => l.Code == Localization.Current);
         _changingChoices = false;
+        InitializeProvider();
         RebuildChoices();
         FlowDirection = Localization.Direction;
         FolderPath.FlowDirection = FlowDirection.LeftToRight;
@@ -113,7 +119,9 @@ public partial class MainWindow : Window
 
     private async Task UpdatePackageAsync(CancellationToken token)
     {
-        var result = await _releases.EnsureLatestAsync(Progress(), token);
+        var result = _provider == ModProvider.Anr
+            ? await _anrReleases.EnsureLatestAsync(_anrVariant, Progress(), token)
+            : await _releases.EnsureLatestAsync(Progress(), token);
         _package = result.Package;
         _updateState = result.State;
         RefreshSummaries();
@@ -129,7 +137,8 @@ public partial class MainWindow : Window
     private async Task InspectHardwareAsync(CancellationToken token)
     {
         SetStatus("hardware_checking");
-        _hardware = await _hardwareService.InspectAsync(token);
+        _rawHardware = await _hardwareService.InspectAsync(token);
+        _hardware = _provider == ModProvider.Anr ? AnrSupport.AdaptHardware(_rawHardware) : _rawHardware;
         RefreshSummaries();
         RenderChecks();
         SetStatus("idle");
@@ -151,12 +160,26 @@ public partial class MainWindow : Window
         ResetGameAnalysis(false);
         try
         {
-            var scan = await _scanner.ScanAsync(FolderPath.Text.Trim().Trim('"'), _package, _selectedExe, token);
+            var scan = await _scanner.ScanAsync(FolderPath.Text.Trim().Trim('"'), _package, _selectedExe, token, _provider);
             InstallationRecord? record = null;
+            string? recordError = null;
             try { record = scan.RenderingDirectory is null ? null : await _installer.ReadRecordAsync(scan.RenderingDirectory, token); }
             catch (Exception error) when (error is InvalidDataException or IOException or UnauthorizedAccessException)
-            { SaveError(error); }
+            { SaveError(error); recordError = error.Message; }
             token.ThrowIfCancellationRequested();
+            if (_provider == ModProvider.Anr)
+            {
+                var variant = AnrSupport.RequiredVariant(scan);
+                if (_package is null || _package.Provider != ModProvider.Anr || _package.Variant != variant)
+                {
+                    _anrVariant = variant;
+                    var result = await _anrReleases.EnsureLatestAsync(variant, Progress(), token);
+                    _package = result.Package; _updateState = result.State;
+                    scan = await _scanner.ScanAsync(FolderPath.Text.Trim().Trim('"'), _package, _selectedExe, token, _provider);
+                }
+            }
+            if (recordError is not null)
+                scan = scan with { Checks = scan.Checks.Append(new CheckResult("mod_record", CheckLevel.Blocked, recordError)).ToArray() };
             _scan = scan;
             _record = record;
         }
@@ -165,7 +188,7 @@ public partial class MainWindow : Window
         ExePicker.ItemsSource = _scan.Executables;
         ExePicker.SelectedItem = _scan.Executables.FirstOrDefault(x => string.Equals(x.Path, _scan.RenderingExe, StringComparison.OrdinalIgnoreCase));
         _changingChoices = false;
-        if (_record is not null) ApplyOptions(_record.Options);
+        if (_record is not null && _record.Provider == _provider) ApplyOptions(_record.Options);
         RefreshSummaries();
         RenderChecks();
         ReadLog(false);
@@ -177,7 +200,9 @@ public partial class MainWindow : Window
 
     private void RefreshSummaries()
     {
-        PackageVersion.Text = _package is null ? "—" : "v" + _package.Release.Version;
+        PackageVersion.Text = _package is null ? "—" : ProviderName(_provider) + " · " + _package.Release.Version;
+        AboutVersionText.Text = "DLSSG Mod Manager " + App.DisplayVersion;
+        RefreshProviderUi();
         var updateKey = _updateState switch
         {
             UpdateState.UpToDate => "up_to_date", UpdateState.Downloaded => "download_complete",
@@ -235,10 +260,12 @@ public partial class MainWindow : Window
         FolderPath.IsEnabled = idle;
         SteamPicker.IsEnabled = idle;
         ExePicker.IsEnabled = idle;
+        ProviderPicker.IsEnabled = idle;
+        AnrOptionsPanel.IsEnabled = idle;
         OptionsGrid.IsEnabled = idle;
         var blockedHardware = _hardware is null || _hardware.Checks.Any(c => c.Level == CheckLevel.Blocked);
         InstallButton.IsEnabled = idle && !_readOnly && !blockedHardware && _package is { SupportedLayout: true } && _scan?.CanInstall == true;
-        InstallButton.Content = Localization.Get(_scan?.ModState switch
+        InstallButton.Content = _record is not null && _record.Provider != _provider ? Localization.Get("switch_provider") : Localization.Get(_scan?.ModState switch
         {
             ModState.Managed or ModState.RecognizedManual => IsGameCurrent() ? "apply_options" : "update_game",
             _ => "install"
@@ -253,9 +280,9 @@ public partial class MainWindow : Window
 
     private bool IsGameCurrent()
     {
-        if (_package is null || _scan is null || _updateState is not (UpdateState.UpToDate or UpdateState.Downloaded)) return false;
+        if (_package is null || _package.Provider != _provider || _scan is null || _record?.State == "Disabled" || _updateState is not (UpdateState.UpToDate or UpdateState.Downloaded)) return false;
         if (_scan.ModState == ModState.RecognizedManual) return _scan.InstalledVersion == _package.Release.Version;
-        return _record is not null && _record.ReleaseId == _package.Release.ReleaseId && _record.AssetId == _package.Release.AssetId
+        return _record is not null && _record.Provider == _provider && _record.ReleaseId == _package.Release.ReleaseId && _record.AssetId == _package.Release.AssetId
             && string.Equals(_record.PackageSha256, _package.Release.Sha256, StringComparison.OrdinalIgnoreCase);
     }
     private bool PrechecksBlocked() => _scan?.CanInstall != true || _package is not { SupportedLayout: true }
@@ -272,21 +299,28 @@ public partial class MainWindow : Window
     private void RebuildChoices()
     {
         _changingChoices = true;
-        Fill(EnginePicker, [new("DLSS", "NVIDIA DLSS-G"), new("XeSS", "Intel XeSS-FG")], "DLSS");
+        Fill(ProviderPicker, [new("Sm86", Localization.Get("provider_sm86")), new("Anr", Localization.Get("provider_anr"))], _provider.ToString());
+        Select(ProviderPicker, _provider.ToString());
+        Fill(EnginePicker, _provider == ModProvider.Anr ? [new("ANR", "Apex Neural Rendering FG")] : [new("DLSS", "NVIDIA DLSS-G"), new("XeSS", "Intel XeSS-FG")], _provider == ModProvider.Anr ? "ANR" : "DLSS");
         Fill(OptimizationPicker, Enumerable.Range(0, 4).Select(i => new Choice(i.ToString(), Localization.Get("tier" + i))), "1");
         Fill(PresetPicker, new[] { "A", "B", "C" }.Select(v => new Choice(v, v)), "A");
         Fill(SrPicker, new[] { "Off", "M-INT8", "L-INT8", "M-FP16", "L-FP16" }.Select(v => new Choice(v, v == "Off" ? Localization.Get("sr_off") : v)), "Off");
         Fill(FlowPicker, new[] { "Coarse", "Middle", "Fine", "CoarseAt4K" }.Select(v => new Choice(v, v)), "Middle");
         Fill(HudPicker, [new("Auto", Localization.Get("hud_auto")), new("1", Localization.Get("hud_strict")), new("0", Localization.Get("hud_never"))], "Auto");
-        Fill(ProxyPicker, new[] { "version.dll", "winmm.dll", "dbghelp.dll", "dinput8.dll", "dxgi.dll", "d3d12.dll" }.Select(v => new Choice(v, v)), "version.dll");
+        Fill(ProxyPicker, (_provider == ModProvider.Anr ? new[] { "dxgi.dll", "winmm.dll", "version.dll" } : new[] { "version.dll", "winmm.dll", "dbghelp.dll", "dinput8.dll", "dxgi.dll", "d3d12.dll" }).Select(v => new Choice(v, v)), _provider == ModProvider.Anr ? "dxgi.dll" : "version.dll");
+        Fill(AnrPathPicker, new[] { "auto", "coopmat", "packed", "dp4a", "portable", "portable-linalg", "portable-xmx" }.Select(v => new Choice(v, v == "auto" ? Localization.Get("hud_auto") : v)), "auto");
+        Fill(AnrNitsPicker, new[] { 40, 80, 100, 200, 400, 600, 1000 }.Select(v => new Choice(v.ToString(), v + " nits")), "80");
         Fill(LogPicker, new[] { "log_off", "log_level_errors", "log_normal", "log_trace" }.Select((v, i) => new Choice(i.ToString(), Localization.Get(v))), "2");
         RefreshMultipliers();
+        RefreshProviderUi();
         _changingChoices = false;
     }
     private void RefreshMultipliers() => Fill(MultiplierPicker,
         Enumerable.Range(2, Value(EnginePicker, "DLSS") == "XeSS" ? 3 : 5).Select(i => new Choice(i.ToString(), i + "×")), "2");
     private ModOptions GetOptions() => new()
     {
+        Provider = _provider, AnrPath = Value(AnrPathPicker, "auto"), AnrSceneCut = AnrSceneCutCheck.IsChecked == true,
+        AnrNitsPerUnit = int.Parse(Value(AnrNitsPicker, "80")),
         Engine = Value(EnginePicker, "DLSS"), Multiplier = int.Parse(Value(MultiplierPicker, "2")),
         Optimization = int.Parse(Value(OptimizationPicker, "1")), Preset = Value(PresetPicker, "A"),
         SuperResolution = Value(SrPicker, "Off"), FlowResolution = Value(FlowPicker, "Middle"),
@@ -297,6 +331,7 @@ public partial class MainWindow : Window
     private void ApplyOptions(ModOptions options)
     {
         _changingChoices = true;
+        Select(AnrPathPicker, options.AnrPath); Select(AnrNitsPicker, options.AnrNitsPerUnit.ToString()); AnrSceneCutCheck.IsChecked = options.AnrSceneCut;
         Select(EnginePicker, options.Engine); RefreshMultipliers(); Select(MultiplierPicker, options.Multiplier.ToString());
         Select(OptimizationPicker, options.Optimization.ToString()); Select(PresetPicker, options.Preset);
         Select(SrPicker, options.SuperResolution); Select(FlowPicker, options.FlowResolution); Select(HudPicker, options.UseHudless);
@@ -362,7 +397,8 @@ public partial class MainWindow : Window
         await InspectHardwareAsync(token);
         await AnalyzeAsync(token);
         if (_hardware!.Checks.Any(c => c.Level == CheckLevel.Blocked) || !_scan!.CanInstall) { SetStatus("checks_blocked"); return; }
-        if (MessageBox.Show(this, Localization.Get("online_warning_title") + "\n" + Localization.Get("online_warning_text") + "\n\n" + Localization.Get("confirm_install") + $"\n\n{_scan.RenderingDirectory}\nv{_package.Release.Version} · {options.Engine} · {options.Multiplier}× · {options.Proxy}",
+        ApplyOptions(options);
+        if (MessageBox.Show(this, Localization.Get("online_warning_title") + "\n" + Localization.Get("online_warning_text") + "\n\n" + Localization.Get("confirm_install") + $"\n\n{_scan.RenderingDirectory}\nv{_package.Release.Version} · {ProviderName(_provider)} · {options.Engine} · {options.Multiplier}× · {options.Proxy}",
             Title, MessageBoxButton.OKCancel, MessageBoxImage.Question) != MessageBoxResult.OK) return;
         await _installer.InstallAsync(_scan, _package, options, Progress(), token);
         await AnalyzeAsync(token); SetStatus("install_done");
@@ -396,7 +432,10 @@ public partial class MainWindow : Window
     {
         if (_scan?.RenderingDirectory is null) return;
         var path = Path.Combine(_scan.RenderingDirectory, "dlssg_sm86", "logs", "dlssg_sm86.log");
-        _verification = LogReader.Read(path, Path.GetFileName(_scan.RenderingExe));
+        _verification = _provider == ModProvider.Anr ? AnrLogReader.ReadLatest(_scan.RenderingDirectory, _scan.RenderingExe)
+            : LogReader.Read(path, Path.GetFileName(_scan.RenderingExe));
+        if (_record is not null && (_record.Provider != _provider || _record.State != "Installed"))
+            _verification = new(false, false, false, null, null, null, [], "not_verified");
         VerificationStatus.Text = Localization.Get(_verification.Summary);
         VerificationStatus.Foreground = _verification.Evaluated ? (Brush)FindResource("Accent") : (Brush)FindResource("Text");
         VerificationDetails.Text = string.Join(" · ", new[] { _verification.Gpu, _verification.ProcessId is null ? null : "PID " + _verification.ProcessId }.Where(s => s is not null));
@@ -420,7 +459,7 @@ public partial class MainWindow : Window
         {
             var report = new
             {
-                ManagerVersion = App.Version, GeneratedAt = DateTimeOffset.UtcNow,
+                ManagerVersion = App.DisplayVersion, Provider = _provider.ToString(), GeneratedAt = DateTimeOffset.UtcNow,
                 Package = _package?.Release.Version, PackageSha256 = _package?.Release.Sha256,
                 UpdateState = _updateState?.ToString(), Gpus = _hardware?.Gpus,
                 Checks = (_hardware?.Checks ?? []).Concat(_scan?.Checks ?? []).Select(c => new { c.Code, Level = c.Level.ToString(), Detail = Redact(c.Detail) }),
@@ -434,13 +473,13 @@ public partial class MainWindow : Window
     }
     private void Cancel_Click(object sender, RoutedEventArgs e) => _operation?.Cancel();
     private static void Open(string target) => Process.Start(new ProcessStartInfo(target) { UseShellExecute = true });
-    private void Upstream_Click(object sender, RoutedEventArgs e) => Open(ReleaseService.RepositoryUrl);
+    private void Upstream_Click(object sender, RoutedEventArgs e) => Open(_provider == ModProvider.Anr ? AnrReleaseService.RepositoryUrl : ReleaseService.RepositoryUrl);
     private void Driver_Click(object sender, RoutedEventArgs e) => Open("https://www.nvidia.com/Download/index.aspx");
     private void Graphics_Click(object sender, RoutedEventArgs e) { Open("ms-settings:display-advancedgraphics"); SetStatus("hags_help"); }
     private void Window_Closing(object? sender, CancelEventArgs e)
     {
         if (_operation is not null) { e.Cancel = true; _operation.Cancel(); SetStatus("close_busy"); return; }
-        _logTimer.Stop(); Localization.Changed -= LanguageChanged; _releases.Dispose();
+        _logTimer.Stop(); Localization.Changed -= LanguageChanged; _releases.Dispose(); _anrReleases.Dispose();
         StopManagerUpdates();
     }
 }

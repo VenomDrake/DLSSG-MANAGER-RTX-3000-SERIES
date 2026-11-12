@@ -15,7 +15,9 @@ foreach ($name in @('LICENSE', 'THIRD_PARTY_NOTICES.md')) { Copy-Item -LiteralPa
 foreach ($name in @('DOTNET-RUNTIME-LICENSE.txt', 'WPF-LICENSE.txt', 'DOTNET-THIRD-PARTY-NOTICES.txt')) { Copy-Item -LiteralPath (Join-Path $repoRoot "docs/$name") -Destination $publishDirectory -Force }
 $readme = [IO.File]::ReadAllText((Join-Path $repoRoot 'README.md'))
 $readme = [regex]::Replace($readme, '(?m)^!\[Application preview\].*\r?\n', '')
-$repositoryRoot = 'https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/blob/main/'
+$prereleaseLabel = [string]$versionDocument.Project.PropertyGroup.PrereleaseLabel
+$documentationRef = if ($prereleaseLabel) { "v$appVersion-$prereleaseLabel" } else { 'main' }
+$repositoryRoot = "https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/blob/$documentationRef/"
 $readme = [regex]::Replace($readme, '(?m)(\[[^\]]*\]\()((?:docs/i18n/README\.[A-Za-z-]+\.md|README\.md|CONTRIBUTING\.md|SECURITY\.md|THIRD_PARTY_NOTICES\.md))((?:#[^)]*)?\))', {
     param($match)
     $match.Groups[1].Value + $repositoryRoot + $match.Groups[2].Value + $match.Groups[3].Value
