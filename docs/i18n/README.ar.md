@@ -12,9 +12,9 @@
 - **التكييف لبطاقات RTX 20 / SM75:** [Coldwood1026](https://github.com/Coldwood1026)، المذكور في [إشعارات المشروع الأصلي](https://github.com/sdli1995/dlssg_for_sm86/blob/main/THIRD_PARTY_NOTICES.txt).
 - **هذا المدير:** واجهة مستقلة للتثبيت والتشخيص. يظل الفضل في التعديل الأصلي لمؤلفيه؛ ولا ينسب المدير أعمالهم إلى نفسه أو يدّعي تأييدًا رسميًا منهم.
 
-## دمج ANR — إصدار أولي 0.4.0-beta.1
+## دمج ANR — إصدار أولي 0.4.0-beta.2
 
-[تنزيل النسخة التجريبية](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/tag/v0.4.0-beta.1): [ZIP محمول](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.4.0-beta.1/DLSSGModManager-Portable-win-x64.zip) · [مثبّت Windows](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.4.0-beta.1/DLSSGModManager-Setup.msi). **يبقى v0.3.1 أحدث إصدار مستقر ولا يتلقى هذه النسخة التجريبية تلقائيًا.** تثبيت النسخة التجريبية اختيار صريح. يشرح باقي الدليل مسار SM86 المستقر، عدا الاختلافات الموضحة هنا.
+[تنزيل النسخة التجريبية](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/tag/v0.4.0-beta.2): [ZIP محمول](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.4.0-beta.2/DLSSGModManager-Portable-win-x64.zip) · [مثبّت Windows](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.4.0-beta.2/DLSSGModManager-Setup.msi). **يبقى v0.3.1 أحدث إصدار مستقر ولا يتلقى هذه النسخة التجريبية تلقائيًا.** تثبيت النسخة التجريبية اختيار صريح. يشرح باقي الدليل مسار SM86 المستقر، عدا الاختلافات الموضحة هنا.
 
 - اختر **تقنية توليد الإطارات**: مسار SM86 الأصلي (NVIDIA DLSS-G / XeSS-FG)، أو **Apex Neural Rendering · تجريبي**. تدعم هذه النسخة ANR على NVIDIA **GTX 16 وRTX 20–50**؛ **GTX 10 / Pascal غير مدعومة**. يجب أن توفر اللعبة DLSS Frame Generation الأصلي عبر **Direct3D 12 أو Vulkan**.
 - يختار المدير **Full** عند غياب OptiScaler أو **Addon** لتثبيت OptiScaler موجود ومتوافق. تُنزّل الحزم مباشرة من الإصدار الرسمي وتُفحص باستخدام SHA-256؛ **لا تُضمّن ملفات ANR وOptiScaler التنفيذية أو النماذج مع المدير**. طريقة ANR المراجعة هي **FG-V.B15**؛ وتبقى الطرق المستقبلية المجهولة محظورة.

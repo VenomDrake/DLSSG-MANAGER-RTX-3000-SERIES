@@ -117,7 +117,7 @@
   "close_busy": "Hay una operación en curso. Cancélala y espera a que termine la limpieza antes de cerrar.",
   "step_detect": "Detectando",
   "demo": "Vista previa / solo lectura",
-  "software_version": "DLSSG Mod Manager 0.4.0-beta.1",
+  "software_version": "DLSSG Mod Manager 0.4.0-beta.2",
   "launch_note": "Activa DLSS Frame Generation en el menú gráfico del juego. El gestor leerá el registro mientras esta ventana esté abierta.",
   "no_steam_games": "No se encontraron juegos de Steam instalados. Puedes elegir una carpeta manualmente.",
   "manual_install": "Instalación manual verificada detectada",

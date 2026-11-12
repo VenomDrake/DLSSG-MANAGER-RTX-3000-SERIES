@@ -10,9 +10,9 @@
 - **RTX 20 / SM75 अनुकूलन:** [Coldwood1026](https://github.com/Coldwood1026), जिनका उल्लेख [मूल परियोजना के नोटिस](https://github.com/sdli1995/dlssg_for_sm86/blob/main/THIRD_PARTY_NOTICES.txt) में है।
 - **यह मैनेजर:** इंस्टॉलेशन और निदान के लिए स्वतंत्र इंटरफ़ेस है। मूल मॉड का श्रेय उसके लेखकों को ही जाता है; यह मैनेजर उनके कार्य पर अपना अधिकार या किसी आधिकारिक समर्थन का दावा नहीं करता।
 
-## ANR एकीकरण — प्री-रिलीज़ 0.4.0-beta.1
+## ANR एकीकरण — प्री-रिलीज़ 0.4.0-beta.2
 
-[प्रयोगात्मक बीटा डाउनलोड करें](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/tag/v0.4.0-beta.1): [पोर्टेबल ZIP](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.4.0-beta.1/DLSSGModManager-Portable-win-x64.zip) · [Windows इंस्टॉलर](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.4.0-beta.1/DLSSGModManager-Setup.msi)। **v0.3.1 नवीनतम स्थिर रिलीज़ है और उसे यह बीटा अपने आप नहीं मिलता।** बीटा इंस्टॉल करना उपयोगकर्ता का स्पष्ट चुनाव है। यहाँ बताए अंतर छोड़कर, बाकी मार्गदर्शिका स्थिर SM86 विकल्प समझाती है।
+[प्रयोगात्मक बीटा डाउनलोड करें](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/tag/v0.4.0-beta.2): [पोर्टेबल ZIP](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.4.0-beta.2/DLSSGModManager-Portable-win-x64.zip) · [Windows इंस्टॉलर](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.4.0-beta.2/DLSSGModManager-Setup.msi)। **v0.3.1 नवीनतम स्थिर रिलीज़ है और उसे यह बीटा अपने आप नहीं मिलता।** बीटा इंस्टॉल करना उपयोगकर्ता का स्पष्ट चुनाव है। यहाँ बताए अंतर छोड़कर, बाकी मार्गदर्शिका स्थिर SM86 विकल्प समझाती है।
 
 - **फ़्रेम जनरेशन तकनीक** चुनें: मूल SM86 (NVIDIA DLSS-G / XeSS-FG) या **Apex Neural Rendering · बीटा**। यह बीटा NVIDIA **GTX 16 और RTX 20–50** पर ANR समर्थित करता है; **GTX 10 / Pascal समर्थित नहीं है**। गेम में **Direct3D 12 या Vulkan** के ज़रिए मूल DLSS Frame Generation होना चाहिए।
 - OptiScaler न होने पर मैनेजर **Full**, और संगत मौजूदा OptiScaler पर **Addon** चुनता है। पैकेज आधिकारिक रिलीज़ से सीधे डाउनलोड होते हैं और SHA-256 से जाँचे जाते हैं; ANR तथा OptiScaler के बाइनरी और मॉडल **मैनेजर में शामिल नहीं हैं**। जाँची गई ANR प्रक्रिया **FG-V.B15** है; अज्ञात भविष्य की प्रक्रिया अवरुद्ध रहती है।

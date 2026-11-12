@@ -10,9 +10,9 @@
 - **RTX 20 / SM75 অভিযোজন:** [Coldwood1026](https://github.com/Coldwood1026), যাঁর অবদানের উল্লেখ [মূল প্রকল্পের বিজ্ঞপ্তিতে](https://github.com/sdli1995/dlssg_for_sm86/blob/main/THIRD_PARTY_NOTICES.txt) রয়েছে।
 - **এই ম্যানেজার:** ইনস্টলেশন ও ত্রুটি নির্ণয়ের জন্য একটি স্বতন্ত্র ইন্টারফেস। মূল মডের কৃতিত্ব তার লেখকদেরই; এই ম্যানেজার তাঁদের কাজকে নিজের বলে দাবি করে না এবং কোনো আনুষ্ঠানিক অনুমোদনের দাবিও করে না।
 
-## ANR সংযোজন — প্রি-রিলিজ 0.4.0-beta.1
+## ANR সংযোজন — প্রি-রিলিজ 0.4.0-beta.2
 
-[পরীক্ষামূলক বিটা ডাউনলোড করুন](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/tag/v0.4.0-beta.1): [পোর্টেবল ZIP](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.4.0-beta.1/DLSSGModManager-Portable-win-x64.zip) · [Windows ইনস্টলার](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.4.0-beta.1/DLSSGModManager-Setup.msi)। **v0.3.1 সর্বশেষ স্থিতিশীল সংস্করণ; এটি স্বয়ংক্রিয়ভাবে এই বিটা পায় না।** বিটা ইনস্টল করা ব্যবহারকারীর স্পষ্ট পছন্দ। এখানে উল্লেখ করা পার্থক্য ছাড়া বাকি নির্দেশিকা স্থিতিশীল SM86 পদ্ধতির জন্য।
+[পরীক্ষামূলক বিটা ডাউনলোড করুন](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/tag/v0.4.0-beta.2): [পোর্টেবল ZIP](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.4.0-beta.2/DLSSGModManager-Portable-win-x64.zip) · [Windows ইনস্টলার](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.4.0-beta.2/DLSSGModManager-Setup.msi)। **v0.3.1 সর্বশেষ স্থিতিশীল সংস্করণ; এটি স্বয়ংক্রিয়ভাবে এই বিটা পায় না।** বিটা ইনস্টল করা ব্যবহারকারীর স্পষ্ট পছন্দ। এখানে উল্লেখ করা পার্থক্য ছাড়া বাকি নির্দেশিকা স্থিতিশীল SM86 পদ্ধতির জন্য।
 
 - **ফ্রেম জেনারেশন প্রযুক্তি** বেছে নিন: মূল SM86 (NVIDIA DLSS-G / XeSS-FG) অথবা **Apex Neural Rendering · বিটা**। এই বিটা NVIDIA **GTX 16 এবং RTX 20–50**-এ ANR সমর্থন করে; **GTX 10 / Pascal সমর্থিত নয়**। গেমে **Direct3D 12 বা Vulkan**-এর মাধ্যমে নেটিভ DLSS Frame Generation থাকতে হবে।
 - OptiScaler না থাকলে ব্যবস্থাপক **Full**, আর সামঞ্জস্যপূর্ণ বিদ্যমান OptiScaler থাকলে **Addon** বেছে নেয়। প্যাকেজ সরাসরি মূল প্রকল্পের অফিসিয়াল রিলিজ থেকে আসে এবং SHA-256 দিয়ে যাচাই হয়; ANR ও OptiScaler-এর বাইনারি বা মডেল **ব্যবস্থাপকের সঙ্গে দেওয়া হয় না**। যাচাই করা ANR পদ্ধতি **FG-V.B15**; ভবিষ্যতের অজানা পদ্ধতি অবরুদ্ধ থাকে।

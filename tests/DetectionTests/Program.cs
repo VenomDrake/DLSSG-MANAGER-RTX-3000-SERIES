@@ -255,6 +255,22 @@ Assert(!(await scanner.ScanAsync(anrGame, anrPackage, provider: ModProvider.Anr)
 Assert(AnrSupport.IsSupportedGpu("NVIDIA GeForce GTX 1660 SUPER") && AnrSupport.IsSupportedGpu("NVIDIA GeForce RTX 5090 Laptop GPU")
     && AnrSupport.IsSupportedGpu("NVIDIA GeForce RTX 3090") && !AnrSupport.IsSupportedGpu("NVIDIA GeForce GTX 1080 Ti")
     && !AnrSupport.IsSupportedGpu("AMD Radeon RX 7900 XTX"), "ANR manager supports only the declared NVIDIA GTX16 and RTX20-50 families; Pascal and other vendors are not silently accepted");
+Assert(!HardwareService.IsSupportedSm86Gpu("NVIDIA GeForce GTX 1650", 7.5)
+    && !HardwareService.IsSupportedSm86Gpu("NVIDIA GeForce GTX 1660 SUPER", 7.5)
+    && AnrSupport.IsSupportedGpu("NVIDIA GeForce GTX 1650") && AnrSupport.IsSupportedGpu("NVIDIA GeForce GTX 1660 SUPER"),
+    "GTX16 shares a Turing compute capability but is eligible only for ANR, never SM86");
+Assert(HardwareService.IsSupportedSm86Gpu("NVIDIA GeForce RTX 2080", 7.5)
+    && HardwareService.IsSupportedSm86Gpu("NVIDIA GeForce RTX 3090", 8.6)
+    && HardwareService.IsSupportedSm86Gpu("NVIDIA GeForce RTX 2080")
+    && HardwareService.IsSupportedSm86Gpu("NVIDIA GeForce RTX 3090")
+    && HardwareService.IsSupportedSm86Gpu("NVIDIA GeForce RTX 2050 Laptop GPU", 8.6)
+    && !HardwareService.IsSupportedSm86Gpu("NVIDIA GeForce RTX 3090", 8.9),
+    "SM86 accepts RTX20/30 names only with SM75/86 when known, including the Ampere-based RTX2050 laptop");
+Assert(!HardwareService.IsSupportedSm86Gpu("NVIDIA GeForce GTX 1080 Ti", 6.1)
+    && !HardwareService.IsSupportedSm86Gpu("NVIDIA GeForce RTX 4090", 8.9)
+    && !HardwareService.IsSupportedSm86Gpu("NVIDIA GeForce RTX 5090", 12.0)
+    && AnrSupport.IsSupportedGpu("NVIDIA GeForce RTX 4090") && AnrSupport.IsSupportedGpu("NVIDIA GeForce RTX 5090"),
+    "Pascal is unsupported and RTX40/50 are eligible only for the ANR option in this manager recipe");
 string systemFixture = sandbox.PathFor("SyntheticSystem");
 foreach (var file in new[] { "MSVCP140.dll", "VCRUNTIME140.dll", "VCRUNTIME140_1.dll", "vulkan-1.dll" }) WritePe(Path.Combine(systemFixture, file));
 var rawHardware = new HardwareInfo([new("NVIDIA GeForce GTX 1660", "550.00", 7.5, false)], true, false, null,

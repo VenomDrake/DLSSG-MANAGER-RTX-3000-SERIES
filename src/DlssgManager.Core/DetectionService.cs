@@ -10,6 +10,14 @@ namespace DlssgManager.Core;
 /// <summary>Read-only machine inspection. Registry HAGS is deliberately not reported as active.</summary>
 public sealed class HardwareService
 {
+    public static bool IsSupportedSm86Gpu(string name, double? computeCapability = null)
+    {
+        if (string.IsNullOrWhiteSpace(name) || !name.Contains("NVIDIA", StringComparison.OrdinalIgnoreCase)) return false;
+        var family = Regex.Match(name, @"\bRTX\s+(20|30)\d{2}\b", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
+        if (!family.Success) return false;
+        return computeCapability is null or 7.5 or 8.6;
+    }
+
     public async Task<HardwareInfo> InspectAsync(CancellationToken cancellationToken = default)
     {
         var checks = new List<CheckResult>();
@@ -27,7 +35,7 @@ public sealed class HardwareService
                     if (cells.Length < 3) continue;
                     double? cap = double.TryParse(cells[^1], NumberStyles.Float, CultureInfo.InvariantCulture, out double value) ? value : null;
                     string name = string.Join(", ", cells[..^2]);
-                    bool eligible = cap is 7.5 or 8.6;
+                    bool eligible = IsSupportedSm86Gpu(name, cap);
                     gpus.Add(new(name, cells[^2], cap, eligible));
                 }
         }
@@ -54,7 +62,7 @@ public sealed class HardwareService
                             int raw = (winDriver.Build % 10) * 10000 + winDriver.Revision;
                             driver = (raw / 100.0).ToString("F2", CultureInfo.InvariantCulture);
                         }
-                        bool eligible = nvidia && Regex.IsMatch(name, @"\bRTX\s+(20|30)\d{2}\b", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
+                        bool eligible = IsSupportedSm86Gpu(name);
                         gpus.Add(new(name, driver, null, eligible));
                     }
                 }

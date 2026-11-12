@@ -117,7 +117,7 @@
   "close_busy": "正在执行操作。请先取消并等待清理完成，再关闭窗口。",
   "step_detect": "正在检测",
   "demo": "预览 / 只读",
-  "software_version": "DLSSG Mod Manager 0.4.0-beta.1",
+  "software_version": "DLSSG Mod Manager 0.4.0-beta.2",
   "launch_note": "请在游戏图形菜单中启用 DLSS 帧生成。此窗口打开时，管理器会读取日志。",
   "no_steam_games": "未找到已安装的 Steam 游戏。您仍可手动选择文件夹。",
   "manual_install": "检测到经过验证的手动安装",

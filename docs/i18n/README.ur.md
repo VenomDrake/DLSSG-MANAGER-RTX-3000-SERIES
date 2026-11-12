@@ -12,9 +12,9 @@
 - **RTX 20 / SM75 موافقت:** [Coldwood1026](https://github.com/Coldwood1026)، جن کی خدمات [اصل منصوبے کے نوٹس](https://github.com/sdli1995/dlssg_for_sm86/blob/main/THIRD_PARTY_NOTICES.txt) میں تسلیم کی گئی ہیں۔
 - **یہ مینیجر:** تنصیب اور تشخیص کے لیے ایک آزاد انٹرفیس ہے۔ اصل موڈ کا سہرا اس کے مصنفین کو جاتا ہے؛ مینیجر ان کے کام کی ملکیت یا کسی سرکاری توثیق کا دعویٰ نہیں کرتا۔
 
-## ANR انضمام — پری ریلیز 0.4.0-beta.1
+## ANR انضمام — پری ریلیز 0.4.0-beta.2
 
-[تجرباتی بیٹا ڈاؤن لوڈ کریں](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/tag/v0.4.0-beta.1): [پورٹیبل ZIP](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.4.0-beta.1/DLSSGModManager-Portable-win-x64.zip) · [Windows انسٹالر](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.4.0-beta.1/DLSSGModManager-Setup.msi)۔ **v0.3.1 تازہ ترین مستحکم ریلیز ہے اور یہ بیٹا اسے خودکار طور پر نہیں ملتا۔** بیٹا انسٹال کرنا صارف کا واضح انتخاب ہے۔ یہاں بیان کردہ فرق کے علاوہ باقی رہنما مستحکم SM86 راستہ سمجھاتا ہے۔
+[تجرباتی بیٹا ڈاؤن لوڈ کریں](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/tag/v0.4.0-beta.2): [پورٹیبل ZIP](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.4.0-beta.2/DLSSGModManager-Portable-win-x64.zip) · [Windows انسٹالر](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.4.0-beta.2/DLSSGModManager-Setup.msi)۔ **v0.3.1 تازہ ترین مستحکم ریلیز ہے اور یہ بیٹا اسے خودکار طور پر نہیں ملتا۔** بیٹا انسٹال کرنا صارف کا واضح انتخاب ہے۔ یہاں بیان کردہ فرق کے علاوہ باقی رہنما مستحکم SM86 راستہ سمجھاتا ہے۔
 
 - **فریم جنریشن ٹیکنالوجی** منتخب کریں: اصل SM86 (NVIDIA DLSS-G / XeSS-FG) یا **Apex Neural Rendering · بیٹا**۔ یہ بیٹا NVIDIA **GTX 16 اور RTX 20–50** پر ANR کی معاونت کرتا ہے؛ **GTX 10 / Pascal معاون نہیں**۔ گیم کو **Direct3D 12 یا Vulkan** کے ذریعے مقامی DLSS Frame Generation فراہم کرنا چاہیے۔
 - OptiScaler نہ ہو تو مینیجر **Full**، اور موجودہ ہم آہنگ OptiScaler کے لیے **Addon** منتخب کرتا ہے۔ پیکیج اصل پروجیکٹ کی سرکاری ریلیز سے براہ راست ڈاؤن لوڈ اور SHA-256 سے جانچے جاتے ہیں؛ ANR اور OptiScaler کی بائنریز یا ماڈل **مینیجر کے ساتھ شامل نہیں**۔ جانچا گیا ANR طریقہ **FG-V.B15** ہے؛ مستقبل کے نامعلوم طریقے مسدود رہتے ہیں۔
