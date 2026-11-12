@@ -117,7 +117,7 @@
   "close_busy": "Une opération est en cours. Annulez-la puis attendez la fin du nettoyage avant de fermer.",
   "step_detect": "Détection",
   "demo": "Aperçu / lecture seule",
-  "software_version": "DLSSG Mod Manager 0.4.0-beta.2",
+  "software_version": "DLSSG Mod Manager 0.4.1",
   "launch_note": "Activez DLSS Frame Generation dans le menu graphique du jeu. Le gestionnaire lira le journal tant que cette fenêtre est ouverte.",
   "no_steam_games": "Aucun jeu Steam installé trouvé. Vous pouvez toujours choisir un dossier manuellement.",
   "manual_install": "Installation manuelle vérifiée détectée",
@@ -230,5 +230,11 @@
   "anr_driver_requirements": "ANR : vérifiez le pilote GPU et le journal d’exécution",
   "anr_graphics_api": "Indices de DirectX 12 ou Vulkan",
   "anr_vulkan_loader": "Chargeur Vulkan 64 bits installé",
-  "anr_variant": "Type de paquet ANR"
+  "anr_variant": "Type de paquet ANR",
+  "anr_game_hint": "Activez NVIDIA DLSS Frame Generation dans le jeu. Le sélecteur 2× peut être verrouillé si c’est le seul multiplicateur proposé. Après avoir joué un peu, confirmez la génération dans Diagnostic.",
+  "anr_log_counts": "{0} évaluations de génération · {1} erreurs de génération · {2}×",
+  "anr_log_pending": "ANR est chargé ; jouez un peu puis relisez le journal pour confirmer les images générées. Si la confirmation reste en attente, fermez le jeu puis relisez le journal.",
+  "anr_log_partial": "Ce journal est trop volumineux ou incomplet pour vérifier toute la session. Lancez une nouvelle session de jeu pour obtenir un journal complet.",
+  "anr_nits_invalid": "Saisissez un nombre entier de 40 à 1000 nits.",
+  "anr_session_time": "Session enregistrée : {0}"
 }

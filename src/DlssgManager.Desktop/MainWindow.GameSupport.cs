@@ -68,6 +68,8 @@ public partial class MainWindow
         VerificationStatus.Text = Localization.Get("not_verified");
         VerificationStatus.Foreground = (Brush)FindResource("Text");
         VerificationDetails.Text = "";
+        VerificationMetricsText.Text = "";
+        VerificationMetricsText.Visibility = Visibility.Collapsed;
         VerificationErrors.Text = "";
         RefreshSummaries();
         RenderChecks();

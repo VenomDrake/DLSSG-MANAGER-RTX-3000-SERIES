@@ -57,12 +57,12 @@ public sealed partial class InstallService
 
     private static void ValidateOptiScalerConfiguration(string text)
     {
-        // The pre-release supports the standard directory only. An arbitrary OptiDllPath
+        // This version supports the standard directory only. An arbitrary OptiDllPath
         // must never allow an install/uninstall to reach outside its reviewed roots.
         var optiPath = GetIniValue(text, "Libraries", "OptiDllPath");
         if (optiPath is not null && !optiPath.Equals("auto", StringComparison.OrdinalIgnoreCase) &&
             !optiPath.Equals("OptiScaler", StringComparison.OrdinalIgnoreCase) && optiPath.Length != 0)
-            throw new InvalidDataException("This pre-release supports only the default OptiScaler directory.");
+            throw new InvalidDataException("This version supports only the default OptiScaler directory.");
         if (GetIniValue(text, "FrameGen", "FGNvngxReplacement") is null)
             throw new InvalidDataException("The installed OptiScaler configuration does not declare custom frame generation providers.");
     }

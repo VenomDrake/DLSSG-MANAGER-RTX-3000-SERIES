@@ -305,6 +305,52 @@ File.WriteAllText(anrNewLog, anrSuccess + AnrLine("nr_fg DLSS-G provider in " + 
 Assert(!AnrLogReader.ReadLatest(anrLogs).Evaluated && AnrLogReader.ReadLatest(anrLogs).Errors.Count == 0, "ANR appended provider session resets status and errors");
 Assert(AnrLogReader.ReadLatest(anrLogs, Path.Combine(sandbox.PathFor("OtherGame"), "Other.exe")).Summary == "log_missing", "ANR log lookup rejects an executable outside the selected rendering directory");
 
+File.WriteAllText(anrNewLog, anrSuccess + AnrLine("final GPU ms (medians of the last 60 real and 60 generated frames): frame in 0.0298 pair 1.1779, per generated frame phase 1.0816 out 0.2104, 2X (12052 generated evaluations, 0 generation errors)"));
+var anrMeasured = AnrLogReader.ReadLatest(anrLogs);
+Assert(anrMeasured is { Evaluated: true, GeneratedEvaluations: 12052, GenerationErrors: 0, Multiplier: 2, PartialLog: false }
+    && anrMeasured.LogPath == anrNewLog && anrMeasured.LogTimestamp?.Hour == 13,
+    "ANR exposes the latest explicit generated count, multiplier and selected session timestamp");
+File.AppendAllText(anrNewLog, AnrLine("GPU ms (medians): 2X (0 generated evaluations, 0 generation errors)"));
+Assert(AnrLogReader.ReadLatest(anrLogs) is { Evaluated: false, GeneratedEvaluations: 0, GenerationErrors: 0 },
+    "ANR latest zero-work summary replaces an earlier positive result");
+File.WriteAllText(anrNewLog, anrSuccess + AnrLine("GPU ms: 2X (620 generated evaluations, 3 generation errors)")
+    + AnrLine("GPU ms: 2X (700 generated evaluations, 0 generation errors)"));
+Assert(AnrLogReader.ReadLatest(anrLogs) is { Evaluated: false, GeneratedEvaluations: 700, GenerationErrors: 0 }
+    && AnrLogReader.ReadLatest(anrLogs).Errors.Count == 1,
+    "ANR later zero-error counters do not erase an error already reported in the same session");
+File.WriteAllText(anrNewLog, anrSuccess + AnrLine("frame generation feature: 1920x1080, render 1280x720"));
+Assert(AnrLogReader.ReadLatest(anrLogs) is { Evaluated: false, GeneratedEvaluations: null, GenerationErrors: null, Multiplier: null },
+    "ANR feature recreation clears the previous feature's counters as well as verification");
+string anrPending = AnrLine("nr_fg DLSS-G provider in synthetic") + AnrLine("frame generation feature: 1920x1080, render 1280x720")
+    + AnrLine("our frame generation ready for PQ10 colors (coopmat)") + AnrLine("multi-frame count 1 (2X) from evaluate 1");
+string anrStatsLine = AnrLine("GPU ms: 2X (600 generated evaluations, 0 generation errors)");
+File.WriteAllText(anrNewLog, anrPending + anrStatsLine.TrimEnd('\n'));
+Assert(AnrLogReader.ReadLatest(anrLogs) is { Evaluated: false, FrameGenerationCreated: true, Multiplier: 2, GeneratedEvaluations: null },
+    "ANR shows the requested multiplier while waiting for a complete generated-frame summary");
+File.AppendAllText(anrNewLog, "\n");
+Assert(AnrLogReader.ReadLatest(anrLogs) is { Evaluated: true, GeneratedEvaluations: 600 },
+    "ANR accepts a newly completed summary only after its newline is present");
+File.WriteAllText(anrNewLog, anrSuccess + AnrLine("GPU ms: 2X (9999999999999999999999999999 generated evaluations, 0 generation errors)"));
+Assert(AnrLogReader.ReadLatest(anrLogs) is { Evaluated: false, GeneratedEvaluations: null },
+    "ANR overflowing summary counters cannot retain earlier successful verification");
+File.WriteAllText(anrNewLog, anrSuccess + AnrLine("GPU ms: 9X (700 generated evaluations, 0 generation errors)"));
+Assert(AnrLogReader.ReadLatest(anrLogs) is { Evaluated: false, Multiplier: null },
+    "ANR an unrecognized later summary cannot retain earlier successful verification");
+File.WriteAllText(anrNewLog, anrSuccess + new string('x', 140000) + "\n" + anrStatsLine);
+Assert(AnrLogReader.ReadLatest(anrLogs) is { Evaluated: false, PartialLog: true },
+    "ANR oversized lines discard uncertain context with bounded memory");
+File.AppendAllText(anrNewLog, anrSuccess);
+Assert(AnrLogReader.ReadLatest(anrLogs) is { Evaluated: true, PartialLog: false },
+    "ANR a complete new provider session restores context after an oversized line");
+File.WriteAllText(anrNewLog, anrSuccess);
+using (var largeAnrLog = new FileStream(anrNewLog, FileMode.Open, FileAccess.Write)) largeAnrLog.SetLength(9L * 1024 * 1024);
+File.AppendAllText(anrNewLog, "\n" + anrStatsLine);
+Assert(AnrLogReader.ReadLatest(anrLogs) is { Evaluated: false, PartialLog: true },
+    "ANR bounded tail never reconstructs omitted provider context from a positive summary alone");
+File.AppendAllText(anrNewLog, anrSuccess);
+Assert(AnrLogReader.ReadLatest(anrLogs) is { Evaluated: true, PartialLog: false, GeneratedEvaluations: 600 },
+    "ANR bounded tail verifies a complete final provider session in a large log");
+
 Console.WriteLine($"All {passed} detection/log checks passed using synthetic fixtures only.");
 
 static ReleasePackage MakePackage(string directory, string fixture)

@@ -14,7 +14,7 @@ if ($LASTEXITCODE -ne 0) { throw 'Self-contained publication failed.' }
 foreach ($name in @('LICENSE', 'THIRD_PARTY_NOTICES.md')) { Copy-Item -LiteralPath (Join-Path $repoRoot $name) -Destination $publishDirectory -Force }
 foreach ($name in @('DOTNET-RUNTIME-LICENSE.txt', 'WPF-LICENSE.txt', 'DOTNET-THIRD-PARTY-NOTICES.txt')) { Copy-Item -LiteralPath (Join-Path $repoRoot "docs/$name") -Destination $publishDirectory -Force }
 $readme = [IO.File]::ReadAllText((Join-Path $repoRoot 'README.md'))
-$readme = [regex]::Replace($readme, '(?m)^!\[Application preview\].*\r?\n', '')
+$readme = [regex]::Replace($readme, '(?m)^!\[[^\]\r\n]*\]\([^\r\n]*\)\r?\n', '')
 $prereleaseLabel = [string]$versionDocument.Project.PropertyGroup.PrereleaseLabel
 $documentationRef = if ($prereleaseLabel) { "v$appVersion-$prereleaseLabel" } else { 'main' }
 $repositoryRoot = "https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/blob/$documentationRef/"

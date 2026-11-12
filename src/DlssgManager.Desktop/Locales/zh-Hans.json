@@ -117,7 +117,7 @@
   "close_busy": "正在执行操作。请先取消并等待清理完成，再关闭窗口。",
   "step_detect": "正在检测",
   "demo": "预览 / 只读",
-  "software_version": "DLSSG Mod Manager 0.4.0-beta.2",
+  "software_version": "DLSSG Mod Manager 0.4.1",
   "launch_note": "请在游戏图形菜单中启用 DLSS 帧生成。此窗口打开时，管理器会读取日志。",
   "no_steam_games": "未找到已安装的 Steam 游戏。您仍可手动选择文件夹。",
   "manual_install": "检测到经过验证的手动安装",
@@ -230,5 +230,11 @@
   "anr_driver_requirements": "ANR：检查 GPU 驱动和运行日志",
   "anr_graphics_api": "DirectX 12 或 Vulkan 的相关证据",
   "anr_vulkan_loader": "已安装 64 位 Vulkan 加载器",
-  "anr_variant": "ANR 软件包类型"
+  "anr_variant": "ANR 软件包类型",
+  "anr_game_hint": "在游戏中启用 NVIDIA DLSS Frame Generation。如果游戏只提供 2×，倍率选择器被锁定可能是正常现象。短暂游玩后，请在诊断页面确认帧生成是否生效。",
+  "anr_log_counts": "{0} 次帧生成评估 · {1} 次生成错误 · {2}×",
+  "anr_log_pending": "ANR 已加载；请短暂游玩后重新读取日志，以确认生成的帧。 如果仍显示待确认，请关闭游戏后重新读取日志。",
+  "anr_log_partial": "此日志过大或不完整，无法验证整个会话。请开始新的游戏会话以获取完整日志。",
+  "anr_nits_invalid": "请输入 40 到 1000 尼特之间的整数。",
+  "anr_session_time": "记录的会话：{0}"
 }

@@ -309,7 +309,6 @@ public partial class MainWindow : Window
         Fill(HudPicker, [new("Auto", Localization.Get("hud_auto")), new("1", Localization.Get("hud_strict")), new("0", Localization.Get("hud_never"))], "Auto");
         Fill(ProxyPicker, (_provider == ModProvider.Anr ? new[] { "dxgi.dll", "winmm.dll", "version.dll" } : new[] { "version.dll", "winmm.dll", "dbghelp.dll", "dinput8.dll", "dxgi.dll", "d3d12.dll" }).Select(v => new Choice(v, v)), _provider == ModProvider.Anr ? "dxgi.dll" : "version.dll");
         Fill(AnrPathPicker, new[] { "auto", "coopmat", "packed", "dp4a", "portable", "portable-linalg", "portable-xmx" }.Select(v => new Choice(v, v == "auto" ? Localization.Get("hud_auto") : v)), "auto");
-        Fill(AnrNitsPicker, new[] { 40, 80, 100, 200, 400, 600, 1000 }.Select(v => new Choice(v.ToString(), v + " nits")), "80");
         Fill(LogPicker, new[] { "log_off", "log_level_errors", "log_normal", "log_trace" }.Select((v, i) => new Choice(i.ToString(), Localization.Get(v))), "2");
         RefreshMultipliers();
         RefreshProviderUi();
@@ -317,21 +316,28 @@ public partial class MainWindow : Window
     }
     private void RefreshMultipliers() => Fill(MultiplierPicker,
         Enumerable.Range(2, Value(EnginePicker, "DLSS") == "XeSS" ? 3 : 5).Select(i => new Choice(i.ToString(), i + "×")), "2");
-    private ModOptions GetOptions() => new()
+    private ModOptions GetOptions()
     {
-        Provider = _provider, AnrPath = Value(AnrPathPicker, "auto"), AnrSceneCut = AnrSceneCutCheck.IsChecked == true,
-        AnrNitsPerUnit = int.Parse(Value(AnrNitsPicker, "80")),
-        Engine = Value(EnginePicker, "DLSS"), Multiplier = int.Parse(Value(MultiplierPicker, "2")),
-        Optimization = int.Parse(Value(OptimizationPicker, "1")), Preset = Value(PresetPicker, "A"),
-        SuperResolution = Value(SrPicker, "Off"), FlowResolution = Value(FlowPicker, "Middle"),
-        UseHudless = Value(HudPicker, "Auto"), LoggingLevel = int.Parse(Value(LogPicker, "2")),
-        FrameTiming = TimingCheck.IsChecked == true, Proxy = Value(ProxyPicker, "version.dll")
-    };
+        var nits = 80;
+        if (_provider == ModProvider.Anr && (!int.TryParse(AnrNitsInput.Text, System.Globalization.NumberStyles.Integer,
+            System.Globalization.CultureInfo.InvariantCulture, out nits) || nits is < 40 or > 1000))
+            throw new ArgumentException(Localization.Get("anr_nits_invalid"));
+        return new()
+        {
+            Provider = _provider, AnrPath = Value(AnrPathPicker, "auto"), AnrSceneCut = AnrSceneCutCheck.IsChecked == true,
+            AnrNitsPerUnit = nits,
+            Engine = Value(EnginePicker, "DLSS"), Multiplier = int.Parse(Value(MultiplierPicker, "2")),
+            Optimization = int.Parse(Value(OptimizationPicker, "1")), Preset = Value(PresetPicker, "A"),
+            SuperResolution = Value(SrPicker, "Off"), FlowResolution = Value(FlowPicker, "Middle"),
+            UseHudless = Value(HudPicker, "Auto"), LoggingLevel = int.Parse(Value(LogPicker, "2")),
+            FrameTiming = TimingCheck.IsChecked == true, Proxy = Value(ProxyPicker, "version.dll")
+        };
+    }
     private static void Select(ComboBox combo, string value) => combo.SelectedItem = combo.Items.Cast<Choice>().FirstOrDefault(c => c.Value == value) ?? combo.SelectedItem;
     private void ApplyOptions(ModOptions options)
     {
         _changingChoices = true;
-        Select(AnrPathPicker, options.AnrPath); Select(AnrNitsPicker, options.AnrNitsPerUnit.ToString()); AnrSceneCutCheck.IsChecked = options.AnrSceneCut;
+        Select(AnrPathPicker, options.AnrPath); AnrNitsInput.Text = options.AnrNitsPerUnit.ToString(System.Globalization.CultureInfo.InvariantCulture); AnrSceneCutCheck.IsChecked = options.AnrSceneCut;
         Select(EnginePicker, options.Engine); RefreshMultipliers(); Select(MultiplierPicker, options.Multiplier.ToString());
         Select(OptimizationPicker, options.Optimization.ToString()); Select(PresetPicker, options.Preset);
         Select(SrPicker, options.SuperResolution); Select(FlowPicker, options.FlowResolution); Select(HudPicker, options.UseHudless);
@@ -436,7 +442,16 @@ public partial class MainWindow : Window
             : LogReader.Read(path, Path.GetFileName(_scan.RenderingExe));
         if (_record is not null && (_record.Provider != _provider || _record.State != "Installed"))
             _verification = new(false, false, false, null, null, null, [], "not_verified");
-        VerificationStatus.Text = Localization.Get(_verification.Summary);
+        VerificationStatus.Text = Localization.Get(_verification.PartialLog ? "anr_log_partial"
+            : _provider == ModProvider.Anr && _verification.ModLoaded && !_verification.Evaluated && _verification.Errors.Count == 0 ? "anr_log_pending" : _verification.Summary);
+        var metrics = new List<string>();
+        if (_provider == ModProvider.Anr && _verification.GeneratedEvaluations is { } generated)
+            metrics.Add(string.Format(Localization.Get("anr_log_counts"), generated.ToString("N0"),
+                _verification.GenerationErrors?.ToString("N0") ?? "—", _verification.Multiplier?.ToString() ?? "—"));
+        if (_verification.LogTimestamp is { } timestamp)
+            metrics.Add(string.Format(Localization.Get("anr_session_time"), timestamp.ToLocalTime().ToString("g")));
+        VerificationMetricsText.Text = string.Join("\n", metrics);
+        VerificationMetricsText.Visibility = metrics.Count > 0 ? Visibility.Visible : Visibility.Collapsed;
         VerificationStatus.Foreground = _verification.Evaluated ? (Brush)FindResource("Accent") : (Brush)FindResource("Text");
         VerificationDetails.Text = string.Join(" · ", new[] { _verification.Gpu, _verification.ProcessId is null ? null : "PID " + _verification.ProcessId }.Where(s => s is not null));
         VerificationErrors.Text = _verification.Errors.Count == 0 ? Localization.Get("no_errors") : string.Join("\n", _verification.Errors.TakeLast(8));
@@ -464,7 +479,7 @@ public partial class MainWindow : Window
                 UpdateState = _updateState?.ToString(), Gpus = _hardware?.Gpus,
                 Checks = (_hardware?.Checks ?? []).Concat(_scan?.Checks ?? []).Select(c => new { c.Code, Level = c.Level.ToString(), Detail = Redact(c.Detail) }),
                 Game = _scan is null ? null : Path.GetFileName(_scan.Root), RuntimeVersion = _scan?.RuntimeVersion,
-                Verification = _verification is null ? null : new { _verification.ModLoaded, _verification.FrameGenerationCreated, _verification.Evaluated, _verification.HagsActive, Errors = _verification.Errors.Select(Redact) }
+                Verification = _verification is null ? null : new { _verification.ModLoaded, _verification.FrameGenerationCreated, _verification.Evaluated, _verification.HagsActive, _verification.GeneratedEvaluations, _verification.GenerationErrors, _verification.Multiplier, _verification.LogTimestamp, _verification.PartialLog, Errors = _verification.Errors.Select(Redact) }
             };
             File.WriteAllText(dialog.FileName, JsonSerializer.Serialize(report, new JsonSerializerOptions { WriteIndented = true }));
             SetStatus("report_saved");

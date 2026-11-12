@@ -29,7 +29,15 @@ public sealed record GameScan(string Root, string? RenderingExe, IReadOnlyList<E
 }
 public sealed record SteamGame(string AppId, string Name, string Directory);
 public sealed record LogVerification(bool ModLoaded, bool FrameGenerationCreated, bool Evaluated,
-    bool? HagsActive, string? Gpu, int? ProcessId, IReadOnlyList<string> Errors, string Summary);
+    bool? HagsActive, string? Gpu, int? ProcessId, IReadOnlyList<string> Errors, string Summary)
+{
+    public long? GeneratedEvaluations { get; init; }
+    public long? GenerationErrors { get; init; }
+    public int? Multiplier { get; init; }
+    public string? LogPath { get; init; }
+    public DateTimeOffset? LogTimestamp { get; init; }
+    public bool PartialLog { get; init; }
+}
 
 public sealed record ModOptions
 {

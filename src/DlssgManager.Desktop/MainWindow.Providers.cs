@@ -27,6 +27,8 @@ public partial class MainWindow
             ProviderDescription.Text += "\n" + string.Format(Localization.Get("provider_installed"), ProviderName(_record.Provider));
         AnrOptionsPanel.Visibility = anr ? Visibility.Visible : Visibility.Collapsed;
         AnrSettingsHint.Visibility = anr ? Visibility.Visible : Visibility.Collapsed;
+        AnrGameHelp.Visibility = anr ? Visibility.Visible : Visibility.Collapsed;
+        VerificationScopeText.Text = Localization.Get(anr ? "anr_log_scope" : "log_scope");
         Sm86OptionsHelp.Visibility = anr ? Visibility.Collapsed : Visibility.Visible;
         ProxyPicker.ToolTip = Localization.Get(anr ? "anr_options_hint" : "proxy_help");
         foreach (var control in new Control[] { OptimizationPicker, PresetPicker, SrPicker, FlowPicker, HudPicker, LogPicker })

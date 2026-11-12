@@ -2,7 +2,7 @@
 
 **Lire en :** [English](../../README.md) · [Italiano](README.it.md) · [简体中文](README.zh-Hans.md) · [हिन्दी](README.hi.md) · [Español](README.es.md) · **Français** · [العربية](README.ar.md) · [বাংলা](README.bn.md) · [Português](README.pt.md) · [Русский](README.ru.md) · [اردو](README.ur.md)
 
-Une application de bureau Windows qui accompagne [DLSSG for SM86](https://github.com/sdli1995/dlssg_for_sm86) : vérifier le PC et le jeu, installer un paquet vérifié du mod et conserver un historique permettant de rétablir l'état précédent.
+Une application de bureau Windows qui accompagne [DLSSG for SM86](https://github.com/sdli1995/dlssg_for_sm86) et [Apex Neural Rendering](https://github.com/apex-compute/ANR) : vérifier le PC et le jeu, installer un paquet vérifié du mod et conserver un historique permettant de rétablir l'état précédent.
 
 ## Crédits
 
@@ -10,18 +10,22 @@ Une application de bureau Windows qui accompagne [DLSSG for SM86](https://github
 - **Adaptation RTX 20 / SM75 :** [Coldwood1026](https://github.com/Coldwood1026), cité dans les [mentions du projet d'origine](https://github.com/sdli1995/dlssg_for_sm86/blob/main/THIRD_PARTY_NOTICES.txt).
 - **Ce gestionnaire :** une interface indépendante d'installation et de diagnostic. Le mérite du mod d'origine revient à ses auteurs ; le gestionnaire ne s'attribue pas leur travail et ne prétend pas bénéficier de leur approbation officielle.
 
-## Intégration ANR — préversion 0.4.0-beta.2
+## Intégration ANR — gestionnaire stable 0.4.1
 
-[Télécharger la bêta expérimentale](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/tag/v0.4.0-beta.2) : [ZIP portable](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.4.0-beta.2/DLSSGModManager-Portable-win-x64.zip) · [installateur Windows](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.4.0-beta.2/DLSSGModManager-Setup.msi). **La v0.3.1 reste la dernière version stable et ne reçoit pas automatiquement cette bêta.** Installer la bêta est un choix explicite. Le reste du guide décrit la solution SM86 stable, sauf les différences précisées ici.
+[Télécharger la version stable v0.4.1](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/tag/v0.4.1): [ZIP portable](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.4.1/DLSSGModManager-Portable-win-x64.zip) · [installateur Windows](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.4.1/DLSSGModManager-Setup.msi). Le gestionnaire est une version stable. **ANR reste une bêta du projet amont, FG-V.B15** ; la mention Bêta désigne cette technologie, pas cette version du gestionnaire.
 
-- Choisissez **Technologie de génération d’images** : SM86 d’origine (NVIDIA DLSS-G / XeSS-FG) ou **Apex Neural Rendering · Bêta**. Cette bêta prend en charge ANR sur NVIDIA **GTX 16 et RTX 20–50** ; **GTX 10 / Pascal n’est pas pris en charge**. Le jeu doit proposer DLSS Frame Generation natif via **Direct3D 12 ou Vulkan**.
-- Le gestionnaire choisit **Full** sans OptiScaler, ou **Addon** pour une installation OptiScaler compatible. Il télécharge les paquets directement depuis la publication officielle et vérifie SHA-256 ; les binaires et modèles ANR et OptiScaler **ne sont pas inclus dans le gestionnaire**. La procédure ANR vérifiée est **FG-V.B15** ; une future procédure inconnue reste bloquée.
+- Choisissez **Technologie de génération d’images** : SM86 d’origine (NVIDIA DLSS-G / XeSS-FG) ou **Apex Neural Rendering · Bêta**. Le gestionnaire prend en charge ANR sur NVIDIA **GTX 16 et RTX 20–50** ; **GTX 10 / Pascal n’est pas pris en charge**. Le jeu doit proposer DLSS Frame Generation natif via **Direct3D 12 ou Vulkan**.
+- Le gestionnaire choisit **Full** sans OptiScaler, ou **Addon** pour une installation OptiScaler compatible. Il télécharge les paquets directement depuis la publication officielle et vérifie SHA-256 ; les binaires et modèles ANR et OptiScaler **ne sont pas inclus dans le gestionnaire**. La procédure ANR vérifiée est **FG-V.B15** ; une future procédure inconnue reste bloquée. Le gestionnaire vérifie le dépôt officiel ANR au démarrage si ANR est sélectionné et chaque fois que vous choisissez ANR. Il télécharge automatiquement une nouvelle version ou indique que celle en cache est déjà la dernière. Chaque jeu est mis à jour uniquement lorsque vous cliquez sur l’action de mise à jour, après les vérifications et la sauvegarde.
 - Fermez le jeu avant l’installation ou le changement. Le gestionnaire vérifie les conflits, inventorie les fichiers gérés et crée des sauvegardes récupérables avant modification. Changement de fournisseur, désactivation et restauration partagent journal et historique ; les fichiers inconnus ou modifiés ailleurs sont protégés. Addon conserve le chargeur OptiScaler existant. Utilisez **Restaurer l’état précédent** pour annuler un changement.
 - Commencez hors ligne en **2×**. ANR possède ses réglages de chemin de calcul, luminance HDR et changements de scène, ainsi que son journal ; les options propres à SM86 ne s’appliquent pas. Les multiplicateurs dépendent du jeu. La confirmation du journal est un premier test, pas une garantie de stabilité prolongée. N’utilisez aucun fournisseur dans les jeux en ligne protégés par anti-triche.
+
+Activez **NVIDIA DLSS Frame Generation** dans le jeu. Le sélecteur **2×** grisé ou verrouillé peut être normal si c’est le seul multiplicateur proposé ; cela ne prouve pas que la génération est active. Jouez un peu puis lisez le journal dans **Diagnostic**. Pour ANR, vérifiez les évaluations de génération réussies et les erreurs, pas seulement « ANR chargé ». Un journal incomplet ou trop volumineux ne permet pas de confirmer toute la session. Si la confirmation reste en attente, fermez le jeu puis relisez le journal.
 
 **Crédits ANR :** [Apex Compute / Apex Neural Rendering](https://github.com/apex-compute/ANR) ; [OptiScaler](https://github.com/optiscaler/OptiScaler) et ses contributeurs. OptiScaler est sous GPL-3.0 ; code, binaires et modèles ANR gardent les conditions de leurs auteurs. Le gestionnaire ne modifie pas leurs licences. Voir la [question sur la licence](https://github.com/apex-compute/ANR/issues/9).
 
 ![Aperçu de l'application](../screenshot.png)
+
+![Paramètres du mod ANR](../settings-anr.png)
 
 ## Fonctionnalités
 
@@ -34,7 +38,8 @@ Une application de bureau Windows qui accompagne [DLSSG for SM86](https://github
 - Affiche le moteur, le multiplicateur, l'optimisation, le préréglage, le remplacement SR, les paramètres de flux/HUD XeSS, le chargeur et les options de journalisation. **Les réglages recommandés sont DLSS, 2×, l'optimisation à résultat exact et le remplacement SR désactivé (Off).**
 - Installe ou met à jour uniquement après examen et confirmation. Prépare les fichiers vérifiés, sauvegarde l'état précédent, désactive les anciens chargeurs avant de modifier les fichiers du runtime et active le nouveau chargeur en dernier.
 - Propose la désactivation et la restauration, protège les fichiers modifiés en dehors du gestionnaire et tient un journal de récupération pour les opérations interrompues. Les sauvegardes sont conservées, y compris les fichiers supplémentaires déplacés.
-- Lit la dernière session de jeu enregistrée. Pour confirmer la génération effective d'images, exige la création réussie de la fonction NGX 11 et sa première évaluation.
+- **SM86:** Lit la dernière session de jeu enregistrée. Pour confirmer la génération effective d'images, exige la création réussie de la fonction NGX 11 et sa première évaluation.
+- Le diagnostic ANR distingue le chargement de la génération effective et affiche le nombre d’évaluations et d’erreurs de génération pour une session enregistrée complète.
 - Exporte un rapport de diagnostic local dans lequel les chemins de l'utilisateur et du jeu sont masqués. Aucun compte ni aucune télémétrie.
 
 ## Se repérer dans l’interface
@@ -45,7 +50,7 @@ Une application de bureau Windows qui accompagne [DLSSG for SM86](https://github
 
 ## Téléchargement et utilisation
 
-Téléchargez la [préversion publique v0.3.1](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/tag/v0.3.1) : [ZIP portable](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.3.1/DLSSGModManager-Portable-win-x64.zip) · [programme d'installation Windows](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.3.1/DLSSGModManager-Setup.msi). Consultez [toutes les versions](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases) pour les versions suivantes.
+[Télécharger la version stable v0.4.1](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/tag/v0.4.1): [ZIP portable](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.4.1/DLSSGModManager-Portable-win-x64.zip) · [installateur Windows](https://github.com/VenomDrake/DLSSG-MANAGER-RTX-3000-SERIES/releases/download/v0.4.1/DLSSGModManager-Setup.msi).
 
 Utilisez `DLSSGModManager.exe` depuis le paquet portable ou exécutez `DLSSGModManager-Setup.msi`, qui installe l'application pour l'utilisateur actuel. Les binaires publiés ne nécessitent pas d'installation séparée de .NET, Python ou CUDA Toolkit.
 
@@ -66,23 +71,25 @@ Le gestionnaire ne modifie pas automatiquement HAGS ni les pilotes. Il ouvre les
 
 Le gestionnaire vérifie discrètement ses propres versions GitHub en arrière-plan. Un petit avis apparaît uniquement lorsqu’une version stable plus récente du gestionnaire est disponible ; les brouillons et préversions sont ignorés.
 
+Les installations stables **0.3.1** et **0.4.0 bêta** peuvent passer à la stable **0.4.1** via **Mettre à jour et redémarrer**. Cette version est proposée sur le canal stable, sans inscription aux bêtas.
+
 Choisissez **Mettre à jour et redémarrer** au moment qui vous convient, après la fin de l’opération en cours. Le gestionnaire sélectionne automatiquement le ZIP portable ou le MSI adapté à l’installation actuelle, le télécharge, vérifie son SHA-256 avec l’empreinte du fichier de la version officielle GitHub, se ferme, installe la mise à jour et se rouvre. Vos jeux, réglages et sauvegardes sont conservés. Les prochaines mises à jour ne nécessitent ni de visiter GitHub ni de remplacer des fichiers manuellement.
 
 **Le passage de 0.1.0 à 0.2.0 nécessite une seule mise à jour manuelle**, car 0.1.0 ne contient pas le système de mise à jour. Fermez 0.1.0, puis lancez le nouveau MSI ou extrayez le nouveau paquet portable complet dans le dossier de votre application portable, avec le même type de paquet qu’auparavant. À partir de 0.2.0, les mises à jour suivantes du gestionnaire peuvent être installées dans l’application.
 
 **Correction ponctuelle pour les installations MSI 0.2.0/0.2.1 :** leur mise à jour MSI depuis l’application peut échouer avec l’erreur Windows Installer **1639** ou afficher sa fenêtre d’aide. Fermez le gestionnaire, puis téléchargez et exécutez **une fois le MSI le plus récent (0.2.2 ou ultérieur)** depuis la version indiquée ci-dessus, en conservant le même dossier d’installation. Installer le MSI 0.2.1 ne corrige pas ce défaut. Une fois 0.2.2 installé, les prochaines mises à jour depuis l’application utilisent le programme de mise à jour corrigé. Les installations portables ne sont pas touchées par ce problème MSI.
 
-Les mises à jour du gestionnaire et du mod sont distinctes. Mettre à jour le gestionnaire n’installe aucun nouveau mod dans les jeux ; la procédure d’installation vérifiée du projet d’origine reste celle de **0.4.1**.
+Les mises à jour du gestionnaire et des mods sont indépendantes. Mettre à jour le gestionnaire ne modifie aucune installation dans les jeux. Les procédures vérifiées sont **SM86 0.4.1** et **ANR FG-V.B15**.
 
 ## Prise en charge et limites
 
-Le gestionnaire vise Windows 10/11 x64 et les GPU RTX 20/30 pris en charge par le projet d'origine. La procédure d'installation actuellement vérifiée concerne la version **0.4.1** du mod, avec un pilote R580 ou plus récent et le runtime 310.9.16. Le gestionnaire télécharge aussi les futures versions officielles, mais une procédure inconnue est signalée comme non prise en charge jusqu'à la mise à jour de ses vérifications ; un nouveau numéro de version ne prouve pas que les exigences sont compatibles.
+Le gestionnaire fonctionne sous **Windows 10/11 x64**. **SM86** vise les GPU **RTX 20/30** compatibles ; la procédure vérifiée concerne le mod **0.4.1**, avec pilote **R580 ou plus récent** et runtime **310.9.16**. **ANR** prend en charge **GTX 16 et RTX 20–50**, exige DLSS Frame Generation natif via **Direct3D 12 ou Vulkan** et utilise la procédure vérifiée **FG-V.B15**. **GTX 10 / Pascal n’est pas pris en charge.** Télécharger une nouvelle version amont ne valide pas ses exigences : les procédures inconnues restent bloquées jusqu’à la mise à jour du gestionnaire.
 
-Le jeu doit intégrer nativement DLSS Frame Generation et fonctionner avec DirectX 12. La procédure actuelle prend en charge les runtimes 310.x ; les anciennes générations sont refusées. Un multiplicateur plus élevé dépend de l'intégration du jeu. XeSS est limité à 4× ; DLSS 6× exige une intégration qui le prenne en charge.
+**SM86:** Le jeu doit intégrer nativement DLSS Frame Generation et fonctionner avec DirectX 12. La procédure actuelle prend en charge les runtimes 310.x ; les anciennes générations sont refusées. Un multiplicateur plus élevé dépend de l'intégration du jeu. XeSS est limité à 4× ; DLSS 6× exige une intégration qui le prenne en charge.
 
 Les indicateurs anti-triche connus bloquent l'installation. Leur absence ne prouve pas qu'un jeu est dépourvu d'anti-triche. N'utilisez pas de mods injectés dans des jeux en ligne protégés par un anti-triche.
 
-Les installations manuelles existantes correspondant à la version vérifiée actuelle peuvent être prises en charge après vérification des empreintes des DLL. Un mod manuel ancien ou inconnu sans inventaire du gestionnaire est traité comme un conflit plutôt que d'être écrasé. Les installations réalisées ensuite par le gestionnaire peuvent être mises à jour et restaurées grâce à leur inventaire et à leurs sauvegardes.
+**SM86:** Les installations manuelles existantes correspondant à la version vérifiée actuelle peuvent être prises en charge après vérification des empreintes des DLL. Un mod manuel ancien ou inconnu sans inventaire du gestionnaire est traité comme un conflit plutôt que d'être écrasé. Les installations réalisées ensuite par le gestionnaire peuvent être mises à jour et restaurées grâce à leur inventaire et à leurs sauvegardes. **ANR:** Une installation manuelle d’ANR non gérée est traitée comme un conflit.
 
 La première vérification dans un journal est un test initial, pas une garantie de stabilité pendant de longues sessions ni de doublement des FPS rendus. Les images générées affichées et la latence des commandes sont des mesures différentes.
 
@@ -126,6 +133,6 @@ dotnet run --project src/DlssgManager.Desktop -- --read-only --game 'D:\Games\Ex
 
 ## Publier votre fork
 
-Créez un dépôt GitHub public et poussez cet arbre de sources. Le workflow Windows inclus compile et teste les pull requests ainsi que les envois sur la branche principale. Une étiquette comme `v0.3.1` publie aussi les binaires sous forme de version GitHub à l'aide du jeton Actions du dépôt. Aucun jeton n'est stocké dans les sources ni demandé aux utilisateurs finaux.
+Créez un dépôt GitHub public et poussez cet arbre de sources. Le workflow Windows inclus compile et teste les pull requests ainsi que les envois sur la branche principale. Une étiquette comme `v0.4.1` publie aussi les binaires sous forme de version GitHub à l'aide du jeton Actions du dépôt. Aucun jeton n'est stocké dans les sources ni demandé aux utilisateurs finaux.
 
 Consultez [CONTRIBUTING.md](../../CONTRIBUTING.md), [SECURITY.md](../../SECURITY.md) et [THIRD_PARTY_NOTICES.md](../../THIRD_PARTY_NOTICES.md). Ce gestionnaire indépendant est distribué sous licence MIT ; le matériel du mod d'origine conserve ses propres conditions.
